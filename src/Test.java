@@ -479,6 +479,11 @@ static void delete_staff() throws SQLExveption {
     int s_id;
     int flag = 1;
 
+    System.out.println("Enter 1 if the staff is Author");
+    System.out.println("Enter 2 if the staff is Journalist");
+    System.out.println("Enter 1 if the staff is Editor");
+    int choice = getinput();
+
     do
     {
         System.out.println("Enter Staff ID");
@@ -499,16 +504,57 @@ static void delete_staff() throws SQLExveption {
         ps.setInt(1, s_id);
         ps.executeUpdate();
 
+        if(choice==1)
+        {
+            sql_insert_stmt = "DELETE from WriteBooks where authorid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, s_id);
+            ps.executeUpdate();
+            flag=3;
+        }
 
+        else if(choice==2)
+        {
+            sql_insert_stmt = "DELETE from Writeperiodicals where journalistid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, s_id);
+            ps.executeUpdate();
+            flag=3
+        }
+
+        else if(choice==3)
+        {
+            sql_insert_stmt = "DELETE from Assign where editorid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, s_id);
+            ps.executeUpdate();
+
+            sql_insert_stmt = "DELETE from EditBooks where editorid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, s_id);
+            ps.executeUpdate();
+
+            sql_insert_stmt = "DELETE from Editperiodicals where editorid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, s_id);
+            ps.executeUpdate();
+            flag=3;
+        }
+
+        if(flag==3)
+        {
         sql_insert_stmt = "DELETE FROM Staff WHERE id = ?;";
         ps = conn.prepareStatement(sql_insert_stmt);
         ps.setInt(1, s_id);
         ps.executeUpdate();
     }
     else{
+        System.out.println("Entered Choices are out of the scope and invalid");
+    }
+    }
+    else{
         System.out.println("Entered Staff ID does not exist");
     }
-
 }
 
 static void add_publications() throws SQLException {
@@ -668,6 +714,11 @@ static void delete_publication()  throws SQLException{
     }while(isbn.isEmpty());
 
     if(flag==2){
+
+        if(choice==1){
+            
+        }
+
         sql_insert_stmt = "DELETE from Publication where ISBN = ?;";
         ps.setString(1,isbn);
         ps.executeUpdate();
