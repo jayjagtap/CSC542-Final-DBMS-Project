@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Date;
+import java.util.Scanner;
+//import java.util.Date;
 
 
 public class Test {
@@ -359,7 +360,7 @@ static void add_staff() throws SQLException{
         try{
             age = br.readLine();
             if(!age.isEmpty()){
-                s_age = Integer.parseInt(age)
+                s_age = Integer.parseInt(age);
             }
         }catch(Exception e){
             System.out.println(e);
@@ -468,7 +469,7 @@ static void update_staff()  throws SQLException {
 
 }
 
-static void delete_staff() throws SQLExveption {
+static void delete_staff() throws SQLException {
 
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -519,7 +520,7 @@ static void delete_staff() throws SQLExveption {
             ps = conn.prepareStatement(sql_insert_stmt);
             ps.setInt(1, s_id);
             ps.executeUpdate();
-            flag=3
+            flag=3;
         }
 
         else if(choice==3)
@@ -557,138 +558,138 @@ static void delete_staff() throws SQLExveption {
     }
 }
 
-static void add_publications() throws SQLException {
-
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Adding Publications Menu");
-
-    String isbn = "";
-    String title = "";
-    String topic = "";
-    String price = "";
-    int cost;
-
-    do{
-        System.out.println("Enter ISBN Number");
-        try{
-            isbn = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(isbn.isEmpty());
-
-    do{
-        System.out.println("Enter Title");
-        try{
-            title = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(title.isEmpty());
-
-    do{
-        System.out.println("Enter Topic");
-        try{
-            topic = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(topic.isEmpty());
-
-    do{
-        System.out.println("Enter Price");
-        try{
-            price = br.readLine();
-            if(!price.isEmpty()){
-                cost = Integer.parseInt(price);
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(price.isEmpty());
-
-    do{
-        System.out.println("Enter Date of Creation");
-        try{
-            java.util.Date date=new java.util.Date();
-            java.sql.Date dateofcreation=new java.sql.Date(date.getTime());
-            }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(dateofcreation.isEmpty())
-    do{
-        System.out.println("Enter Date of Publishing");
-        try{
-            java.util.Date date=new java.util.Date();
-            java.sql.Date dateofpublishing=new java.sql.Date(date.getTime());
-            }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(dateofpublishing.isEmpty())
-
-    sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, isbn);
-    ps.setDate(2, dateofcreation);
-    ps.setString(3, title);
-    ps.setString(4, topic);
-    ps.setDate(5, dateofpublishing);
-    ps.setInt(6, cost);
-    ps.executeUpdate();
-
-    System.out.println("If the above publication is Books, enter 1");
-    System.out.println("If the above publication is Periodicals, enter 2");
-    int choice = getinput();
-
-    if(choice==1)
-    {
-        String edition = "";
-        do{
-        System.out.println("Enter Edition");
-        try{
-            edition = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(edition.isEmpty());
-
-        sql_insert_stmt = "INSERT INTO BOOKS VALUES(?,?);";
-        ps.setString(1, isbn);
-        ps.setString(2, edition);
-        ps.executeUpdate();
-    }
-
-    if(choice==2)
-    {
-        String periodicity = "";
-        String type = ""
-        do{
-        System.out.println("Enter Periodicity");
-        try{
-            periodicity = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(periodicity.isEmpty());
-
-        do{
-        System.out.println("Enter Type of the Periodicals");
-        try{
-            type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(type.isEmpty());
-
-        sql_insert_stmt = "INSERT INTO BOOKS VALUES(?,?,?);";
-        ps.setString(1, isbn);
-        ps.setString(2, periodicity);
-        ps.setString(3,type);
-        ps.executeUpdate();
-    }      
-}
+//static void add_publications() throws SQLException {
+//
+//    PreparedStatement ps = null;
+//    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+//    String sql_insert_stmt;
+//    System.out.println("Adding Publications Menu");
+//
+//    String isbn = "";
+//    String title = "";
+//    String topic = "";
+//    String price = "";
+//    int cost;
+//
+//    do{
+//        System.out.println("Enter ISBN Number");
+//        try{
+//            isbn = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(isbn.isEmpty());
+//
+//    do{
+//        System.out.println("Enter Title");
+//        try{
+//            title = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(title.isEmpty());
+//
+//    do{
+//        System.out.println("Enter Topic");
+//        try{
+//            topic = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(topic.isEmpty());
+//
+//    do{
+//        System.out.println("Enter Price");
+//        try{
+//            price = br.readLine();
+//            if(!price.isEmpty()){
+//                cost = Integer.parseInt(price);
+//            }
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(price.isEmpty());
+//
+//    do{
+//        System.out.println("Enter Date of Creation");
+//        try{
+//            java.util.Date date=new java.util.Date();
+//            java.sql.Date dateofcreation=new java.sql.Date(date.getTime());
+//            }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(dateofcreation.isEmpty())
+//    do{
+//        System.out.println("Enter Date of Publishing");
+//        try{
+//            java.util.Date date=new java.util.Date();
+//            java.sql.Date dateofpublishing=new java.sql.Date(date.getTime());
+//            }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(dateofpublishing.isEmpty())
+//
+//    sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
+//    ps = conn.prepareStatement(sql_insert_stmt);
+//    ps.setString(1, isbn);
+//    ps.setDate(2, dateofcreation);
+//    ps.setString(3, title);
+//    ps.setString(4, topic);
+//    ps.setDate(5, dateofpublishing);
+//    ps.setInt(6, cost);
+//    ps.executeUpdate();
+//
+//    System.out.println("If the above publication is Books, enter 1");
+//    System.out.println("If the above publication is Periodicals, enter 2");
+//    int choice = getinput();
+//
+//    if(choice==1)
+//    {
+//        String edition = "";
+//        do{
+//        System.out.println("Enter Edition");
+//        try{
+//            edition = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(edition.isEmpty());
+//
+//        sql_insert_stmt = "INSERT INTO BOOKS VALUES(?,?);";
+//        ps.setString(1, isbn);
+//        ps.setString(2, edition);
+//        ps.executeUpdate();
+//    }
+//
+//    if(choice==2)
+//    {
+//        String periodicity = "";
+//        String type = ""
+//        do{
+//        System.out.println("Enter Periodicity");
+//        try{
+//            periodicity = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(periodicity.isEmpty());
+//
+//        do{
+//        System.out.println("Enter Type of the Periodicals");
+//        try{
+//            type = br.readLine();
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }while(type.isEmpty());
+//
+//        sql_insert_stmt = "INSERT INTO BOOKS VALUES(?,?,?);";
+//        ps.setString(1, isbn);
+//        ps.setString(2, periodicity);
+//        ps.setString(3,type);
+//        ps.executeUpdate();
+//    }      
+//}
 
 static void delete_publication()  throws SQLException{
 
@@ -1359,7 +1360,7 @@ static void assign() throws SQLException {
     
 }
 
-    public int getinput()
+    public static int getinput()
     {
         Scanner scan = new Scanner(System.in);
         int num = scan.nextInt();
