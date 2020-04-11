@@ -1359,6 +1359,14 @@ static void assign() throws SQLException {
     
 }
 
+    public int getinput()
+    {
+        Scanner scan = new Scanner(System.in);
+        int num = scan.nextInt();
+        scan.close();
+        return num;
+    }
+
 /*
     static void close(Connection conn) {
         if(conn != null) {
