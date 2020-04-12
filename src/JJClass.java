@@ -52,7 +52,8 @@ public class JJClass {
     		//get_staff_payment_remaining();
     		//get_staff_payment_availed();
     		//find_distributors_by_city();
-    		check_editor_publications();
+    		//check_editor_publications();
+    		totalprice_perisbn_perdistributor_permonth();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -401,4 +402,45 @@ public class JJClass {
         }
 	}
 	
+	
+	public static void totalprice_perisbn_perdistributor_permonth() {
+		PreparedStatement ps = null;
+	    try {
+			conn = DriverManager.getConnection(jdbcURL, user, passwd);
+			String query = "select MONTH(o.orderdate) as Month,o.ISBN, o.distributorid, sum(p.price*o.numcopies) as \"Price Generated\" from Orders o join Publication p on o.ISBN where o.ISBN = p .ISBN group by MONTH(o.orderdate), o.ISBN, o.distributorid;";
+		    Statement stmt = conn.createStatement();
+	        ResultSet rs = stmt.executeQuery(query);
+	        
+	        List<String> l = new ArrayList<String>();
+	        l.add("Month");
+	        l.add("ISBN");
+	        l.add("Distributor ID");
+	        l.add("Price Generated");
+	        
+	        StringBuilder sb = new StringBuilder();
+	        for(int i=0; i<l.size(); i++)
+	        	sb.append(String.format("| %-15s", l.get(i)));
+	        System.out.println(sb);
+	        while (rs.next()) {
+	        	l.clear();
+	        	sb.setLength(0);
+	            int month = rs.getInt("MONTH");
+	            String ISBN = rs.getString("o.distributorid");
+	            int distributorid = rs.getInt("o.distributorid");
+	            int price = rs.getInt("Price Generated");
+	            
+	            
+	            l.add(Integer.toString(month));
+	            l.add(ISBN);
+	            l.add(Integer.toString(distributorid));
+	            l.add(Integer.toString(price));
+	            for(int i=0; i<l.size(); i++)
+		        	sb.append(String.format("| %-15s", l.get(i)));
+		        System.out.println(sb);
+	         }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
