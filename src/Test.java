@@ -24,12 +24,12 @@ import java.util.Date;
 
 public class Test {
 
-    static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/skumar29";
+    static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/nkashya";
     static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     static Connection conn = null;
-    static String user = "skumar29";
-    static String passwd = "200314584";
+    static String user = "nkashya";
+    static String passwd = "200314563";
 
     public static void main(String[] args) {
 
@@ -303,10 +303,8 @@ static void add_staff() throws SQLException{
     System.out.println("Add Enter Staff");
 
     String staff_name = "";
-    String staff_id = "";
     String phone_number = "";
     String staff_address = "";
-    String age = "";
     String staff_gender = "";
     int s_id;
     int s_age;
@@ -314,14 +312,11 @@ static void add_staff() throws SQLException{
     {
         System.out.println("Enter Staff ID");
         try{
-            staff_id = br.readLine();
-            if(!staff_id.isEmpty()){
-                s_id = Integer.parseInt(staff_id);
-            }
+            s_id = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(staff_id.isEmpty());
+    }while(s_id.isEmpty());
 
     do
     {
@@ -357,14 +352,11 @@ static void add_staff() throws SQLException{
     {
         System.out.println("Enter Staff age");
         try{
-            age = br.readLine();
-            if(!age.isEmpty()){
-                s_age = Integer.parseInt(age)
-            }
+            s_age = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(age.isEmpty());
+    }while(s_age.isEmpty());
 
     do
     {
@@ -449,61 +441,165 @@ static void update_staff()  throws SQLException {
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
     System.out.println("Updating the information of Staff");
-
-    String staff_id = "";
     int s_id;
+    String staff_name = "";
+    String phone_number = "";
+    String staff_address = "";
+    String staff_gender = "";
+    int s_age;
 
     do
     {
         System.out.println("Enter Staff ID");
         try{
-            staff_id = br.readLine();
-            if(!staff_id.isEmpty()){
-                s_id = Integer.parseInt(staff_id);
-            }
+                s_id = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(staff_id.isEmpty());
+    }while(s_id.isEmpty());
 
+    String data_retrieval = "Select name,id,phonenumber,address,age,gender from Staff;";
+    Statement stmt = conn.createStatement();
+    ResultSet rs = stmt.executeQuery(data_retrieval);
+    if(rs==False)
+    {
+        System.out.println("Entered id not present in the database");
+    }
+    else{
+    while(rs.next())
+    {
+        String rs_name = rs.getString("name");
+        String rs_phonenumber = rs.getString("phonenumber");
+        String rs_address = rs.getString("address");
+        int rs_age = rs.getInt("age");
+        String rs_gender = rs.getString("gender");
+    }
+
+    System.out.println("If you want to update the name, please enter 1 else press 0");
+    int choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter Staff Name");
+        try{
+            staff_name = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(staff_name.isEmpty());
+
+    rs_name = staff_name
 }
 
-static void delete_staff() throws SQLExveption {
+    System.out.println("If you want to update the phonenumber, please enter 1 else press 0");
+    choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter phonenumber");
+        try{
+            phone_number = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(phone_number.isEmpty());
+
+    rs_phonenumber = phone_number
+}
+    System.out.println("If you want to update the address, please enter 1 else press 0");
+    choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter address");
+        try{
+            staff_address = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }while(staff_address.isEmpty());
+
+    rs_address = staff_address
+}
+}
+
+    System.out.println("If you want to update the gender, please enter 1 else press 0");
+    choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter gender");
+        try{
+            staff_gender = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(staff_genderstaff.isEmpty());
+
+    rs_gender = staff_gender
+}
+
+    System.out.println("If you want to update the age, please enter 1 else press 0");
+    choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter age");
+        try{
+            s_age= getinput();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(s_age.isEmpty());
+
+    rs_age = s_age
+}
+
+    sql_insert_stmt = "Update Staff set name = ?,phonenumber = ?, address = ?,age=?,gender = ?;"
+    ps.setString(1, rs_name);
+    ps.setString(2, rs_phonenumber);
+    ps.setString(3, rs_address);
+    ps.setInt(4, rs_age);
+    ps.setString(5, rs_gender);
+    ps.executeUpdate();
+}
+
+static void delete_staff() throws SQLException {
 
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
     System.out.println("Delete Staff Menu:");
 
-    String staff_id = "";
     int s_id;
     int flag = 1;
 
-    System.out.println("Enter 1 if the staff is Author");
-    System.out.println("Enter 2 if the staff is Journalist");
-    System.out.println("Enter 1 if the staff is Editor");
+    System.out.println("Enter 1 if it is an Author");
+    System.out.println("Enter 2 if it is an Journalist");
+    System.out.println("Enter 3 if it is an Editor");
     int choice = getinput();
 
     do
     {
         System.out.println("Enter Staff ID");
         try{
-            staff_id = br.readLine();
-            if(!staff_id.isEmpty()){
                 flag = 2;
-                s_id = Integer.parseInt(staff_id);
-            }
+                s_id = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(staff_id.isEmpty());
+    }while(s_id.isEmpty());
 
     if(flag==2){
-        sql_insert_stmt = "DELETE FROM Pays WHERE staffid = ?;";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, s_id);
-        ps.executeUpdate();
-
         if(choice==1)
         {
             sql_insert_stmt = "DELETE from WriteBooks where authorid = ?;";
@@ -697,7 +793,7 @@ static void delete_publication()  throws SQLException{
     String sql_insert_stmt;
     System.out.println("Delete Publication Menu:");
     int flag=1;
-    String ISBN = "";
+    String isbn = "";
 
     System.out.println("Enter 1 if it is a Book");
     System.out.println("Enter 2 if it is a Periodical");
@@ -714,16 +810,42 @@ static void delete_publication()  throws SQLException{
     }while(isbn.isEmpty());
 
     if(flag==2){
-
         if(choice==1){
-            
-        }
+            sql_insert_stmt = "DELETE from EditBooks where isbn = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.executeUpdate();
 
+            sql_insert_stmt = "DELETE from WriteBooks where isbn = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.executeUpdate();
+        }
+        if(choice==2)
+        {
+            sql_insert_stmt = "DELETE from EditPeriodicals where isbn = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.executeUpdate();
+
+            sql_insert_stmt = "DELETE from Writeperiodicals where isbn = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.executeUpdate();
+        }
         sql_insert_stmt = "DELETE from Publication where ISBN = ?;";
         ps.setString(1,isbn);
         ps.executeUpdate();
+        }
     }
-}
+
+    public int getinput()
+    {
+        Scanner scan = new Scanner(System.in);
+        int num = scan.nextInt();
+        scan.close();
+        return num;
+    }
 
 static void add_distributor() throws SQLException {
 
@@ -1358,15 +1480,6 @@ static void assign() throws SQLException {
     }
     
 }
-
-    public int getinput()
-    {
-        Scanner scan = new Scanner(System.in);
-        int num = scan.nextInt();
-        scan.close();
-        return num;
-    }
-
 /*
     static void close(Connection conn) {
         if(conn != null) {
