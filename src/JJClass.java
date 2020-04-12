@@ -51,7 +51,8 @@ public class JJClass {
     		//get_total_expense();
     		//get_staff_payment_remaining();
     		//get_staff_payment_availed();
-    		find_distributors_by_city();
+    		//find_distributors_by_city();
+    		check_editor_publications();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -336,7 +337,68 @@ public class JJClass {
 		}
 	
 	
+	public static void check_editor_publications() {
+		PreparedStatement ps = null;
+		System.out.println("Enter Editor ID: ");
 	
-	
+		int flag = 0;
+		String id = "";
+		
+        try{
+        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        	id = br.readLine();
+            String sql_chk = "select editorid from Assign WHERE editorid = ?;"; 
+            ps = conn.prepareStatement(sql_chk);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next() == true){
+                flag = 1;
+            }
+            else{
+                System.out.println("Editor ID not in Assign Table");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
+        if(flag == 1) {
+        	//System.out.println("Came in try after flag = 1");
+        	try {
+    			conn = DriverManager.getConnection(jdbcURL, user, passwd);
+    			String query = "SELECT editorid, ISBN FROM Assign WHERE editorid = ?;";
+    			ps = null;
+    			ps = conn.prepareStatement(query);
+    			ps.setString(1, id);
+    		    //Statement stmt = conn.createStatement();
+    	        ResultSet rs = ps.executeQuery();
+    	        List<String> l = new ArrayList<String>();
+    	        l.add("Editor id");
+    	        l.add("ISBN");
+    	        StringBuilder sb = new StringBuilder();
+    	        for(int i=0; i<l.size(); i++)
+    	        	sb.append(String.format("| %-17s", l.get(i)));
+    	        System.out.println(sb);
+    	        while (rs.next()) {
+    	        	l.clear();
+    	        	sb.setLength(0);
+    	        
+    	            int editorid = rs.getInt("editorid");
+    	            String name = rs.getString("ISBN");
+    	            
+    	            l.add(Integer.toString(editorid));
+    	            l.add(name);
+    	            
+    	            for(int i=0; i<l.size(); i++)
+    		        	sb.append(String.format("| %-17s", l.get(i)));
+    		        System.out.println(sb);
+    	         }
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+        }
+	}
 	
 }
