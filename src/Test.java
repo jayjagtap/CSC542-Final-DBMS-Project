@@ -431,6 +431,140 @@ static void add_staff() throws SQLException{
     }
 }
 
+static void update_author() throws SQLException {
+    PreparedStatement ps = null;
+    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+    String sql_insert_stmt;
+    System.out.println("Updating the information of Author");
+
+    int s_id;
+    String rs_type = "";
+    String new_type = "";
+    System.out.println("Enter Staff ID");
+        try{
+                s_id = getinput();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+    String data_retrieval = "Select type from Authors;";
+    Statement stmt = conn.createStatement();
+    ResultSet rs = stmt.executeQuery(data_retrieval);
+    while(rs.next())
+    {
+        rs_type = rs.getString("type");
+}
+    System.out.println("If you want to update the type, please enter 1 else press 0");
+    int choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter author Type");
+        try{
+            new_type = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(new_type.isEmpty());
+
+    rs_type = new_type;
+}
+    sql_insert_stmt = "Update Authors set type = ?;";
+    ps.setString(1, rs_name);
+    ps.executeUpdate();
+}
+
+static void update_editor() throws SQLException {
+    PreparedStatement ps = null;
+    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+    String sql_insert_stmt;
+    System.out.println("Updating the information of editor");
+
+    int s_id;
+    String rs_type = "";
+    String new_type = "";
+    System.out.println("Enter Staff ID");
+        try{
+                s_id = getinput();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+    String data_retrieval = "Select type from Editors;";
+    Statement stmt = conn.createStatement();
+    ResultSet rs = stmt.executeQuery(data_retrieval);
+    while(rs.next())
+    {
+        rs_type = rs.getString("type");
+}
+    System.out.println("If you want to update the type, please enter 1 else press 0");
+    int choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter Editor Type");
+        try{
+            new_type = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(new_type.isEmpty());
+
+    rs_type = new_type;
+}
+    sql_insert_stmt = "Update Editors set type = ?;";
+    ps.setString(1, rs_name);
+    ps.executeUpdate();
+}
+
+static void update_journalist() throws SQLException {
+    PreparedStatement ps = null;
+    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+    String sql_insert_stmt;
+    System.out.println("Updating the information of Journalist");
+
+    int s_id;
+    String rs_type = "";
+    String new_type = "";
+    System.out.println("Enter Staff ID");
+        try{
+                s_id = getinput();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+    String data_retrieval = "Select type from Journalist;";
+    Statement stmt = conn.createStatement();
+    ResultSet rs = stmt.executeQuery(data_retrieval);
+    while(rs.next())
+    {
+        rs_type = rs.getString("type");
+}
+    System.out.println("If you want to update the type, please enter 1 else press 0");
+    int choice = getinput();
+
+    if(choice==1)
+    {
+    do
+    {
+        System.out.println("Enter Journalist Type");
+        try{
+            new_type = br.readLine();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(new_type.isEmpty());
+
+    rs_type = new_type;
+}
+    sql_insert_stmt = "Update Journalists set type = ?;";
+    ps.setString(1, rs_name);
+    ps.executeUpdate();
+}
 static void update_staff()  throws SQLException {
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -860,7 +994,6 @@ static void update_publication() throws SQLException{
     ps.setDouble(3, rs_price);
     ps.executeUpdate();
 }
-
 static void delete_publication()  throws SQLException{
 
     PreparedStatement ps = null;
