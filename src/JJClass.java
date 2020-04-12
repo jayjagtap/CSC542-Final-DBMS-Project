@@ -56,7 +56,8 @@ public class JJClass {
     		//find_distributors_by_city();
     		//check_editor_publications();
     		//totalprice_perisbn_perdistributor_permonth();
-    		calculate_payment_within_daterange();
+    		//calculate_payment_within_daterange();
+    		orders_date_range();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -460,7 +461,7 @@ public class JJClass {
 		int flag = 1;
 		do {
 		try {
-			System.out.println("Enter Begin of Date Range");
+			System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
 			mydate1 = br.readLine();
 			try {
 				myDate1 = format.parse( mydate1 );
@@ -481,7 +482,7 @@ public class JJClass {
 		flag = 1;
 		do {
 		try {
-			System.out.println("Enter End of Date Range");
+			System.out.println("Enter End of Date Range (YYYY-MM-DD)");
 			mydate2 = br.readLine();
 			try {
 				myDate2 = format.parse( mydate2 );
@@ -560,5 +561,134 @@ public class JJClass {
         }
 
 		
+	}
+	
+	public static void orders_date_range() {
+		String mydate1 = "";
+		String mydate2 = "";
+		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+		format.setLenient(false);
+		java.util.Date myDate1 =  new java.util.Date();
+		java.util.Date myDate2 = new java.util.Date();
+		
+		
+		int flag = 1;
+		do {
+		try {
+			System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
+			mydate1 = br.readLine();
+			try {
+				myDate1 = format.parse( mydate1 );
+				flag = 1;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				flag = 0;
+				System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+				//e.printStackTrace();
+			}		
+			//System.out.println(mydate);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}while(flag == 0);
+		
+		flag = 1;
+		do {
+		try {
+			System.out.println("Enter End of Date Range (YYYY-MM-DD)");
+			mydate2 = br.readLine();
+			try {
+				myDate2 = format.parse( mydate2 );
+				flag = 1;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				flag = 0;
+				System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+				//e.printStackTrace();
+			}		
+			//System.out.println(mydate2);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}while(flag == 0);
+		
+		
+		PreparedStatement ps = null;
+		
+		flag = 0;
+		
+        try{
+        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+            ps = conn.prepareStatement(sql_chk);
+            java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+            java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+            ps.setDate(1, sqlDate1);
+            ps.setDate(2, sqlDate2);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next() == true){
+                flag = 1;
+            }
+            else{
+                System.out.println("No results for this date range");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
+        if(flag == 1) {
+        	//System.out.println("Came in try after flag = 1");
+        	try {
+        		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+                java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+                ps.setDate(1, sqlDate1);
+                ps.setDate(2, sqlDate2);
+                ResultSet rs = ps.executeQuery();
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
+    	        StringBuilder sb = new StringBuilder();
+    	        for(int i=0; i<l.size(); i++)
+    	        	sb.append(String.format("| %-15s", l.get(i)));
+    	        System.out.println(sb);
+    	        
+    	        while (rs.next()) {
+    	        	sb.setLength(0);
+    	        	 
+    	        	int did = rs.getInt(l.get(0));
+    	            int mid = rs.getInt(l.get(1));
+    	            int oid= rs.getInt(l.get(2));
+    	            String ISBN = rs.getString(l.get(3));
+    	            int copies = rs.getInt(l.get(4));
+    	            String ddate = rs.getString(l.get(5));
+    	            String odate = rs.getString(l.get(6));
+    	            int cost = rs.getInt(l.get(7));
+    	            int scost= rs.getInt(l.get(8));
+    	            ArrayList<String> m = new ArrayList<String>();
+    	            m.add(Integer.toString(did));
+    	            m.add(Integer.toString(mid));
+    	            m.add(Integer.toString(oid));
+    	            m.add(ISBN);
+    	            m.add(Integer.toString(copies));
+    	            m.add(ddate);
+    	            m.add(odate);
+    	            m.add(Integer.toString(cost));
+    	            m.add(Integer.toString(scost));
+    	            for(int i=0; i<l.size(); i++)
+    		        	sb.append(String.format("| %-15s", m.get(i)));
+    		        System.out.println(sb);
+    	         }
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+        }
+
 	}
 }
