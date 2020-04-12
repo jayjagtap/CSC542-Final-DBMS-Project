@@ -25,12 +25,12 @@ import java.util.Scanner;
 
 public class Test {
 
-    static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/nkashya";
+    static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/jjjagtap";
     static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     static Connection conn = null;
-    static String user = "nkashya";
-    static String passwd = "200314563";
+    static String user = "jjjagtap";
+    static String passwd = "200311438";
 
     public static void main(String[] args) {
 
@@ -58,7 +58,12 @@ public class Test {
             //total_number_articles();
             //update_chapters_text();
             //delete_article();
-            assign();
+
+            add_staff();
+            delete_staff();
+            update_staff();
+
+            //assign();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -686,12 +691,12 @@ static void update_staff()  throws SQLException {
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
     System.out.println("Updating the information of Staff");
-    int s_id;
+    int s_id = 0;
     String staff_name = "";
     String phone_number = "";
     String staff_address = "";
     String staff_gender = "";
-    int s_age;
+    int s_age = 0;
 
     String rs_name = "";
     String rs_phonenumber = "";
@@ -818,7 +823,7 @@ static void delete_staff() throws SQLException {
     String sql_insert_stmt;
     System.out.println("Delete Staff Menu:");
 
-    int s_id;
+    int s_id = 0;
     int flag = 1;
 
     System.out.println("Enter 1 if it is an Author");
@@ -886,7 +891,7 @@ static void delete_staff() throws SQLException {
         System.out.println("Entered Staff ID does not exist");
     }
 }
-
+/*
 static void add_publications() throws SQLException {
 
     PreparedStatement ps = null;
@@ -1109,7 +1114,7 @@ static void update_publication() throws SQLException{
     ps.setString(2, rs_topic);
     ps.setDouble(3, rs_price);
     ps.executeUpdate();
-}
+}*/
 static void delete_publication()  throws SQLException{
 
     PreparedStatement ps = null;
@@ -1162,7 +1167,7 @@ static void delete_publication()  throws SQLException{
         ps.executeUpdate();
         }
     }
-
+/*
 static void insert_orders() throws SQLException{
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -1176,6 +1181,7 @@ static void insert_orders() throws SQLException{
     int numofcopies = 0;
     float cost = 0;
     float shippingcost = 0;
+    float rs_price_val = 0;
 
         try{
             System.out.println("Enter OrderId");
@@ -1238,19 +1244,18 @@ static void insert_orders() throws SQLException{
             System.out.println(e);
         }
 
-        try{
-            System.out.println("Enter cost");
-            cost = getinput();
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        String queryCheck = "SELECT price from Publication WHERE isbn = '" + isbn + "';";
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery(queryCheck);
 
-        try{
-            System.out.println("Enter Shipping Cost");
-            shippingcost = getinput();
-        }catch(Exception e){
-            System.out.println(e);
+        while(rs.next())
+        {
+            rs_price_val = rs.getdouble("price");
         }
+        cost = rs_price_val*numofcopies
+
+        shippingcost = 25*numofcopies;
+        
 
         sql_insert_stmt = "INSERT INTO Orders VALUES(?,?,?,?,?,?,?,?,?);";
         ps = conn.prepareStatement(sql_insert_stmt);
@@ -1293,7 +1298,7 @@ static void update_order() throws SQLException {
     String sql_insert_stmt;
     System.out.println("Update from the Orders Menu:");
 
-}
+}*/
 static int getinput()
     {
         Scanner scan = new Scanner(System.in);
