@@ -57,7 +57,11 @@ public class JJClass {
     		//check_editor_publications();
     		//totalprice_perisbn_perdistributor_permonth();
     		//calculate_payment_within_daterange();
-    		orders_date_range();
+    		//orders_date_range();
+    		//display_orders();
+    		//display_pays();
+    		display_WriteBooks();
+    		display_WritePeriodicals();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -691,4 +695,174 @@ public class JJClass {
         }
 
 	}
+	
+	public static void display_orders() {
+		
+		PreparedStatement ps = null;
+		
+	
+        	//System.out.println("Came in try after flag = 1");
+        	try {
+        		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Orders;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("Orders Table");
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
+    	        StringBuilder sb = new StringBuilder();
+    	        for(int i=0; i<l.size(); i++)
+    	        	sb.append(String.format("| %-15s", l.get(i)));
+    	        System.out.println(sb);
+    	        
+    	        while (rs.next()) {
+    	        	sb.setLength(0);
+    	        	 
+    	        	int did = rs.getInt(l.get(0));
+    	            int mid = rs.getInt(l.get(1));
+    	            int oid= rs.getInt(l.get(2));
+    	            String ISBN = rs.getString(l.get(3));
+    	            int copies = rs.getInt(l.get(4));
+    	            String ddate = rs.getString(l.get(5));
+    	            String odate = rs.getString(l.get(6));
+    	            int cost = rs.getInt(l.get(7));
+    	            int scost= rs.getInt(l.get(8));
+    	            ArrayList<String> m = new ArrayList<String>();
+    	            m.add(Integer.toString(did));
+    	            m.add(Integer.toString(mid));
+    	            m.add(Integer.toString(oid));
+    	            m.add(ISBN);
+    	            m.add(Integer.toString(copies));
+    	            m.add(ddate);
+    	            m.add(odate);
+    	            m.add(Integer.toString(cost));
+    	            m.add(Integer.toString(scost));
+    	            for(int i=0; i<l.size(); i++)
+    		        	sb.append(String.format("| %-15s", m.get(i)));
+    		        System.out.println(sb);
+    	         }
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+        }
+	
+public static void display_pays() {
+		
+		PreparedStatement ps = null;
+		
+	
+        	
+        	try {
+        		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Pays;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("Pays Table");
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("managerid", "staffid","payment", "paydate", "Payment Availed"));
+    	        StringBuilder sb = new StringBuilder();
+    	        for(int i=0; i<l.size(); i++)
+    	        	sb.append(String.format("| %-15s", l.get(i)));
+    	        System.out.println(sb);
+    	        
+    	        while (rs.next()) {
+    	        	sb.setLength(0);
+    	        	 
+    	        	int mid = rs.getInt(l.get(0));
+    	            int sid = rs.getInt(l.get(1));
+    	            int payment = rs.getInt(l.get(2));
+    	            String pdate = rs.getString(l.get(3));
+    	            String track = rs.getString("TrackingPayment");
+    	            ArrayList<String> m = new ArrayList<String>();
+    	            m.add(Integer.toString(mid));
+    	            m.add(Integer.toString(sid));
+    	            m.add(Integer.toString(payment));
+    	            m.add(pdate);
+    	            m.add(track);
+    	            for(int i=0; i<l.size(); i++)
+    		        	sb.append(String.format("| %-15s", m.get(i)));
+    		        System.out.println(sb);
+    	         }
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+        }
+
+public static void display_WriteBooks() {
+	
+	PreparedStatement ps = null;
+    	try {
+    		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM WriteBooks;"; 
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Write Books Table");
+            ArrayList<String> l = new ArrayList<String>( 
+                    Arrays.asList("authorid","ISBN","chapterid"));
+	        StringBuilder sb = new StringBuilder();
+	        for(int i=0; i<l.size(); i++)
+	        	sb.append(String.format("| %-15s", l.get(i)));
+	        System.out.println(sb);
+	        
+	        while (rs.next()) {
+	        	sb.setLength(0);
+	        	 
+	        	int aid = rs.getInt(l.get(0));
+	        	String ISBN = rs.getString(l.get(1));
+	            int cid = rs.getInt(l.get(2));
+	            ArrayList<String> m = new ArrayList<String>();
+	            m.add(Integer.toString(aid));
+	            m.add(ISBN);
+	            m.add(Integer.toString(cid));
+	            for(int i=0; i<l.size(); i++)
+		        	sb.append(String.format("| %-15s", m.get(i)));
+		        System.out.println(sb);
+	         }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    }
+
+public static void display_WritePeriodicals() {
+	
+	PreparedStatement ps = null;
+    	try {
+    		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM Writeperiodicals;"; 
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Write Periodicals Table");
+            ArrayList<String> l = new ArrayList<String>( 
+                    Arrays.asList("journalistid","ISBN","articleid"));
+	        StringBuilder sb = new StringBuilder();
+	        for(int i=0; i<l.size(); i++)
+	        	sb.append(String.format("| %-15s", l.get(i)));
+	        System.out.println(sb);
+	        
+	        while (rs.next()) {
+	        	sb.setLength(0);
+	        	 
+	        	int jid = rs.getInt(l.get(0));
+	        	String ISBN = rs.getString(l.get(1));
+	            int aid = rs.getInt(l.get(2));
+	            ArrayList<String> m = new ArrayList<String>();
+	            m.add(Integer.toString(jid));
+	            m.add(ISBN);
+	            m.add(Integer.toString(aid));
+	            for(int i=0; i<l.size(); i++)
+		        	sb.append(String.format("| %-15s", m.get(i)));
+		        System.out.println(sb);
+	         }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    }
 }
