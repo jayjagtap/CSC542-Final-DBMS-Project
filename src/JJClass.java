@@ -529,8 +529,10 @@ public class JJClass {
         		conn = DriverManager.getConnection(jdbcURL, user, passwd);
                 String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
                 ps = conn.prepareStatement(sql_chk);
-                ps.setDate(1, (Date) myDate1);
-                ps.setDate(2, (Date) myDate2);
+                java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+                java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+                ps.setDate(1, sqlDate1);
+                ps.setDate(2, sqlDate2);
                 ResultSet rs = ps.executeQuery();
     	        List<String> l = new ArrayList<String>();
     	        l.add("Staff ID");
