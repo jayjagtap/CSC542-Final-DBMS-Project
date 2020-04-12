@@ -677,7 +677,7 @@ static void update_periodicals() throws SQLException{
 }
     sql_insert_stmt = "Update Journalists set periodicity = ?,type = ?;";
     ps.setString(1, rs_periodicity);
-    ps.setString(1, rs_type);
+    ps.setString(2, rs_type);
     ps.executeUpdate();
     
 }
