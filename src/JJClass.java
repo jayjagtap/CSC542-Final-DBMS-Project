@@ -15,6 +15,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,7 +55,8 @@ public class JJClass {
     		//get_staff_payment_availed();
     		//find_distributors_by_city();
     		//check_editor_publications();
-    		totalprice_perisbn_perdistributor_permonth();
+    		//totalprice_perisbn_perdistributor_permonth();
+    		calculate_payment_within_daterange();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -442,5 +445,118 @@ public class JJClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public static void calculate_payment_within_daterange() {
+		
+		String mydate1 = "";
+		String mydate2 = "";
+		SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+		format.setLenient(false);
+		java.util.Date myDate1 =  new java.util.Date();
+		java.util.Date myDate2 = new java.util.Date();
+		
+		
+		int flag = 1;
+		do {
+		try {
+			System.out.println("Enter Begin of Date Range");
+			mydate1 = br.readLine();
+			try {
+				myDate1 = format.parse( mydate1 );
+				flag = 1;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				flag = 0;
+				System.out.println("Invalid Date, Please Enter again");
+				//e.printStackTrace();
+			}		
+			//System.out.println(mydate);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}while(flag == 0);
+		
+		flag = 1;
+		do {
+		try {
+			System.out.println("Enter End of Date Range");
+			mydate2 = br.readLine();
+			try {
+				myDate2 = format.parse( mydate2 );
+				flag = 1;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				flag = 0;
+				System.out.println("Invalid Date, Please Enter again");
+				//e.printStackTrace();
+			}		
+			//System.out.println(mydate2);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}while(flag == 0);
+		
+		PreparedStatement ps = null;
+		
+		flag = 0;
+		
+        try{
+        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+            ps = conn.prepareStatement(sql_chk);
+            java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+            java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+            ps.setDate(1, sqlDate1);
+            ps.setDate(2, sqlDate2);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next() == true){
+                flag = 1;
+            }
+            else{
+                System.out.println("No results for this date range ");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
+        if(flag == 1) {
+        	//System.out.println("Came in try after flag = 1");
+        	try {
+        		conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setDate(1, (Date) myDate1);
+                ps.setDate(2, (Date) myDate2);
+                ResultSet rs = ps.executeQuery();
+    	        List<String> l = new ArrayList<String>();
+    	        l.add("Staff ID");
+    	        l.add("Total Payments");
+    	        StringBuilder sb = new StringBuilder();
+    	        for(int i=0; i<l.size(); i++)
+    	        	sb.append(String.format("| %-15s", l.get(i)));
+    	        System.out.println(sb);
+    	        while (rs.next()) {
+    	        	l.clear();
+    	        	sb.setLength(0);
+    	        	int id = rs.getInt("staffid");
+    	            int revenue = rs.getInt("sum(payment)");
+    	            l.add(Integer.toString(id));
+    	            l.add(Integer.toString(revenue));
+    	            for(int i=0; i<l.size(); i++)
+    		        	sb.append(String.format("| %-15s", l.get(i)));
+    		        System.out.println(sb);
+    	         }
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+
+        }
+
+		
 	}
 }
