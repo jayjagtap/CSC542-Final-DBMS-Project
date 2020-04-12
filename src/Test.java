@@ -2,12 +2,13 @@
 // by Dimitri Rakitine. Further modified by Shrikanth N C for MySql(MariaDB) support
 // Relpace all $USER$ with your unity id and $PASSWORD$ with your 9 digit student id or updated password (if changed)
 
+import java.text.SimpleDateFormat;
 import java.sql.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Date;
+import java.util.Scanner;
 
 
 public class Test {
@@ -306,17 +307,14 @@ static void add_staff() throws SQLException{
     String phone_number = "";
     String staff_address = "";
     String staff_gender = "";
-    int s_id;
-    int s_age;
-    do
-    {
+    int s_id = 0;
+    int s_age= 0;
         System.out.println("Enter Staff ID");
         try{
             s_id = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(s_id.isEmpty());
 
     do
     {
@@ -348,15 +346,12 @@ static void add_staff() throws SQLException{
         }
     }while(staff_address.isEmpty());
 
-    do
-    {
         System.out.println("Enter Staff age");
         try{
             s_age = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(s_age.isEmpty());
 
     do
     {
@@ -448,31 +443,29 @@ static void update_staff()  throws SQLException {
     String staff_gender = "";
     int s_age;
 
-    do
-    {
+    String rs_name = "";
+    String rs_phonenumber = "";
+    String rs_address = "";
+    int rs_age = 0;
+    String rs_gender = "";
+
         System.out.println("Enter Staff ID");
         try{
                 s_id = getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(s_id.isEmpty());
 
     String data_retrieval = "Select name,id,phonenumber,address,age,gender from Staff;";
     Statement stmt = conn.createStatement();
     ResultSet rs = stmt.executeQuery(data_retrieval);
-    if(rs==False)
-    {
-        System.out.println("Entered id not present in the database");
-    }
-    else{
     while(rs.next())
     {
-        String rs_name = rs.getString("name");
-        String rs_phonenumber = rs.getString("phonenumber");
-        String rs_address = rs.getString("address");
-        int rs_age = rs.getInt("age");
-        String rs_gender = rs.getString("gender");
+        rs_name = rs.getString("name");
+        rs_phonenumber = rs.getString("phonenumber");
+        rs_address = rs.getString("address");
+        rs_age = rs.getInt("age");
+        rs_gender = rs.getString("gender");
     }
 
     System.out.println("If you want to update the name, please enter 1 else press 0");
@@ -490,7 +483,7 @@ static void update_staff()  throws SQLException {
         }
     }while(staff_name.isEmpty());
 
-    rs_name = staff_name
+    rs_name = staff_name;
 }
 
     System.out.println("If you want to update the phonenumber, please enter 1 else press 0");
@@ -508,7 +501,7 @@ static void update_staff()  throws SQLException {
         }
     }while(phone_number.isEmpty());
 
-    rs_phonenumber = phone_number
+    rs_phonenumber = phone_number;
 }
     System.out.println("If you want to update the address, please enter 1 else press 0");
     choice = getinput();
@@ -524,8 +517,8 @@ static void update_staff()  throws SQLException {
             System.out.println(e);
         }while(staff_address.isEmpty());
 
-    rs_address = staff_address
-}
+    rs_address = staff_address;
+}while(staff_address.isEmpty());
 }
 
     System.out.println("If you want to update the gender, please enter 1 else press 0");
@@ -541,9 +534,8 @@ static void update_staff()  throws SQLException {
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(staff_genderstaff.isEmpty());
-
-    rs_gender = staff_gender
+    }while(staff_gender.isEmpty());
+    rs_gender = staff_gender;
 }
 
     System.out.println("If you want to update the age, please enter 1 else press 0");
@@ -551,20 +543,16 @@ static void update_staff()  throws SQLException {
 
     if(choice==1)
     {
-    do
-    {
         System.out.println("Enter age");
         try{
             s_age= getinput();
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(s_age.isEmpty());
+    rs_age = s_age;
+    }   
 
-    rs_age = s_age
-}
-
-    sql_insert_stmt = "Update Staff set name = ?,phonenumber = ?, address = ?,age=?,gender = ?;"
+    sql_insert_stmt = "Update Staff set name = ?,phonenumber = ?, address = ?,age=?,gender = ?;";
     ps.setString(1, rs_name);
     ps.setString(2, rs_phonenumber);
     ps.setString(3, rs_address);
@@ -587,9 +575,6 @@ static void delete_staff() throws SQLException {
     System.out.println("Enter 2 if it is an Journalist");
     System.out.println("Enter 3 if it is an Editor");
     int choice = getinput();
-
-    do
-    {
         System.out.println("Enter Staff ID");
         try{
                 flag = 2;
@@ -597,7 +582,6 @@ static void delete_staff() throws SQLException {
         }catch(Exception e){
             System.out.println(e);
         }
-    }while(s_id.isEmpty());
 
     if(flag==2){
         if(choice==1)
@@ -615,7 +599,7 @@ static void delete_staff() throws SQLException {
             ps = conn.prepareStatement(sql_insert_stmt);
             ps.setInt(1, s_id);
             ps.executeUpdate();
-            flag=3
+            flag=3;
         }
 
         else if(choice==3)
@@ -660,11 +644,13 @@ static void add_publications() throws SQLException {
     String sql_insert_stmt;
     System.out.println("Adding Publications Menu");
 
+    String dateofcreation = "";
+    String dateofpublishing = "";
     String isbn = "";
     String title = "";
     String topic = "";
     String price = "";
-    int cost;
+    int cost = 0;
 
     do{
         System.out.println("Enter ISBN Number");
@@ -705,32 +691,33 @@ static void add_publications() throws SQLException {
         }
     }while(price.isEmpty());
 
-    do{
-        System.out.println("Enter Date of Creation");
-        try{
-            java.util.Date date=new java.util.Date();
-            java.sql.Date dateofcreation=new java.sql.Date(date.getTime());
+    System.out.println("Enter Date of Creation");
+    try{
+                dateofcreation = br.readLine();
+                SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD");
+                Date javadate1 = sdf.parse(dateofcreation);
+                java.sql.Date date1 = new java.sql.Date(javadate1.getTime());
             }catch(Exception e){
             System.out.println(e);
         }
-    }while(dateofcreation.isEmpty())
-    do{
+
         System.out.println("Enter Date of Publishing");
         try{
-            java.util.Date date=new java.util.Date();
-            java.sql.Date dateofpublishing=new java.sql.Date(date.getTime());
+            dateofpublishing = br.readLine();
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/DD");
+            Date javadate2 = sdf.parse(dateofpublishing);
+           java.sql.Date date2 = new java.sql.Date(javadate2.getTime());
             }catch(Exception e){
             System.out.println(e);
         }
-    }while(dateofpublishing.isEmpty())
 
     sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
     ps = conn.prepareStatement(sql_insert_stmt);
     ps.setString(1, isbn);
-    ps.setDate(2, dateofcreation);
+    ps.setDate(2, date1);
     ps.setString(3, title);
     ps.setString(4, topic);
-    ps.setDate(5, dateofpublishing);
+    ps.setDate(5, date2);
     ps.setInt(6, cost);
     ps.executeUpdate();
 
@@ -759,7 +746,7 @@ static void add_publications() throws SQLException {
     if(choice==2)
     {
         String periodicity = "";
-        String type = ""
+        String type = "";
         do{
         System.out.println("Enter Periodicity");
         try{
@@ -839,7 +826,7 @@ static void delete_publication()  throws SQLException{
         }
     }
 
-    public int getinput()
+static int getinput()
     {
         Scanner scan = new Scanner(System.in);
         int num = scan.nextInt();
