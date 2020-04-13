@@ -56,7 +56,9 @@ static void add_staff() throws SQLException
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
 
-    System.out.println("Add Enter Staff");
+    System.out.println("**********************************");
+    System.out.println("API for Entering Staff information");
+    System.out.println("**********************************")
 
     String staff_name = "";
     String phone_number = "";
@@ -75,7 +77,8 @@ static void add_staff() throws SQLException
                 
                 if(rs.next() == true){
                     s_id=-1;
-                    System.out.println("Entered value already present in the database");
+                    System.out.println("Entered Staff ID already present in the database");
+                    System.out.println("Please Enter New Staff ID");
                 }
         }catch(Exception e){
             System.out.println(e);
@@ -795,7 +798,7 @@ static void delete_staff() throws SQLException {
             ps.setInt(1, s_id);
             ps.executeUpdate();
 
-            sql_insert_stmt = "DELETE from Editperiodicals where editorid = ?;";
+            sql_insert_stmt = "DELETE from EditPeriodicals where editorid = ?;";
             ps = conn.prepareStatement(sql_insert_stmt);
             ps.setInt(1, s_id);
             ps.executeUpdate();
@@ -1260,7 +1263,7 @@ static void insert_orders() throws SQLException{
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
-            String sql_chk = "select id from Orders WHERE id = ?;"; 
+            String sql_chk = "select id from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
@@ -1349,9 +1352,10 @@ static void insert_orders() throws SQLException{
         }
     }while(numofcopies<0);
 
-        String queryCheck = "SELECT price from Publication WHERE isbn = '" + isbn + "';";
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery(queryCheck);
+        String queryCheck = "SELECT price from Publication WHERE ISBN = ?;";
+            ps = conn.prepareStatement(queryCheck);
+            ps.setString(1,isbn);
+            ResultSet rs = ps.executeQuery();
 
         while(rs.next())
         {
@@ -1425,7 +1429,7 @@ static void delete_order() throws SQLException {
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
-            String sql_chk = "select id from Orders WHERE id = ?;"; 
+            String sql_chk = "select id from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
@@ -1482,7 +1486,7 @@ static void update_order() throws SQLException {
     do{
     try{
         orderid = getinput();
-        String sql_chk = "select id from Orders WHERE id = ?;"; 
+        String sql_chk = "select id from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
