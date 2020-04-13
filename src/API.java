@@ -1,7 +1,3 @@
-// Acknowledgments: This example is a modification of code provided
-// by Dimitri Rakitine. Further modified by Shrikanth N C for MySql(MariaDB) support
-// Relpace all $USER$ with your unity id and $PASSWORD$ with your 9 digit student id or updated password (if changed)
-
 import java.text.SimpleDateFormat;
 import java.sql.*;
 import java.io.BufferedReader;
@@ -31,7 +27,7 @@ public class API {
     static Connection conn = null;
     static String user = "nkashya";
     static String passwd = "200314563";
-
+/*
     public static void main(String[] args) 
     {
 
@@ -67,7 +63,7 @@ public class API {
             System.out.println(e);
         }   
     }
-
+*/
 static void add_staff() throws SQLException
 {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
