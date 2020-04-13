@@ -24,7 +24,7 @@ import java.text.ParseException;
 import java.sql.Date;
 import java.util.List;
 
-public class Test {
+public class API {
 
     static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/nkashya";
     static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
