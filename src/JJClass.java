@@ -60,8 +60,8 @@ public class JJClass {
     		//orders_date_range();
     		//display_orders();
     		//display_pays();
-    		display_WriteBooks();
-    		display_WritePeriodicals();
+    		//display_WriteBooks();
+    		//display_WritePeriodicals();
     }catch(Exception e){
         System.out.println(e);
     }
@@ -103,29 +103,33 @@ public class JJClass {
 	
 	public static void revenue_for_city() {
 		PreparedStatement ps = null;
-		System.out.println("Enetr the name of the city to get revenue details: ");
+		System.out.println("Enter the name of the city to get revenue details: ");
 		
 		Scanner sc = new Scanner(System.in);
 		int flag = 0;
 		String city = "";
-		
-        try{
-        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
-        	city = br.readLine();
-            String sql_chk = "select city from Distributors WHERE city = ?;"; 
-            ps = conn.prepareStatement(sql_chk);
-            ps.setString(1, city);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next() == true){
-                flag = 1;
-            }
-            else{
-                System.out.println("City does not exist in Distributor table");
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
+		do {
+			try{
+	        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+	        	city = br.readLine();
+	            String sql_chk = "select city from Distributors WHERE city = ?;"; 
+	            ps = conn.prepareStatement(sql_chk);
+	            ps.setString(1, city);
+	            ResultSet rs = ps.executeQuery();
+	            
+	            if(rs.next() == true){
+	                flag = 1;
+	            }
+	            else{
+	            	flag = 0;
+	                System.out.println("City does not exist in Distributor table");
+	                System.out.println("Please enter city again");
+	            }
+	        }catch(Exception e){
+	            System.out.println(e);
+	        }
+		}while(flag == 0 );
+        
     
         if(flag == 1) {
         	//System.out.println("Came in try after flag = 1");
@@ -272,24 +276,28 @@ public class JJClass {
 		
 			int flag = 0;
 			String city = "";
-			
-	        try{
-	        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
-	        	city = br.readLine();
-	            String sql_chk = "select city from Distributors WHERE city = ?;"; 
-	            ps = conn.prepareStatement(sql_chk);
-	            ps.setString(1, city);
-	            ResultSet rs = ps.executeQuery();
-	            
-	            if(rs.next() == true){
-	                flag = 1;
-	            }
-	            else{
-	                System.out.println("City does not exist in Distributor table");
-	            }
-	        }catch(Exception e){
-	            System.out.println(e);
-	        }
+			do {
+				try{
+		        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+		        	city = br.readLine();
+		            String sql_chk = "select city from Distributors WHERE city = ?;"; 
+		            ps = conn.prepareStatement(sql_chk);
+		            ps.setString(1, city);
+		            ResultSet rs = ps.executeQuery();
+		            
+		            if(rs.next() == true){
+		                flag = 1;
+		            }
+		            else{
+		            	flag = 0;
+		                System.out.println("City does not exist in Distributor table");
+		                System.out.println("Please Enter valid city");
+		            }
+		        }catch(Exception e){
+		            System.out.println(e);
+		        }
+			}while(flag == 0);
+	        
 	    
 	        if(flag == 1) {
 	        	//System.out.println("Came in try after flag = 1");
@@ -353,23 +361,28 @@ public class JJClass {
 		int flag = 0;
 		String id = "";
 		
-        try{
-        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
-        	id = br.readLine();
-            String sql_chk = "select editorid from Assign WHERE editorid = ?;"; 
-            ps = conn.prepareStatement(sql_chk);
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            
-            if(rs.next() == true){
-                flag = 1;
-            }
-            else{
-                System.out.println("Editor ID not in Assign Table");
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
+		do {
+			try{
+	        	conn = DriverManager.getConnection(jdbcURL, user, passwd);
+	        	id = br.readLine();
+	            String sql_chk = "select editorid from Assign WHERE editorid = ?;"; 
+	            ps = conn.prepareStatement(sql_chk);
+	            ps.setString(1, id);
+	            ResultSet rs = ps.executeQuery();
+	            
+	            if(rs.next() == true){
+	                flag = 1;
+	            }
+	            else{
+	            	flag = 0;
+	                System.out.println("Editor ID not in Assign Table");
+	                System.out.println("Please enter valid editor id");
+	            }
+	        }catch(Exception e){
+	            System.out.println(e);
+	        }
+		}while(flag == 0);
+        
     
         if(flag == 1) {
         	//System.out.println("Came in try after flag = 1");
