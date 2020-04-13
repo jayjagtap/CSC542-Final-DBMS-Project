@@ -75,6 +75,7 @@ public class Test {
             //assign();
             //insert_orders();
             //update_publication();
+            delete_manager();
 
 
         }catch(Exception e){
@@ -630,6 +631,33 @@ static void update_staff()  throws SQLException {
     ps.setString(5, rs_gender);
     ps.setInt(6,s_id);
     ps.executeUpdate();
+}
+
+    static void delete_manager() throws SQLException{
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Add Chapters Menu:");
+        int manager_id = -1;
+        int flag=1;
+
+        do{
+            System.out.println("Enter Manager_ID to be deleted");
+        try{
+                flag = 2;
+                manager_id = getinput();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    }while(manager_id<0);
+
+    if(flag==2){
+        sql_insert_stmt = "DELETE FROM Manager WHERE id = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setInt(1, manager_id);
+        ps.executeUpdate();
+    }
 }
 
 static void delete_staff() throws SQLException {
@@ -1683,4 +1711,3487 @@ static void displayPublication() throws SQLException {
                 System.out.println(sb);
 }
 }
+
+ static void add_chapters() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Add Chapters Menu:");
+        String isbn = "";
+        String texts = "";
+        String tc_id = "";
+
+        int c_id = 0;
+        int flag = 1;
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+
+                String sql_chk = "SELECT * FROM Books WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist in Books table");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        if (flag == 2) {
+            do {
+                System.out.println("Enter the Text:");
+
+                try {
+                    texts = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (texts.isEmpty());
+        }
+
+        if (flag == 2) {
+            do {
+                System.out.println("Enter Chapter_ID:");
+
+                try {
+                    tc_id = br.readLine();
+                    if (!tc_id.isEmpty()) {
+                        c_id = Integer.parseInt(tc_id);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (tc_id.isEmpty());
+        }
+
+        if (flag == 2) {
+            sql_insert_stmt = "INSERT INTO Chapters(ISBN, texts, id) VALUES(?,?,?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.setString(2, texts);
+            ps.setInt(3, c_id);
+
+            ps.executeUpdate();
+        }
     }
+
+
+    //journalists
+    static void add_articles() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Add Articles Menu:");
+        String isbn = "";
+        String texts = "";
+        String te_id = "";
+
+        int e_id = 0;
+        int flag = 1;
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+
+                String sql_chk = "SELECT * FROM Periodicals WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist in the Periodicals table");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        if (flag == 2) {
+            do {
+                System.out.println("Enter the Text:");
+
+                try {
+                    texts = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (texts.isEmpty());
+        }
+
+        if (flag == 2) {
+            do {
+                System.out.println("Enter Chapter_ID:");
+
+                try {
+                    te_id = br.readLine();
+                    if (!te_id.isEmpty()) {
+                        e_id = Integer.parseInt(te_id);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (te_id.isEmpty());
+        }
+
+        if (flag == 2) {
+            sql_insert_stmt = "INSERT INTO Articles(ISBN, texts, id) VALUES(?,?,?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.setString(2, texts);
+            ps.setInt(3, e_id);
+
+            ps.executeUpdate();
+        }
+    }
+
+    //editors, authors
+    static void total_chapters() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Total Number of Chapters Menu:");
+
+        String isbn = "";
+
+        int flag = 1;
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+
+                String sql_chk = "SELECT * FROM Books WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist in the Chapters table");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        if (flag == 2) {
+            sql_insert_stmt = "SELECT COUNT(*) FROM Chapters WHERE ISBN = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println("Total number of chapters in ISBN - " + isbn + " = " + rs.getInt(1));
+            }
+        }
+    }
+
+
+    // editors, journalists
+    static void total_articles() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Total Number of Articles Menu:");
+
+        String isbn = "";
+
+        int flag = 1;
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+
+                String sql_chk = "SELECT * FROM Periodicals WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist in the Periodicals table");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        if (flag == 2) {
+            sql_insert_stmt = "SELECT COUNT(*) FROM Articles WHERE ISBN = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println("Total number of articles in ISBN - " + isbn + " = " + rs.getInt(1));
+            }
+        }
+    }
+
+
+    // manager
+    static void add_distributor() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Add Distributor Menu:");
+
+        String name = "";
+        String phone_number = "";
+        String city = "";
+        String address = "";
+        String type = "";
+        String contact_person = "";
+        String sd_id = "";
+        String sa_o = "";
+
+        int d_id = 0;
+
+        double amount_owed = 0.0d;
+
+        do {
+            System.out.println("Enter Distributor ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid Integer");
+                    sd_id = "";
+                }
+            }
+
+        } while (sd_id.isEmpty());
+
+        do {
+            System.out.println("Enter the Distributor Name:");
+
+            try {
+                name = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (name.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor Phone Number"); // ensure it's of 10 digits
+            try {
+                phone_number = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (phone_number.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor City");
+            try {
+                city = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (city.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor Address");
+            try {
+                address = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (address.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor Type");
+            try {
+                type = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (type.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor Owed Amount");
+            try {
+                sa_o = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sa_o.isEmpty()) {
+                try {
+                    amount_owed = Double.parseDouble(sa_o);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid amount value");
+                    sa_o = "";
+                }
+            }
+
+        } while (sa_o.isEmpty());
+
+        do {
+            System.out.println("Enter Distributor Contact Person");
+            try {
+                contact_person = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (contact_person.isEmpty());
+
+        sql_insert_stmt = "INSERT INTO Distributors VALUES(?,?,?,?,?,?,?,?);";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setInt(1, d_id);
+        ps.setString(2, name);
+        ps.setString(3, phone_number);
+        ps.setString(4, city);
+        ps.setString(5, address);
+        ps.setString(6, type);
+        ps.setDouble(7, amount_owed);
+        ps.setString(8, contact_person);
+        ps.executeUpdate();
+    }
+
+
+    // manager
+    static void delete_distributor() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Delete Distributor Menu:");
+        String sd_id = "";
+
+        int d_id = 0;
+        int flag = 1;
+        do {
+            System.out.println("Enter Distributor ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setString(1, sd_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag = 2;
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid Distributor ID");
+                    sd_id = "";
+                }
+            }
+
+        } while (sd_id.isEmpty());
+
+        if (flag == 2) {
+            sql_insert_stmt = "DELETE FROM Distributors WHERE id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, d_id);
+
+            ps.executeUpdate();
+        } else {
+            System.out.println("Entered Distributor ID does not exist");
+        }
+
+    }
+
+    // manager
+    static void bill_distributor() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Bill Distributor Menu:");
+        String sd_id = "";
+
+        int d_id = 0;
+        int flag = 1;
+        do {
+            System.out.println("Enter Distributor ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, sd_id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag = 2;
+                    try {
+                        d_id = Integer.parseInt(sd_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid Distributor ID");
+                        sd_id = "";
+                    }
+                } else {
+                    System.out.println("Entered Distributor ID does not exist");
+                }
+            }
+
+        } while (sd_id.isEmpty());
+
+        if (flag == 2) {
+            sql_insert_stmt = "SELECT sum(cost) + sum(shippingcost) as distributor_Bill FROM Orders WHERE distributorid = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, d_id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                System.out.println("Total Bill for Distributor ID - " + d_id + " = " + rs.getInt(1));
+            }
+        }
+    }
+
+    // manager
+    static void update_distributor_balance() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+
+        System.out.println("Update Distributor Balance Menu:");
+        String sd_id = "";
+        String da_a = "";
+
+        int d_id = 0;
+        int flag = 1;
+
+        double amount_owed = 0.0d;
+
+        do {
+            System.out.println("Enter Distributor ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid Distributor ID");
+                    sd_id = "";
+                }
+            }
+        } while (sd_id.isEmpty());
+
+        String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+        ps = conn.prepareStatement(sql_chk);
+        ps.setInt(1, d_id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            flag = 2;
+            // break;
+        } else {
+            System.out.println("Entered Distributor ID does not Exist");
+        }
+
+        if (flag == 2) {
+            do {
+                System.out.println("Enter Distributor Balance:");
+                try {
+                    da_a = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!da_a.isEmpty()) {
+                    try {
+                        amount_owed = Double.parseDouble(da_a);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid AMount");
+                        da_a = "";
+                    }
+                }
+
+            } while (da_a.isEmpty());
+        }
+
+        if (flag == 2) {
+            sql_insert_stmt = "UPDATE Distributors SET amountowed = ? WHERE id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setDouble(1, amount_owed);
+            ps.setInt(2, d_id);
+            ps.executeUpdate();
+        }
+    }
+
+
+    // editors, journalists
+    static void total_number_articles() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        // ystem.out.println("Total Number of Articles Menu:");
+
+        sql_insert_stmt = "SELECT Count(*) AS Total_Number_of_Articles FROM Articles;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            System.out.println("Total number of Articles" + " = " + rs.getInt(1));
+        }
+    }
+
+
+    // editors, journalists
+    static void update_articles_text() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Update Article's Text Menu:");
+        String isbn = "";
+        String texts = "";
+        String tc_id = "";
+
+        int c_id = 0;
+        int flag_o = 1;
+        int flag_t = 1;
+
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+
+                String sql_chk = "SELECT * FROM Articles WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag_o = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        if (flag_o == 2) {
+            do {
+                System.out.println("Enter the Text:");
+
+                try {
+                    texts = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (texts.isEmpty());
+        }
+
+        if (flag_o == 2) {
+            do {
+                System.out.println("Enter Article_ID:");
+
+                try {
+                    tc_id = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!tc_id.isEmpty()) {
+                    try {
+                        c_id = Integer.parseInt(tc_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid ID");
+                        tc_id = "";
+                    }
+                }
+            } while (tc_id.isEmpty());
+            String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setInt(1, c_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag_t = 2;
+                // break;
+            } else {
+                System.out.println("Article ID does not exist");
+            }
+        }
+
+        if (flag_o == 2 && flag_t == 2) {
+            sql_insert_stmt = "UPDATE Articles SET texts = ? WHERE ISBN = ? AND id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, texts);
+            ps.setString(2, isbn);
+            ps.setInt(3, c_id);
+
+            ps.executeUpdate();
+        }
+    }
+
+
+    // editors, authors
+    static void update_chapters_text() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Update Chapter's Text Menu:");
+        String isbn = "";
+        String texts = "";
+        String tc_id = "";
+
+        int c_id = 0;
+        int flag_o = 1;
+        int flag_t = 1;
+
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            String sql_chk = "SELECT * FROM Chapters WHERE ISBN = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setString(1, isbn);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag_o = 2;
+                break;
+            } else {
+                System.out.println("ISBN does not exist");
+            }
+
+        } while (isbn.isEmpty());
+
+        if (flag_o == 2) {
+            do {
+                System.out.println("Enter the Updated Text:");
+
+                try {
+                    texts = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (texts.isEmpty());
+        }
+
+        if (flag_o == 2) {
+            do {
+                System.out.println("Enter Chapter_ID:");
+
+                try {
+                    tc_id = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!tc_id.isEmpty()) {
+                    try {
+                        c_id = Integer.parseInt(tc_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid ID");
+                        tc_id = "";
+                    }
+                }
+            } while (tc_id.isEmpty());
+
+            String sql_chk = "SELECT * FROM Chapters WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setInt(1, c_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag_t = 2;
+                // break;
+            } else {
+                System.out.println("Chapter ID does not exist");
+            }
+        }
+
+        if (flag_o == 2 && flag_t == 2) {
+            sql_insert_stmt = "UPDATE Chapters SET texts = ? WHERE ISBN = ? AND id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, texts);
+            ps.setString(2, isbn);
+            ps.setInt(3, c_id);
+
+            ps.executeUpdate();
+        }
+    }
+
+    // editor, journalist
+    static void delete_article() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Delete Article Menu:");
+        String isbn = "";
+        String tc_id = "";
+
+        int c_id = 0;
+        int flag_o = 1;
+        int flag_t = 1;
+
+        do {
+            System.out.println("Enter ISBN:");
+            try {
+                isbn = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            String sql_chk = "SELECT * FROM Articles WHERE ISBN = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setString(1, isbn);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag_o = 2;
+                break;
+            } else {
+                System.out.println("ISBN does not exist");
+            }
+        } while (isbn.isEmpty());
+
+        if (flag_o == 2) {
+            do {
+                System.out.println("Enter Article_ID:");
+
+                try {
+                    tc_id = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!tc_id.isEmpty()) {
+                    try {
+                        c_id = Integer.parseInt(tc_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid ID");
+                        tc_id = "";
+                    }
+                }
+            } while (tc_id.isEmpty());
+
+            String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk);
+            ps.setInt(1, c_id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                flag_t = 2;
+                // break;
+            } else {
+                System.out.println("Article_ID does not exist");
+            }
+        }
+
+        if (flag_o == 2 && flag_t == 2) {
+            sql_insert_stmt = "DELETE FROM Articles WHERE ISBN = ? and id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+
+            ps.setString(1, isbn);
+            ps.setInt(2, c_id);
+
+            ps.executeUpdate();
+        }
+    }
+
+    // manager
+    static void assign() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Assign Menu:");
+
+        int m_id = 0;
+        int e_id = 0;
+
+        String isbn = "";
+        String sm_id = "";
+        String se_id = "";
+
+        int t1 = 1;
+        int t2 = 1;
+        int t3 = 1;
+
+        do {
+            System.out.println("Enter Manager ID:");
+            try {
+                sm_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sm_id.isEmpty()) {
+                try {
+                    m_id = Integer.parseInt(sm_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid ID");
+                    sm_id = "";
+                }
+            }
+        } while (sm_id.isEmpty());
+
+        String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
+        ps = conn.prepareStatement(sql_chk);
+        ps.setInt(1, m_id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            t1 = 2;
+            // break;
+        } else {
+            System.out.println("Manager ID does not exist");
+        }
+
+        if (t1 == 2) {
+            do {
+                System.out.println("Enter the Editor ID:");
+
+                try {
+                    se_id = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!se_id.isEmpty()) {
+                    try {
+                        e_id = Integer.parseInt(se_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid ID");
+                        se_id = "";
+                    }
+                }
+            } while (se_id.isEmpty());
+
+            String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk1);
+            ps.setInt(1, e_id);
+            ResultSet rs1 = ps.executeQuery();
+            if (rs1.next()) {
+                t2 = 2;
+                // break;
+            } else {
+                System.out.println("Editor ID does not exist");
+            }
+        }
+
+        if (t1 == 2 && t2 == 2) {
+            do {
+                System.out.println("Enter ISBN:");
+                try {
+                    isbn = br.readLine();
+
+                    String sql_chk1 = "SELECT * FROM Publication WHERE ISBN = ?;";
+                    ps = conn.prepareStatement(sql_chk1);
+                    ps.setString(1, isbn);
+                    ResultSet rs1 = ps.executeQuery();
+                    if (rs1.next()) {
+                        t3 = 2;
+                        break;
+                    } else {
+                        System.out.println("ISBN does not exist");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (isbn.isEmpty());
+        }
+
+        if (t1 == 2 && t2 == 2 && t3 == 2) {
+            sql_insert_stmt = "INSERT INTO Assign VALUES(?,?,?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, m_id);
+            ps.setInt(2, e_id);
+            ps.setString(3, isbn);
+
+            ps.executeUpdate();
+        }
+
+    }
+
+
+    //  manager
+    static void publication_by_editor() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Find Publication by Editor ID Menu:");
+
+        int e_id = 0;
+
+        String se_id = "";
+        int t1 = 1;
+
+        do {
+            System.out.println("Enter Editor ID:");
+            try {
+                se_id = br.readLine();
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!se_id.isEmpty()) {
+                try {
+                    e_id = Integer.parseInt(se_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid ID");
+                    se_id = "";
+                }
+            }
+        } while (se_id.isEmpty());
+
+        String sql_chk = "SELECT * FROM Editors WHERE id = ?;";
+        ps = conn.prepareStatement(sql_chk);
+        ps.setInt(1, e_id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            t1 = 2;
+            // break;
+        } else {
+            System.out.println("Editor does not exist");
+        }
+
+        if (t1 == 2) {
+            sql_insert_stmt = "Select * From Publication WHERE ISBN IN (Select ISBN from Assign where editorid=?);";
+
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, e_id);
+            ResultSet rs1 = ps.executeQuery();
+
+            if (!rs1.isBeforeFirst()) {
+                System.out.println("Query returns no rows!");
+                // continue;
+            }
+
+            else {
+                System.out.println(
+                        "--------------------------------------------------------------------------------------------------------------------------------------------------------");
+                String c1 = "ISBN";
+                String c2 = "Date_of_Creation";
+                String c3 = "Title";
+                String c4 = "Topic";
+                String c5 = "Publication_Date";
+                String c6 = "Price";
+                System.out.format("%-10s%-30s%-40s%-20s%-24s%-10s", c1, c2, c3, c4, c5, c6);
+
+                System.out.println();
+
+                while (rs1.next()) {
+                    String r1 = rs1.getString(1);
+                    String r2 = rs1.getString(2);
+                    String r3 = rs1.getString(3);
+                    String r4 = rs1.getString(4);
+                    String r5 = rs1.getString(5);
+                    String r6 = rs1.getString(6);
+
+                    System.out.format("%-10s%-30s%-40s%-20s%-24s%-10s", r1, r2, r3, r4, r5, r6);
+                    System.out.println();
+                }
+                System.out.println(
+                        "--------------------------------------------------------------------------------------------------------------------------------------------------------");
+            }
+        }
+    }
+
+    // manager
+    static void insert_pay() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Insert into Pays Menu:");
+        String sm_id = "";
+        String se_id = "";
+        String spayment = "";
+        String day = "";
+        String month = "";
+        String year = "";
+        String date = "";
+        String track = "";
+
+        int e_id = 0;
+        int m_id = 0;
+        int payment = 0;
+        int m = 0, d = 0;
+
+        int flag1 = 1;
+        int flag2 = 1;
+
+        do {
+            System.out.println("Enter Manager ID:");
+            try {
+                sm_id = br.readLine();
+
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sm_id.isEmpty()) {
+
+                try {
+                    m_id = Integer.parseInt(sm_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid ID");
+                    sm_id = "";
+                }
+            }
+        } while (sm_id.isEmpty());
+
+        String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
+        ps = conn.prepareStatement(sql_chk);
+        ps.setInt(1, m_id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            flag1 = 2;
+            // break;
+        } else {
+            System.out.println("Manager does not exist");
+        }
+
+        if (flag1 == 2) {
+            do {
+                System.out.println("Enter Editor_ID:");
+                try {
+                    se_id = br.readLine();
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!se_id.isEmpty()) {
+                    try {
+                        e_id = Integer.parseInt(se_id);
+                    } catch (Exception e) {
+                        System.out.println("ENter a valid ID");
+                        se_id = "";
+                    }
+                }
+            } while (se_id.isEmpty());
+
+            String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
+            ps = conn.prepareStatement(sql_chk1);
+            ps.setInt(1, e_id);
+            ResultSet rs1 = ps.executeQuery();
+            if (rs1.next()) {
+                flag2 = 2;
+                // break;
+            } else {
+                System.out.println("Editor does not exist");
+            }
+
+        }
+
+        if (flag1 == 2 && flag2 == 2) {
+            do {
+                System.out.println("Enter Payment to be made:");
+                try {
+                    spayment = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!spayment.isEmpty()) {
+                    try {
+                        payment = Integer.parseInt(spayment);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid Amount");
+                        spayment = "";
+                    }
+                }
+            } while (spayment.isEmpty());
+
+            System.out.println(
+                    "Entering the date now: --------------------------------------------------------------------------");
+            do {
+                System.out.println("Enter the Year");
+                try {
+                    year = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (year.isEmpty());
+            do {
+                System.out.println("Enter the Month");
+                try {
+                    month = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!month.isEmpty()) {
+                    try {
+                        m = Integer.parseInt(month);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid value");
+                        month = "";
+                    }
+                }
+            } while (month.isEmpty() || m > 12 || m <= 0);
+
+            do {
+                System.out.println("Enter the Day");
+                try {
+                    day = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!day.isEmpty()) {
+                    try {
+                        d = Integer.parseInt(day);
+                    } catch (Exception e) {
+                        System.out.println("ENter a valid value");
+                        day = "";
+                    }
+                }
+
+            } while (day.isEmpty() || d > 31 || d <= 0);
+
+            date = year + "-" + month + "-" + day;
+
+            do {
+                System.out.println("Enter if it is Being Tracked or Not?");
+                try {
+                    track = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (track.isEmpty());
+        }
+
+        if (flag1 == 2 && flag2 == 2) {
+            sql_insert_stmt = "INSERT INTO Pays(managerid, staffid, payment, paydate, TrackingPayment) VALUES (?, ?, ?, ?, ?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, m_id);
+            ps.setInt(2, e_id);
+            ps.setInt(3, payment);
+            ps.setDate(4, java.sql.Date.valueOf(date));
+            ps.setString(5, track);
+
+            ps.executeUpdate();
+            System.out.println("Inserted");
+        }
+    }
+
+    // manager
+    static void generate_distributor_report() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Generate Order Report for an Individual Distributor:");
+
+        int d_id = 0;
+        String sd_id = "";
+
+        // String e_id = "";
+        int t1 = 1;
+
+        do {
+            System.out.println("Enter Distributor ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a valid value");
+                    sd_id = "";
+                }
+            }
+        } while (sd_id.isEmpty());
+
+        String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+        ps = conn.prepareStatement(sql_chk);
+        ps.setInt(1, d_id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            t1 = 2;
+            // break;
+        } else {
+            System.out.println("Distributor does not exist");
+        }
+
+        if (t1 == 2) {
+            sql_insert_stmt = "Select A.id as Distributorid, A.phonenumber, A.city, A.type, A.amountowed,B.orderid, B.ISBN,B.numcopies, B.cost from Distributors as A join Orders as B where A.id = B.distributorid and A.id = ?;";
+
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, d_id);
+            ResultSet rs1 = ps.executeQuery();
+
+            if (!rs1.isBeforeFirst()) {
+                System.out.println("Query returns no rows!");
+                // continue;
+            }
+
+            else {
+                System.out.println(
+                        "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                String c1 = "Distributor ID";
+                String c2 = "Phone Number";
+                String c3 = "City";
+                String c4 = "Type";
+                String c5 = "Amount Owed";
+                String c6 = "Order ID";
+                String c7 = "ISBN";
+                String c8 = "Number of Copies";
+                String c9 = "Cost";
+                System.out.format("%-30s%-20s%-20s%-20s%-20s%-10s%-15s%-36s%-10s", c1, c2, c3, c4, c5, c6, c7, c8, c9);
+
+                System.out.println();
+
+                while (rs1.next()) {
+                    String r1 = rs1.getString(1);
+                    String r2 = rs1.getString(2);
+                    String r3 = rs1.getString(3);
+                    String r4 = rs1.getString(4);
+                    String r5 = rs1.getString(5);
+                    String r6 = rs1.getString(6);
+                    String r7 = rs1.getString(7);
+                    String r8 = rs1.getString(8);
+                    String r9 = rs1.getString(9);
+
+                    System.out.format("%-30s%-20s%-20s%-20s%-20s%-10s%-15s%-36s%-10s", r1, r2, r3, r4, r5, r6, r7, r8,
+                            r9);
+                    System.out.println();
+                }
+                System.out.println(
+                        "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            }
+        }
+    }
+
+    // manager
+    static void generate_distributors_report() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Generate Order Report for all Distributors:");
+
+        sql_insert_stmt = "select A.id as Distributorid, A.phonenumber, A.city, A.type, A.amountowed,B.orderid, B.ISBN, B.numcopies, B.cost from Distributors as A join Orders as B where A.id = B.distributorid;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            String c1 = "Distributor ID";
+            String c2 = "Phone Number";
+            String c3 = "City";
+            String c4 = "Type";
+            String c5 = "Amount Owed";
+            String c6 = "Order ID";
+            String c7 = "ISBN";
+            String c8 = "Number of Copies";
+            String c9 = "Cost";
+            System.out.format("%-30s%-20s%-20s%-20s%-20s%-10s%-15s%-36s%-10s", c1, c2, c3, c4, c5, c6, c7, c8, c9);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+                String r4 = rs.getString(4);
+                String r5 = rs.getString(5);
+                String r6 = rs.getString(6);
+                String r7 = rs.getString(7);
+                String r8 = rs.getString(8);
+                String r9 = rs.getString(9);
+
+                System.out.format("%-30s%-20s%-20s%-20s%-20s%-10s%-15s%-36s%-10s", r1, r2, r3, r4, r5, r6, r7, r8, r9);
+                System.out.println();
+            }
+            System.out.println(
+                    "----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void orders_by_month() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Group Orders by Month:");
+
+        sql_insert_stmt = "select month(orderdate),orderid,ISBN from Orders group by month(orderdate);";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------");
+            String c1 = "Month";
+            String c2 = "Order ID";
+            String c3 = "ISBN";
+
+            System.out.format("%-10s%-30s%-40s", c1, c2, c3);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+
+                System.out.format("%-10s%-30s%-40s", r1, r2, r3);
+                System.out.println();
+            }
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void total_distributors() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Total Distributors:");
+
+        sql_insert_stmt = "select count(id) as \"No of Distributors \" from Distributors;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("------------------------------------------------");
+            String c1 = "No of Distributors";
+
+            System.out.format("%-10s", c1);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+
+                System.out.format("%-10s", r1);
+                System.out.println();
+            }
+            System.out.println("------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void total_expense() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Total Expense:");
+
+        sql_insert_stmt = "select sum(payment) as Expense from Pays where TrackingPayment = \"Yes\";";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("--------------------------------------------------");
+            String c1 = "Expense";
+
+            System.out.format("%-10s", c1);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+
+                System.out.format("%-10s", r1);
+                System.out.println();
+            }
+            System.out.println("--------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void Revenue_by_City() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Total Revenue for every given city :");
+
+        sql_insert_stmt = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\" from Distributors d left join Orders o on d.id=o.distributorid group by d.city;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("-----------------------------------------------------------------");
+            String c1 = "City";
+            String c2 = "Revenue Generated";
+
+            System.out.format("%-20s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-20s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println("-----------------------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void distributor_report_by_month() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        String mon = "";
+        int month_no = 0;
+        System.out.println("Distributor Report by Month:");
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        map.put("january", 1);
+        map.put("february", 2);
+        map.put("march", 3);
+        map.put("april", 4);
+        map.put("may", 5);
+        map.put("june", 6);
+        map.put("july", 7);
+        map.put("august", 8);
+        map.put("september", 9);
+        map.put("october", 10);
+        map.put("november", 11);
+        map.put("december", 12);
+
+        do {
+            System.out.println("Enter Month:");
+            try {
+                mon = br.readLine();
+            } catch (Exception e) {
+
+            }
+            mon = mon.toLowerCase();
+            try {
+                month_no = map.get(mon);
+            } catch (Exception e) {
+                System.out.println("Entered String is invalid---------------------");
+                mon = "";
+            }
+        } while (mon.isEmpty());
+
+        sql_insert_stmt = "select A.id as Distributorid, A.phonenumber, A.city, A.type, A.amountowed,B.orderid, B.orderdate, B.deliverydate, B.ISBN, B.numcopies, B.cost from Distributors as A join Orders as B where A.id = B.distributorid and MONTH(orderdate) = ? ;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setInt(1, month_no);
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println(
+                    "--------------------------------------------------------------------------------------------------------------------------------------------------------");
+            String c1 = "Distributor ID";
+            String c2 = "Phone Number";
+            String c3 = "City";
+            String c4 = "Type";
+            String c5 = "Amount Owed";
+            String c6 = "Order ID";
+            String c7 = "Order Date";
+            String c8 = "Delivery Date";
+            String c9 = "ISBN";
+            String c10 = "Number of Copies";
+            String c11 = "Cost";
+            System.out.format("%-23s%-20s%-18s%-20s%-20s%-12s%-19s%-19s%-10s%-12s%-11s", c1, c2, c3, c4, c5, c6, c7, c8,
+                    c9, c10, c11);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+                String r4 = rs.getString(4);
+                String r5 = rs.getString(5);
+                String r6 = rs.getString(6);
+                String r7 = rs.getString(7);
+                String r8 = rs.getString(8);
+                String r9 = rs.getString(9);
+                String r10 = rs.getString(10);
+                String r11 = rs.getString(11);
+
+                System.out.format("%-23s%-20s%-18s%-20s%-20s%-12s%-19s%-19s%-10s%-12s%-11s", r1, r2, r3, r4, r5, r6, r7,
+                        r8, r9, r10, r11);
+                System.out.println();
+            }
+            System.out.println(
+                    "--------------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
+    }
+
+    // manager
+    static void update_distributors() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Update Distributor's Details Menu:------------------------------");
+
+        String sd_id = "";
+
+        int d_id = 0;
+        int flag1 = 1;
+
+        do {
+            System.out.println("Enter Distributor's ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Invalid Manager ID");
+                    sd_id = "";
+                }
+            }
+
+            if (!sd_id.isEmpty()) {
+                String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, d_id);
+                ResultSet rs = ps.executeQuery();
+
+                if (!rs.isBeforeFirst()) {
+                    System.out.println("Manager ID does not exist");
+                    // continue;
+                }
+
+                else {
+                    flag1 = 2;
+                    while (rs.next()) {
+                        String r1 = rs.getString(1);
+                        String r2 = rs.getString(2);
+                        String r3 = rs.getString(3);
+                        String r4 = rs.getString(4);
+                        String r5 = rs.getString(5);
+                        String r6 = rs.getString(6);
+                        String r7 = rs.getString(7);
+                        String r8 = rs.getString(8);
+
+                        System.out.println("id: " + r1);
+                        System.out.println("Name: " + r2);
+                        System.out.println("Phone_Number: " + r3);
+                        System.out.println("City: " + r4);
+                        System.out.println("Address: " + r5);
+                        System.out.println("Type: " + r6);
+                        System.out.println("Amount_Owed: " + r7);
+                        System.out.println("Contact_Person: " + r8);
+                    }
+                }
+            }
+
+        } while (sd_id.isEmpty());
+
+        if (flag1 == 2) {
+            System.out.println("What Do you want to update? Enter space separated values like 1 2 3 4...");
+            System.out.println("1: Name");
+            System.out.println("2: Phone_Number");
+            System.out.println("3: City");
+            System.out.println("4: Address");
+            System.out.println("5: Type");
+            System.out.println("6: Amount_Owed");
+            System.out.println("7: Contact_Person");
+            System.out.println("Enter your Choice: ");
+
+            String ch = "";
+
+            try {
+                ch = br.readLine();
+            } catch (Exception e) {
+
+            }
+
+            int i;
+            int f1 = -1;
+            int f2 = -1;
+            int f3 = -1;
+            int f4 = -1;
+            int f5 = -1;
+            int f6 = -1;
+            int f7 = -1;
+            // int f8 = -1;
+
+            String new_name = "";
+            String new_number = "";
+            String new_city = "";
+            String new_address = "";
+            String new_type = "";
+            String new_contact = "";
+
+            double a_o = 0.0d;
+
+            for (i = 0; i < ch.length(); i++) {
+                if (ch.charAt(i) == ' ') {
+                    continue;
+                } else if (ch.charAt(i) == '1') {
+                    if (f1 == -1) {
+                        f1 = 1;
+                        try {
+                            new_name = get_name();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Name Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '2') {
+                    if (f2 == -1) {
+                        f2 = 1;
+                        try {
+                            new_number = get_number();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Phone Number Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '3') {
+                    if (f3 == -1) {
+                        f3 = 1;
+                        try {
+                            new_city = get_city();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("City Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '4') {
+                    if (f4 == -1) {
+                        f4 = 1;
+                        try {
+                            new_address = get_address();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Address Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '5') {
+                    if (f5 == -1) {
+                        f5 = 1;
+                        try {
+                            new_type = get_type();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Type Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '6') {
+                    if (f6 == -1) {
+                        f6 = 1;
+                        try {
+                            a_o = get_amount();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Amount Owed Already Entered");
+                        continue;
+                    }
+                } else if (ch.charAt(i) == '7') {
+                    if (f7 == -1) {
+                        f7 = 1;
+                        try {
+                            new_contact = get_contact();
+                        } catch (Exception e) {
+                        }
+                    } else {
+                        // System.out.println("Contact Person Already Entered");
+                        continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
+
+            if (!ch.isEmpty()) {
+
+                if (f1 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET name = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_name);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f2 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET phonenumber = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_number);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f3 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET city = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_city);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f4 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET address = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_address);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f5 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET type = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_type);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f6 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET amountowed = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setDouble(1, a_o);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f7 == 1) {
+                    sql_insert_stmt = "UPDATE Distributors SET contactperson = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_contact);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+
+            } else {
+                // go to all options menu-----------
+            }
+        }
+    }
+
+    static String get_name() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Name:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+    }
+
+    static String get_number() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Number:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    static String get_city() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New City:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    static String get_address() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Address:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    static String get_type() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Type:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    static double get_amount() throws SQLException {
+
+        String sd_id = "";
+        double a_o = 0.0d;
+
+        do {
+            System.out.println("Enter New Amount Owed:");
+            try {
+                sd_id = br.readLine();
+                if (!sd_id.isEmpty()) {
+                    try {
+                        a_o = Double.parseDouble(sd_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter a valid value");
+                        sd_id = "";
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return a_o;
+    }
+
+    static String get_contact() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Contact:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    static int get_age() throws SQLException {
+
+        String sd_id = "";
+        int a_o = 0;
+
+        do {
+            System.out.println("Enter New Age");
+            try {
+                sd_id = br.readLine();
+                if (!sd_id.isEmpty()) {
+                    try {
+                        a_o = Integer.parseInt(sd_id);
+                    } catch (Exception e) {
+                        System.out.println("Enter valid value");
+                        sd_id = "";
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return a_o;
+    }
+
+    static String get_gender() throws SQLException {
+
+        String sd_id = "";
+        do {
+            System.out.println("Enter New Gender:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (sd_id.isEmpty());
+
+        return sd_id;
+
+    }
+
+    // manager
+    static void add_manager() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Add Manager Menu:");
+
+        String name = "";
+        String phone_number = "";
+        String gender = "";
+        String address = "";
+        String sm_id = "";
+        String sage = "";
+
+        int age = 0;
+        int m_id = 0;
+
+        do {
+            System.out.println("Enter Manager ID:");
+            try {
+                sm_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sm_id.isEmpty()) {
+                try {
+                    m_id = Integer.parseInt(sm_id);
+                } catch (Exception e) {
+                    System.out.println("Enter a proper integer ID");
+                    sm_id = "";
+                }
+            }
+        } while (sm_id.isEmpty());
+
+        do {
+            System.out.println("Enter the Manager Name:");
+
+            try {
+                name = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (name.isEmpty());
+
+        do {
+            System.out.println("Enter Manager Phone Number"); // ensure it's of 10 digits
+            try {
+                phone_number = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (phone_number.isEmpty());
+
+        do {
+            System.out.println("Enter Manager Address");
+            try {
+                address = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (address.isEmpty());
+
+        do {
+            System.out.println("Enter Manager Age");
+            try {
+                sage = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sage.isEmpty()) {
+                try {
+                    age = Integer.parseInt(sage);
+                } catch (Exception e) {
+                    System.out.println("Enter a proper integer age");
+                    sage = "";
+                }
+            }
+            if (age > 100 || age < 18) {
+                System.out.println("Enter a valid age.");
+                sage = "";
+            }
+        } while (sage.isEmpty());
+
+        do {
+            System.out.println("Enter Manager Gender:");
+            try {
+                gender = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (gender.isEmpty());
+
+        sql_insert_stmt = "INSERT INTO Manager VALUES(?,?,?,?,?,?);";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, name);
+        ps.setInt(2, m_id);
+        ps.setString(3, phone_number);
+        ps.setString(4, address);
+        ps.setInt(5, age);
+        ps.setString(6, gender);
+        ps.executeUpdate();
+    }
+
+    // manager
+    static void update_manager() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Update Manager's Details Menu:------------------------------");
+
+        String sd_id = "";
+
+        int d_id = 0;
+        int flag1 = 1;
+
+        do {
+            System.out.println("Enter Manager's ID:");
+            try {
+                sd_id = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            if (!sd_id.isEmpty()) {
+                try {
+                    d_id = Integer.parseInt(sd_id);
+                } catch (Exception e) {
+                    System.out.println("Invalid Manager ID");
+                    sd_id = "";
+                }
+            }
+
+            if (!sd_id.isEmpty()) {
+                String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, d_id);
+                ResultSet rs = ps.executeQuery();
+
+                if (!rs.isBeforeFirst()) {
+                    System.out.println("Manager ID does not exist");
+                    // continue;
+                }
+
+                else {
+                    flag1 = 2;
+                    while (rs.next()) {
+                        String r1 = rs.getString(1);
+                        String r2 = rs.getString(2);
+                        String r3 = rs.getString(3);
+                        String r4 = rs.getString(4);
+                        String r5 = rs.getString(5);
+                        String r6 = rs.getString(6);
+
+                        System.out.println("Name: " + r1);
+                        System.out.println("ID: " + r2);
+                        System.out.println("Phone_Number: " + r3);
+                        System.out.println("Address: " + r4);
+                        System.out.println("age: " + r5);
+                        System.out.println("Gender: " + r6);
+                    }
+                }
+            }
+
+        } while (sd_id.isEmpty());
+
+        if (flag1 == 2) {
+            System.out.println("What Do you want to update? Enter space separated values like 1 2 3 4...");
+            System.out.println("1: Name");
+            System.out.println("2: Phone_Number");
+            System.out.println("3: Address");
+            System.out.println("4: Age");
+            System.out.println("5: Gender");
+            System.out.println("Enter your Choice: ");
+
+            String ch = "";
+
+            try {
+                ch = br.readLine();
+            } catch (Exception e) {
+
+            }
+
+            int i;
+            int f1 = -1;
+            int f2 = -1;
+            int f3 = -1;
+            int f4 = -1;
+            int f5 = -1;
+            ;
+            // int f8 = -1;
+
+            String new_name = "";
+            String new_number = "";
+            String new_address = "";
+            int new_age = 0;
+            String new_gender = "";
+
+            for (i = 0; i < ch.length(); i++) {
+
+                if (ch.charAt(i) == ' ') {
+                    continue;
+                } else if (ch.charAt(i) == '1') {
+                    if (f1 == -1) {
+                        f1 = 1;
+                        try {
+                            new_name = get_name();
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        System.out.println("Name Already Entered");
+                    }
+                }
+
+                else if (ch.charAt(i) == '2') {
+                    if (f2 == -1) {
+                        f2 = 1;
+                        try {
+                            new_number = get_number();
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        System.out.println("Phone Number Already Entered");
+                    }
+                }
+
+                else if (ch.charAt(i) == '3') {
+                    if (f3 == -1) {
+                        f3 = 1;
+                        try {
+                            new_address = get_address();
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        System.out.println("Address Already Entered");
+                    }
+                }
+
+                else if (ch.charAt(i) == '4') {
+                    if (f4 == -1) {
+                        f4 = 1;
+                        try {
+                            new_age = get_age();
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        System.out.println("Age Already Entered");
+                    }
+                }
+
+                else if (ch.charAt(i) == '5') {
+                    if (f5 == -1) {
+                        f5 = 1;
+                        try {
+                            new_gender = get_gender();
+                        } catch (Exception e) {
+
+                        }
+                    } else {
+                        System.out.println("Gender Already Entered");
+                    }
+                }
+
+            }
+
+            if (!ch.isEmpty()) {
+
+                if (f1 == 1) {
+                    sql_insert_stmt = "UPDATE Manager SET name = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_name);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f2 == 1) {
+                    sql_insert_stmt = "UPDATE Manager SET phonenumber = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_number);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f3 == 1) {
+                    sql_insert_stmt = "UPDATE Manager SET address = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_address);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f4 == 1) {
+                    sql_insert_stmt = "UPDATE Manager SET age = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, new_age);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+                if (f5 == 1) {
+                    sql_insert_stmt = "UPDATE Manager SET gender = ? WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, new_gender);
+                    ps.setInt(2, d_id);
+                    ps.executeUpdate();
+                }
+
+                System.out.println("All queries have executed--------------");
+
+            } else {
+                // go to all options menu-----------
+            }
+        }
+    }
+
+    // to print all the tables in the db
+    static void articles() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Show all Articles:");
+
+        sql_insert_stmt = "select * from Articles;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            String c1 = "ISBN";
+            String c2 = "Texts";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println(
+                    "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
+    }
+
+    static void assigns() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("All Assigns Table:");
+
+        sql_insert_stmt = "select * from Assign;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("----------------------------------------------------------------------");
+            String c1 = "Manager ID";
+            String c2 = "Editor ID";
+            String c3 = "ISBN";
+
+            System.out.format("%-10s%-30s", c1, c2, c3);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+
+                System.out.format("%-10s%-30s", r1, r2, r3);
+                System.out.println();
+            }
+            System.out.println("----------------------------------------------------------------------");
+        }
+    }
+
+    static void authors() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("All Authors Table:");
+
+        sql_insert_stmt = "select * from Authors;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("-------------------------------------------------");
+            String c1 = "ID";
+            String c2 = "Type";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println("-------------------------------------------------");
+        }
+    }
+
+    static void books() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Books Table:");
+
+        sql_insert_stmt = "select * from Books;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("-------------------------------------------------");
+            String c1 = "ISBN";
+            String c2 = "Edition";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println("-------------------------------------------------");
+        }
+    }
+
+    static void chapters() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Chapters Table:");
+
+        sql_insert_stmt = "select * from Chapters;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out
+                    .println("--------------------------------------------------------------------------------------");
+            String c1 = "ISBN";
+            String c2 = "Texts";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out
+                    .println("--------------------------------------------------------------------------------------");
+        }
+    }
+
+    static void distributors() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Distributors Table:");
+
+        sql_insert_stmt = "select * from Distributors;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println(
+                    "--------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            String c1 = "ID";
+            String c2 = "Name";
+            String c3 = "Phone Number";
+            String c4 = "City";
+            String c5 = "Address";
+            String c6 = "Type";
+            String c7 = "Amount Owed";
+            String c8 = "Contact Person";
+
+            System.out.format("%-7s%-25s%-20s%-15s%-34s%-20s%-20s%-20s", c1, c2, c3, c4, c5, c6, c7, c8);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+                String r4 = rs.getString(4);
+                String r5 = rs.getString(5);
+                String r6 = rs.getString(6);
+                String r7 = rs.getString(7);
+                String r8 = rs.getString(8);
+
+                System.out.format("%-7s%-25s%-20s%-15s%-34s%-20s%-20s%-20s", r1, r2, r3, r4, r5, r6, r7, r8);
+                System.out.println();
+            }
+            System.out.println(
+                    "-------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        }
+    }
+
+    static void editBooks() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("EditBooks Table:");
+
+        sql_insert_stmt = "select * from EditBooks;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("------------------------------------------------------------------------");
+            String c1 = "Editor ID";
+            String c2 = "ISBN";
+            String c3 = "Chapter ID";
+
+            System.out.format("%-10s%-20s%-20s", c1, c2, c3);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+
+                System.out.format("%-10s%-20s%-20s", r1, r2, r3);
+                System.out.println();
+            }
+            System.out.println("------------------------------------------------------------------------");
+        }
+    }
+
+    static void editPeriodicals() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("EditPeriodicals Table:");
+
+        sql_insert_stmt = "select * from EditPeriodicals;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("----------------------------------------------------");
+            String c1 = "Editor ID";
+            String c2 = "ISBN";
+            String c3 = "Article ID";
+
+            System.out.format("%-10s%-20s%-20s", c1, c2, c3);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+                String r3 = rs.getString(3);
+
+                System.out.format("%-10s%-20s%-20s", r1, r2, r3);
+                System.out.println();
+            }
+            System.out.println("----------------------------------------------------");
+        }
+    }
+
+    static void editors() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Editors Table:");
+
+        sql_insert_stmt = "select * from Editors;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("------------------------------------");
+            String c1 = "ID";
+            String c2 = "Type";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println("------------------------------------");
+        }
+    }
+
+    static void journalists() throws SQLException {
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Journalists Table:");
+
+        sql_insert_stmt = "select * from Journalists;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (!rs.isBeforeFirst()) {
+            System.out.println("Query returns no rows!");
+            // continue;
+        }
+
+        else {
+            System.out.println("------------------------------------");
+            String c1 = "ID";
+            String c2 = "Type";
+
+            System.out.format("%-10s%-30s", c1, c2);
+
+            System.out.println();
+
+            while (rs.next()) {
+                String r1 = rs.getString(1);
+                String r2 = rs.getString(2);
+
+                System.out.format("%-10s%-30s", r1, r2);
+                System.out.println();
+            }
+            System.out.println("------------------------------------");
+        }
+    }
+
+    public static void total_revenue_for_each_city() {
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n" + 
+                    "from Distributors d left join Orders o on d.id=o.distributorid group by d.city;";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            List<String> l = new ArrayList<String>();
+            l.add("City");
+            l.add("Revenue");
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            while (rs.next()) {
+                l.clear();
+                sb.setLength(0);
+                int revenue = rs.getInt("Revenue Generated");
+                String city = rs.getString("city");
+                l.add(city);
+                l.add(Integer.toString(revenue));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+     }
+    
+    public static void revenue_for_city() {
+        PreparedStatement ps = null;
+        System.out.println("Enter the name of the city to get revenue details: ");
+        
+        Scanner sc = new Scanner(System.in);
+        int flag = 0;
+        String city = "";
+        do {
+            try{
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                city = br.readLine();
+                String sql_chk = "select city from Distributors WHERE city = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, city);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    flag = 1;
+                }
+                else{
+                    flag = 0;
+                    System.out.println("City does not exist in Distributor table");
+                    System.out.println("Please enter city again");
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }while(flag == 0 );
+        
+    
+        if(flag == 1) {
+            //System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n" + 
+                        "from Distributors d join Orders o on d.id=o.distributorid\r\n" + 
+                        " and d.city = ?;";
+                ps = null;
+                ps = conn.prepareStatement(query);
+                ps.setString(1, city);
+                //Statement stmt = conn.createStatement();
+                ResultSet rs = ps.executeQuery();
+                List<String> l = new ArrayList<String>();
+                l.add("City");
+                l.add("Revenue");
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                while (rs.next()) {
+                    l.clear();
+                    sb.setLength(0);
+                    int revenue = rs.getInt("Revenue Generated");
+                    String city_name = rs.getString("city");
+                    l.add(city_name);
+                    l.add(Integer.toString(revenue));
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", l.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+        
+     }
+    
+    public static void get_total_expense() {
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String query = "select sum(payment) from Pays;";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            List<String> l = new ArrayList<String>();
+            l.add("Total Expense");
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            while (rs.next()) {
+                l.clear();
+                sb.setLength(0);
+                int expense = rs.getInt("sum(payment)");
+                l.add(Integer.toString(expense));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
+    //API: get staff payment remaining
+    public static void get_staff_payment_remaining() {
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String query = "select staffid, sum(payment) from Pays where TrackingPayment = \"No\" group by staffid";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            List<String> l = new ArrayList<String>();
+            l.add("staffid");
+            l.add("sum(payment remaining)");
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            while (rs.next()) {
+                l.clear();
+                sb.setLength(0);
+                int id = rs.getInt("staffid");
+                int payment = rs.getInt("sum(payment)");
+                l.add(Integer.toString(id));
+                l.add(Integer.toString(payment));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+    
+    //API: get staff payment availed
+        public static void get_staff_payment_availed() {
+            PreparedStatement ps = null;
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String query = "select staffid, sum(payment) from Pays where TrackingPayment = \"Yes\" group by staffid ";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                
+                List<String> l = new ArrayList<String>();
+                l.add("staffid");
+                l.add("sum(payment availed)");
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                while (rs.next()) {
+                    l.clear();
+                    sb.setLength(0);
+                    int id = rs.getInt("staffid");
+                    int payment = rs.getInt("sum(payment)");
+                    l.add(Integer.toString(id));
+                    l.add(Integer.toString(payment));
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", l.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    
+        
+        //API: Find distributors by city
+        public static void find_distributors_by_city() {
+            PreparedStatement ps = null;
+            System.out.println("Enter the name of the city to get distributors details in that city: ");
+        
+            int flag = 0;
+            String city = "";
+            do {
+                try{
+                    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                    city = br.readLine();
+                    String sql_chk = "select city from Distributors WHERE city = ?;"; 
+                    ps = conn.prepareStatement(sql_chk);
+                    ps.setString(1, city);
+                    ResultSet rs = ps.executeQuery();
+                    
+                    if(rs.next() == true){
+                        flag = 1;
+                    }
+                    else{
+                        flag = 0;
+                        System.out.println("City does not exist in Distributor table");
+                        System.out.println("Please Enter valid city");
+                    }
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+            }while(flag == 0);
+            
+        
+            if(flag == 1) {
+                //System.out.println("Came in try after flag = 1");
+                try {
+                    conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                    String query = "SELECT * FROM Distributors WHERE city = \"New York City\" OR city = ?;";
+                    ps = null;
+                    ps = conn.prepareStatement(query);
+                    ps.setString(1, city);
+                    //Statement stmt = conn.createStatement();
+                    ResultSet rs = ps.executeQuery();
+                    List<String> l = new ArrayList<String>();
+                    l.add("id");
+                    l.add("name");
+                    l.add("City");
+                    l.add("Phone Number");
+                    l.add("Type");
+                    l.add("Amount Owed");
+                    l.add("Contact Person");
+                    StringBuilder sb = new StringBuilder();
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-17s", l.get(i)));
+                    System.out.println(sb);
+                    while (rs.next()) {
+                        l.clear();
+                        sb.setLength(0);
+                    
+                        int id = rs.getInt("id");
+                        String name = rs.getString("name");
+                        String city_name = rs.getString("city");
+                        String phone = rs.getString("phonenumber");
+                        String type = rs.getString("type");
+                        int amount = rs.getInt("amountowed");
+                        String person = rs.getString("contactperson");
+                        
+                        l.add(Integer.toString(id));
+                        l.add(name);
+                        l.add(city_name);
+                        l.add(type);
+                        l.add(Integer.toString(amount));
+                        l.add(person);
+                        
+                        
+                        for(int i=0; i<l.size(); i++)
+                            sb.append(String.format("| %-17s", l.get(i)));
+                        System.out.println(sb);
+                     }
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    
+    
+    public static void check_editor_publications() {
+        PreparedStatement ps = null;
+        System.out.println("Enter Editor ID: ");
+    
+        int flag = 0;
+        String id = "";
+        
+        do {
+            try{
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                id = br.readLine();
+                String sql_chk = "select editorid from Assign WHERE editorid = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    flag = 1;
+                }
+                else{
+                    flag = 0;
+                    System.out.println("Editor ID not in Assign Table");
+                    System.out.println("Please enter valid editor id");
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }while(flag == 0);
+        
+    
+        if(flag == 1) {
+            //System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String query = "SELECT editorid, ISBN FROM Assign WHERE editorid = ?;";
+                ps = null;
+                ps = conn.prepareStatement(query);
+                ps.setString(1, id);
+                //Statement stmt = conn.createStatement();
+                ResultSet rs = ps.executeQuery();
+                List<String> l = new ArrayList<String>();
+                l.add("Editor id");
+                l.add("ISBN");
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-17s", l.get(i)));
+                System.out.println(sb);
+                while (rs.next()) {
+                    l.clear();
+                    sb.setLength(0);
+                
+                    int editorid = rs.getInt("editorid");
+                    String name = rs.getString("ISBN");
+                    
+                    l.add(Integer.toString(editorid));
+                    l.add(name);
+                    
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-17s", l.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }
+    
+    
+    public static void totalprice_perisbn_perdistributor_permonth() {
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String query = "select MONTH(o.orderdate) as Month,o.ISBN, o.distributorid, sum(p.price*o.numcopies) as \"Price Generated\" from Orders o join Publication p on o.ISBN where o.ISBN = p .ISBN group by MONTH(o.orderdate), o.ISBN, o.distributorid;";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            
+            List<String> l = new ArrayList<String>();
+            l.add("Month");
+            l.add("ISBN");
+            l.add("Distributor ID");
+            l.add("Price Generated");
+            
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            while (rs.next()) {
+                l.clear();
+                sb.setLength(0);
+                int month = rs.getInt("MONTH");
+                String ISBN = rs.getString("o.distributorid");
+                int distributorid = rs.getInt("o.distributorid");
+                int price = rs.getInt("Price Generated");
+                
+                
+                l.add(Integer.toString(month));
+                l.add(ISBN);
+                l.add(Integer.toString(distributorid));
+                l.add(Integer.toString(price));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public static void calculate_payment_within_daterange() {
+        
+        String mydate1 = "";
+        String mydate2 = "";
+        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+        format.setLenient(false);
+        java.util.Date myDate1 =  new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
+        
+        
+        int flag = 1;
+        do {
+        try {
+            System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
+            mydate1 = br.readLine();
+            try {
+                myDate1 = format.parse( mydate1 );
+                flag = 1;
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                flag = 0;
+                System.out.println("Invalid Date, Please Enter again");
+                //e.printStackTrace();
+            }       
+            //System.out.println(mydate);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        }while(flag == 0);
+        
+        flag = 1;
+        do {
+        try {
+            System.out.println("Enter End of Date Range (YYYY-MM-DD)");
+            mydate2 = br.readLine();
+            try {
+                myDate2 = format.parse( mydate2 );
+                flag = 1;
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                flag = 0;
+                System.out.println("Invalid Date, Please Enter again");
+                //e.printStackTrace();
+            }       
+            //System.out.println(mydate2);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        }while(flag == 0);
+        
+        PreparedStatement ps = null;
+        
+        flag = 0;
+        
+        try{
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+            ps = conn.prepareStatement(sql_chk);
+            java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+            java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+            ps.setDate(1, sqlDate1);
+            ps.setDate(2, sqlDate2);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next() == true){
+                flag = 1;
+            }
+            else{
+                System.out.println("No results for this date range ");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
+        if(flag == 1) {
+            //System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+                ps = conn.prepareStatement(sql_chk);
+                java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+                java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+                ps.setDate(1, sqlDate1);
+                ps.setDate(2, sqlDate2);
+                ResultSet rs = ps.executeQuery();
+                List<String> l = new ArrayList<String>();
+                l.add("Staff ID");
+                l.add("Total Payments");
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                while (rs.next()) {
+                    l.clear();
+                    sb.setLength(0);
+                    int id = rs.getInt("staffid");
+                    int revenue = rs.getInt("sum(payment)");
+                    l.add(Integer.toString(id));
+                    l.add(Integer.toString(revenue));
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", l.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+        
+    }
+    
+    public static void orders_date_range() {
+        String mydate1 = "";
+        String mydate2 = "";
+        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+        format.setLenient(false);
+        java.util.Date myDate1 =  new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
+        
+        
+        int flag = 1;
+        do {
+        try {
+            System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
+            mydate1 = br.readLine();
+            try {
+                myDate1 = format.parse( mydate1 );
+                flag = 1;
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                flag = 0;
+                System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+                //e.printStackTrace();
+            }       
+            //System.out.println(mydate);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        }while(flag == 0);
+        
+        flag = 1;
+        do {
+        try {
+            System.out.println("Enter End of Date Range (YYYY-MM-DD)");
+            mydate2 = br.readLine();
+            try {
+                myDate2 = format.parse( mydate2 );
+                flag = 1;
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                flag = 0;
+                System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+                //e.printStackTrace();
+            }       
+            //System.out.println(mydate2);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        }while(flag == 0);
+        
+        
+        PreparedStatement ps = null;
+        
+        flag = 0;
+        
+        try{
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+            ps = conn.prepareStatement(sql_chk);
+            java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+            java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+            ps.setDate(1, sqlDate1);
+            ps.setDate(2, sqlDate2);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next() == true){
+                flag = 1;
+            }
+            else{
+                System.out.println("No results for this date range");
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+    
+        if(flag == 1) {
+            //System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+                java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+                ps.setDate(1, sqlDate1);
+                ps.setDate(2, sqlDate2);
+                ResultSet rs = ps.executeQuery();
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                
+                while (rs.next()) {
+                    sb.setLength(0);
+                     
+                    int did = rs.getInt(l.get(0));
+                    int mid = rs.getInt(l.get(1));
+                    int oid= rs.getInt(l.get(2));
+                    String ISBN = rs.getString(l.get(3));
+                    int copies = rs.getInt(l.get(4));
+                    String ddate = rs.getString(l.get(5));
+                    String odate = rs.getString(l.get(6));
+                    int cost = rs.getInt(l.get(7));
+                    int scost= rs.getInt(l.get(8));
+                    ArrayList<String> m = new ArrayList<String>();
+                    m.add(Integer.toString(did));
+                    m.add(Integer.toString(mid));
+                    m.add(Integer.toString(oid));
+                    m.add(ISBN);
+                    m.add(Integer.toString(copies));
+                    m.add(ddate);
+                    m.add(odate);
+                    m.add(Integer.toString(cost));
+                    m.add(Integer.toString(scost));
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", m.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+    
+    public static void display_orders() {
+        
+        PreparedStatement ps = null;
+        
+    
+            //System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Orders;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("Orders Table");
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                
+                while (rs.next()) {
+                    sb.setLength(0);
+                     
+                    int did = rs.getInt(l.get(0));
+                    int mid = rs.getInt(l.get(1));
+                    int oid= rs.getInt(l.get(2));
+                    String ISBN = rs.getString(l.get(3));
+                    int copies = rs.getInt(l.get(4));
+                    String ddate = rs.getString(l.get(5));
+                    String odate = rs.getString(l.get(6));
+                    int cost = rs.getInt(l.get(7));
+                    int scost= rs.getInt(l.get(8));
+                    ArrayList<String> m = new ArrayList<String>();
+                    m.add(Integer.toString(did));
+                    m.add(Integer.toString(mid));
+                    m.add(Integer.toString(oid));
+                    m.add(ISBN);
+                    m.add(Integer.toString(copies));
+                    m.add(ddate);
+                    m.add(odate);
+                    m.add(Integer.toString(cost));
+                    m.add(Integer.toString(scost));
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", m.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    
+public static void display_pays() {
+        
+        PreparedStatement ps = null;
+        
+    
+            
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String sql_chk = "SELECT * FROM Pays;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ResultSet rs = ps.executeQuery();
+                System.out.println("Pays Table");
+                ArrayList<String> l = new ArrayList<String>( 
+                        Arrays.asList("managerid", "staffid","payment", "paydate", "Payment Availed"));
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
+                
+                while (rs.next()) {
+                    sb.setLength(0);
+                     
+                    int mid = rs.getInt(l.get(0));
+                    int sid = rs.getInt(l.get(1));
+                    int payment = rs.getInt(l.get(2));
+                    String pdate = rs.getString(l.get(3));
+                    String track = rs.getString("TrackingPayment");
+                    ArrayList<String> m = new ArrayList<String>();
+                    m.add(Integer.toString(mid));
+                    m.add(Integer.toString(sid));
+                    m.add(Integer.toString(payment));
+                    m.add(pdate);
+                    m.add(track);
+                    for(int i=0; i<l.size(); i++)
+                        sb.append(String.format("| %-15s", m.get(i)));
+                    System.out.println(sb);
+                 }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+
+public static void display_WriteBooks() {
+    
+    PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM WriteBooks;"; 
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Write Books Table");
+            ArrayList<String> l = new ArrayList<String>( 
+                    Arrays.asList("authorid","ISBN","chapterid"));
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            
+            while (rs.next()) {
+                sb.setLength(0);
+                 
+                int aid = rs.getInt(l.get(0));
+                String ISBN = rs.getString(l.get(1));
+                int cid = rs.getInt(l.get(2));
+                ArrayList<String> m = new ArrayList<String>();
+                m.add(Integer.toString(aid));
+                m.add(ISBN);
+                m.add(Integer.toString(cid));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", m.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void display_WritePeriodicals() {
+    
+    PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM Writeperiodicals;"; 
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Write Periodicals Table");
+            ArrayList<String> l = new ArrayList<String>( 
+                    Arrays.asList("journalistid","ISBN","articleid"));
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            
+            while (rs.next()) {
+                sb.setLength(0);
+                 
+                int jid = rs.getInt(l.get(0));
+                String ISBN = rs.getString(l.get(1));
+                int aid = rs.getInt(l.get(2));
+                ArrayList<String> m = new ArrayList<String>();
+                m.add(Integer.toString(jid));
+                m.add(ISBN);
+                m.add(Integer.toString(aid));
+                for(int i=0; i<l.size(); i++)
+                    sb.append(String.format("| %-15s", m.get(i)));
+                System.out.println(sb);
+             }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+}
