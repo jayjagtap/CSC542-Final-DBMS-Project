@@ -33,7 +33,7 @@ public class API {
     static String user = "nkashya";
     static String passwd = "200314563";
 
-    public static void main(String[] args) 
+    /*public static void main(String[] args) 
     {
 
         try{
@@ -42,47 +42,13 @@ public class API {
             System.out.println("Driver missing!");
         }
         try {
-            //Our Method Calls-------------------------
-            //add_chapters();
-            //add_articles();
-            //total_chaps();
-            //total_articles();
-            //add_distributor();
-            //delete_distributor();
-            //bill_distributor();
-            //update_distributor_balance();
-            //total_number_articles();
-            //update_chapters_text();
-            //delete_article();
-
-            //add_staff();
-            //delete_staff();
-            //update_staff();
-            //update_author();
-            //update_editor();
-            //update_journalist();
-            //delete_publication();
-            //update_books();
-            //update_periodicals();
-            //delete_order();
-            //add_publications();
-            //update_order();
-            //displayManager();
-            //displayStaff();
-            //displayPeriodicals();
-            //displayPublication();
-
-            //assign();
-            //insert_orders();
-            //update_publication();
-            delete_manager();
 
 
         }catch(Exception e){
             System.out.println(e);
         }   
     }
-
+*/
 static void add_staff() throws SQLException
 {
     PreparedStatement ps = null;
@@ -101,6 +67,15 @@ static void add_staff() throws SQLException
         System.out.println("Enter Staff ID");
         try{
             s_id = getinput();
+            String sql_chk = "select id from Staff WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    s_id=-1;
+                    System.out.println("Entered value already present in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -234,6 +209,18 @@ static void update_author() throws SQLException {
     System.out.println("Enter Staff ID");
         try{
                 s_id = getinput();
+                String sql_chk = "select id from Authors WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    s_id=-1;
+                    System.out.println("ID not in Author Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -285,6 +272,18 @@ static void update_editor() throws SQLException {
     System.out.println("Enter Staff ID");
         try{
                 s_id = getinput();
+                String sql_chk = "select id from Editors WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{;
+                    s_id=-1;
+                    System.out.println("ID not in Editors Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -336,6 +335,18 @@ static void update_journalist() throws SQLException {
     System.out.println("Enter Staff ID");
         try{
                 s_id = getinput();
+                String sql_chk = "select id from Journalists WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    s_id=-1;
+                    System.out.println("ID not in Journalist Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -387,6 +398,18 @@ static void update_books() throws SQLException{
     System.out.println("Enter isbn");
         try{
                 isbn = br.readLine();
+                String sql_chk = "select isbn from Books WHERE ISBN = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    isbn="";
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -441,6 +464,18 @@ do{
     System.out.println("Enter isbn");
         try{
                 isbn = br.readLine();
+                String sql_chk = "select isbn from Periodicals WHERE ISBN = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    isbn="";
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -520,6 +555,17 @@ static void update_staff()  throws SQLException {
         System.out.println("Enter Staff ID");
         try{
                 s_id = getinput();
+                String sql_chk = "select id from Staff WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    s_id=-1;
+                    System.out.println("ID not in the Database, please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
