@@ -48,20 +48,20 @@ public class JJClass {
     }
     try {
             //Functions
-            //total_revenue_for_each_city();
-           // revenue_for_city();
-    		//get_total_expense();
-    		//get_staff_payment_remaining();
-    		//get_staff_payment_availed();
-    		//find_distributors_by_city();
-    		//check_editor_publications();
-    		//totalprice_perisbn_perdistributor_permonth();
-    		//calculate_payment_within_daterange();
-    		//orders_date_range();
-    		//display_orders();
-    		//display_pays();
-    		//display_WriteBooks();
-    		//display_WritePeriodicals();
+            total_revenue_for_each_city();
+            revenue_for_city();
+    		get_total_expense();
+    		get_staff_payment_remaining();
+    		get_staff_payment_availed();
+    		find_distributors_by_city();
+    		check_editor_publications();
+    		totalprice_perisbn_perdistributor_permonth();
+    		calculate_payment_within_daterange();
+    		orders_date_range();
+    		display_orders();
+    		display_pays();
+    		display_WriteBooks();
+    		display_WritePeriodicals();
     }catch(Exception e){
         System.out.println(e);
     }
