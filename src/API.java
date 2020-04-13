@@ -32,7 +32,7 @@ public class API {
     static String user = "nkashya";
     static String passwd = "200314563";
 
-    /*public static void main(String[] args) 
+    public static void main(String[] args) 
     {
 
         try{
@@ -42,12 +42,31 @@ public class API {
         }
         try {
 
+            //add_staff();
+            //update_author();
+            //update_editor();
+            //update_journalist();
+            //update_books();
+            //update_periodicals();
+            //update_staff();
+            //delete_manager();
+            //delete_staff();
+            //add_publications();
+            //update_publication();
+            //delete_publication();
+            //insert_orders();
+            //delete_order();
+            update_order();
+            //displayManager();
+            //displayStaff();
+            //displayPeriodicals();
+            //displayPublication();
 
         }catch(Exception e){
             System.out.println(e);
         }   
     }
-*/
+
 static void add_staff() throws SQLException
 {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -57,7 +76,7 @@ static void add_staff() throws SQLException
 
     System.out.println("**********************************");
     System.out.println("API for Entering Staff information");
-    System.out.println("**********************************")
+    System.out.println("**********************************");
 
     String staff_name = "";
     String phone_number = "";
@@ -69,18 +88,17 @@ static void add_staff() throws SQLException
         System.out.println("Enter Staff ID");
         try{
             s_id = getinput();
-            String sql_chk = "select id from Staff WHERE id = ?;"; 
+                String sql_chk = "select id from Staff WHERE id = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
                 if(rs.next() == true){
                     s_id=-1;
                     System.out.println("Entered Staff ID already present in the database");
                     System.out.println("Please Enter New Staff ID");
                 }
         }catch(Exception e){
-            System.out.println(e);
+            System.out.println("Invalid Entry");
         }
     }while(s_id<0);
 
@@ -1262,7 +1280,7 @@ static void insert_orders() throws SQLException{
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
-            String sql_chk = "select id from Orders WHERE orderid = ?;"; 
+            String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
@@ -1428,7 +1446,7 @@ static void delete_order() throws SQLException {
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
-            String sql_chk = "select id from Orders WHERE orderid = ?;"; 
+            String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
@@ -1485,7 +1503,7 @@ static void update_order() throws SQLException {
     do{
     try{
         orderid = getinput();
-        String sql_chk = "select id from Orders WHERE orderid = ?;"; 
+        String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
@@ -1525,6 +1543,18 @@ static void update_order() throws SQLException {
         System.out.println("Enter distributorid");
         try{
             distributorid = getinput();
+            String queryCheck = "SELECT * from Distributors WHERE id = ?;";
+            ps = conn.prepareStatement(queryCheck);
+            ps.setInt(1,distributorid);
+            ResultSet rms = ps.executeQuery();
+
+            if(rms.next()){
+
+            }
+            else{
+                System.out.println("Entered DistributorId not present in our database");
+                distributorid = -1;
+            }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1542,6 +1572,17 @@ static void update_order() throws SQLException {
         System.out.println("Enter managerid");
         try{
             managerid = getinput();
+            String queryCheck = "SELECT * from Manager WHERE id = ?;";
+            ps = conn.prepareStatement(queryCheck);
+            ps.setInt(1,managerid);
+            ResultSet rms = ps.executeQuery();
+
+            if(rms.next()){
+            }
+            else{
+                System.out.println("Entered Manager Id not present in our database");
+                managerid = -1;
+            }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1559,6 +1600,17 @@ static void update_order() throws SQLException {
         System.out.println("Enter isbn");
         try{
             isbn = br.readLine();
+            String queryCheck = "SELECT * from Publication WHERE ISBN = ?;";
+            ps = conn.prepareStatement(queryCheck);
+            ps.setString(1,isbn);
+            ResultSet rms = ps.executeQuery();
+
+            if(rms.next()){
+            }
+            else{
+                System.out.println("Entered isbn not present in our database");
+                isbn = "";
+            }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1636,16 +1688,16 @@ static void update_order() throws SQLException {
         double ms_price_val = -1;
         String queryCheck = "SELECT price from Publication WHERE isbn = ?;";
         ps = conn.prepareStatement(queryCheck);
-        ps.setString(1,isbn);
+        ps.setString(1,rs_isbn);
         ResultSet ms = ps.executeQuery();
 
         while(ms.next())
         {
             ms_price_val = ms.getDouble("price");
         }
-        double cost = ms_price_val*numofcopies;
+        double cost = ms_price_val*rs_numofcopies;
 
-        double shippingcost = 25*numofcopies;
+        double shippingcost = 25*rs_numofcopies;
 
 
 
@@ -4150,7 +4202,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     // to print all the tables in the db
-    static void articles() throws SQLException {
+    static void displayArticles() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4189,7 +4241,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void assigns() throws SQLException {
+    static void displayAssigns() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4228,7 +4280,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void authors() throws SQLException {
+    static void displayAuthors() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4265,7 +4317,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void books() throws SQLException {
+    static void displayBooks() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4302,7 +4354,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void chapters() throws SQLException {
+    static void displayChapters() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4341,7 +4393,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void distributors() throws SQLException {
+    static void displayDistributors() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4392,7 +4444,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void editBooks() throws SQLException {
+    static void displayEditBooks() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4431,7 +4483,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void editPeriodicals() throws SQLException {
+    static void displayEditPeriodicals() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4470,7 +4522,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void editors() throws SQLException {
+    static void displayEditors() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4507,7 +4559,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
     }
 
-    static void journalists() throws SQLException {
+    static void displayJournalists() throws SQLException {
 final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
