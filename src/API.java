@@ -794,7 +794,7 @@ static void delete_staff() throws SQLException {
             ps.setInt(1, s_id);
             ps.executeUpdate();
 
-            sql_insert_stmt = "DELETE from Editperiodicals where editorid = ?;";
+            sql_insert_stmt = "DELETE from EditPeriodicals where editorid = ?;";
             ps = conn.prepareStatement(sql_insert_stmt);
             ps.setInt(1, s_id);
             ps.executeUpdate();
