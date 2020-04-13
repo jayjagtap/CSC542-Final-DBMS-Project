@@ -28,748 +28,699 @@ public class API {
     static String user = "nkashya";
     static String passwd = "200314563";
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
 
-        try{
+        try {
             Class.forName("org.mariadb.jdbc.Driver");
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Driver missing!");
         }
         try {
 
-            //add_staff();
-            //update_author();
-            //update_editor();
-            //update_journalist();
-            //update_books();
-            //update_periodicals();
-            //update_staff();
-            //delete_manager();
+            // add_staff();
+            // update_author();
+            // update_editor();
+            // update_journalist();
+            // update_books();
+            // update_periodicals();
+            // update_staff();
+            // delete_manager();
             delete_staff();
             add_publications();
-            //update_publication();
-            //delete_publication();
-            //insert_orders();
-            //delete_order();
-            //update_order();
-            //displayManager();
-            //displayStaff();
-            //displayPeriodicals();
-            //displayPublication();
+            // update_publication();
+            // delete_publication();
+            // insert_orders();
+            // delete_order();
+            // update_order();
+            // displayManager();
+            // displayStaff();
+            // displayPeriodicals();
+            // displayPublication();
 
-
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
-        }   
+        }
     }
 
-static void add_staff() throws SQLException
-{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
+    static void add_staff() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
 
-    System.out.println("**********************************");
-    System.out.println("API for Entering Staff information");
-    System.out.println("**********************************");
+        System.out.println("**********************************");
+        System.out.println("API for Entering Staff information");
+        System.out.println("**********************************");
 
-    String staff_name = "";
-    String phone_number = "";
-    String staff_address = "";
-    String staff_gender = "";
-    int s_id = -1;
-    int s_age= -1;
-    do{
-        System.out.println("Enter Staff ID");
-        try{
-            s_id = getinput();
-                String sql_chk = "select id from Staff WHERE id = ?;"; 
+        String staff_name = "";
+        String phone_number = "";
+        String staff_address = "";
+        String staff_gender = "";
+        int s_id = -1;
+        int s_age = -1;
+        do {
+            System.out.println("Enter Staff ID");
+            try {
+                s_id = getinput();
+                String sql_chk = "select id from Staff WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                if(rs.next() == true){
-                    s_id=-1;
+                if (rs.next() == true) {
+                    s_id = -1;
                     System.out.println("Entered Staff ID already present in the database");
                     System.out.println("Please Enter New Staff ID");
                 }
-        }catch(Exception e){
-            System.out.println("Invalid Entry");
+            } catch (Exception e) {
+                System.out.println("Invalid Entry");
+            }
+        } while (s_id < 0);
+
+        do {
+            try {
+                System.out.println("Enter Staff Name");
+                staff_name = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (staff_name.isEmpty());
+
+        do {
+            System.out.println("Enter Staff Phone Number");
+            try {
+                phone_number = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (phone_number.isEmpty());
+
+        do {
+            System.out.println("Enter Staff Address");
+            try {
+                staff_address = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (staff_address.isEmpty());
+
+        do {
+            System.out.println("Enter Staff age");
+            try {
+                s_age = getinput();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_age < 0);
+
+        do {
+            System.out.println("Enter Staff Gender");
+            try {
+                staff_gender = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (staff_gender.isEmpty());
+        try {
+            conn.setAutoCommit(false);
+            sql_insert_stmt = "INSERT INTO Staff VALUES(?,?,?,?,?,?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, staff_name);
+            ps.setInt(2, s_id);
+            ps.setString(3, phone_number);
+            ps.setString(4, staff_address);
+            ps.setInt(5, s_age);
+            ps.setString(6, staff_gender);
+            ps.executeUpdate();
+
+            System.out.println("If the above staff is Author, enter 1");
+            System.out.println("If the above staff is Editor, enter 2");
+            System.out.println("If the above staff is Journalist, enter 3");
+            int choice = getinput();
+
+            String type = "";
+            if (choice == 1) {
+                do {
+                    System.out.println("Enter Author Type");
+                    try {
+                        type = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (type.isEmpty());
+
+                sql_insert_stmt = "INSERT INTO Authors VALUES(?,?);";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setInt(1, s_id);
+                ps.setString(2, type);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            } else if (choice == 2) {
+
+                do {
+                    System.out.println("Enter Editor Type");
+                    try {
+                        type = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (type.isEmpty());
+                sql_insert_stmt = "INSERT INTO Editors VALUES(?,?);";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setInt(1, s_id);
+                ps.setString(2, type);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            } else if (choice == 3) {
+                do {
+                    System.out.println("Enter Journalist Type");
+                    try {
+                        type = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (type.isEmpty());
+
+                sql_insert_stmt = "INSERT INTO Journalists VALUES(?,?);";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setInt(1, s_id);
+                ps.setString(2, type);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            }
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (Exception f) {
+                System.out.println("Unable to Rollback");
+            }
         }
-    }while(s_id<0);
-
-        do{
-        try{
-            System.out.println("Enter Staff Name");
-            staff_name = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(staff_name.isEmpty());
-
-        do{
-        System.out.println("Enter Staff Phone Number");
-        try{
-            phone_number = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(phone_number.isEmpty());
-
-        do{
-        System.out.println("Enter Staff Address");
-        try{
-            staff_address= br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(staff_address.isEmpty());
-
-        do{
-        System.out.println("Enter Staff age");
-        try{
-            s_age = getinput();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(s_age<0);
-
-        do{
-        System.out.println("Enter Staff Gender");
-        try{
-            staff_gender = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(staff_gender.isEmpty());
-try{
-    conn.setAutoCommit(false);
-    sql_insert_stmt = "INSERT INTO Staff VALUES(?,?,?,?,?,?);";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, staff_name);
-    ps.setInt(2, s_id);
-    ps.setString(3, phone_number);
-    ps.setString(4, staff_address);
-    ps.setInt(5, s_age);
-    ps.setString(6, staff_gender);
-    ps.executeUpdate();
-
-    System.out.println("If the above staff is Author, enter 1");
-    System.out.println("If the above staff is Editor, enter 2");
-    System.out.println("If the above staff is Journalist, enter 3");
-    int choice = getinput();
-
-    String type = "";
-    if(choice==1)
-    {
-        do{
-        System.out.println("Enter Author Type");
-        try{
-            type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(type.isEmpty());
-
-        sql_insert_stmt = "INSERT INTO Authors VALUES(?,?);";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, s_id);
-        ps.setString(2, type);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
     }
-    else if(choice==2)
-    {
-        
-        do{
-        System.out.println("Enter Editor Type");
-        try{
-            type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(type.isEmpty());
-        sql_insert_stmt = "INSERT INTO Editors VALUES(?,?);";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, s_id);
-        ps.setString(2, type);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-    }
-    else if(choice==3)
-    {
-        do{
-        System.out.println("Enter Journalist Type");
-        try{
-            type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(type.isEmpty());
 
-        sql_insert_stmt = "INSERT INTO Journalists VALUES(?,?);";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, s_id);
-        ps.setString(2, type);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-    }
-}catch(Exception e){
-    try{
-        if(conn!=null)
-        {
-            conn.rollback();
-        }
-    }catch(Exception f){
-        System.out.println("Unable to Rollback");
-    }
-}
-}
+    static void update_author() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Author");
 
-static void update_author() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Author");
+        int s_id = -1;
+        String rs_type = "";
+        String new_type = "";
 
-    int s_id = -1;
-    String rs_type = "";
-    String new_type = "";
-
-    do{
-    System.out.println("Enter Staff ID");
-        try{
+        do {
+            System.out.println("Enter Staff ID");
+            try {
                 s_id = getinput();
-                String sql_chk = "select id from Authors WHERE id = ?;"; 
+                String sql_chk = "select id from Authors WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    s_id=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    s_id = -1;
                     System.out.println("ID not in Author Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_id < 0);
+
+        String data_retrieval = "Select type from Authors where id = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setInt(1, s_id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_type = rs.getString("type");
         }
-    }while(s_id<0);
-
-    String data_retrieval = "Select type from Authors where id = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setInt(1,s_id);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_type = rs.getString("type");
-    }
-    System.out.println("If you want to update the type, please enter 1 else press 0");
-    int choice = getinput();
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter author Type");
-        try{
-            new_type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
+        System.out.println("If you want to update the type, please enter 1 else press 0");
+        int choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(new_type.isEmpty());
 
-    rs_type = new_type;
-}
-    sql_insert_stmt = "Update Authors set type = ? where id = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_type);
-    ps.setInt(2,s_id);
-    ps.executeUpdate();
-}
+        if (choice == 1) {
+            do {
+                System.out.println("Enter author Type");
+                try {
+                    new_type = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_type.isEmpty());
 
-static void update_editor() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of editor");
+            rs_type = new_type;
+        }
+        sql_insert_stmt = "Update Authors set type = ? where id = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_type);
+        ps.setInt(2, s_id);
+        ps.executeUpdate();
+    }
 
-    int s_id = -1;
-    String rs_type = "";
-    String new_type = "";
+    static void update_editor() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of editor");
 
-    do{
-    System.out.println("Enter Staff ID");
-        try{
+        int s_id = -1;
+        String rs_type = "";
+        String new_type = "";
+
+        do {
+            System.out.println("Enter Staff ID");
+            try {
                 s_id = getinput();
-                String sql_chk = "select id from Editors WHERE id = ?;"; 
+                String sql_chk = "select id from Editors WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{;
-                    s_id=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    ;
+                    s_id = -1;
                     System.out.println("ID not in Editors Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_id < 0);
+
+        String data_retrieval = "Select type from Editors where id = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setInt(1, s_id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_type = rs.getString("type");
         }
-    }while(s_id<0);
+        System.out.println("If you want to update the type, please enter 1 else press 0");
+        int choice = getinput();
 
-    String data_retrieval = "Select type from Editors where id = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setInt(1,s_id);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_type = rs.getString("type");
-}
-    System.out.println("If you want to update the type, please enter 1 else press 0");
-    int choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
 
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Editor Type");
+                try {
+                    new_type = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_type.isEmpty());
+
+            rs_type = new_type;
+        }
+        sql_insert_stmt = "Update Editors set type = ? where id = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_type);
+        ps.setInt(2, s_id);
+        ps.executeUpdate();
     }
 
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter Editor Type");
-        try{
-            new_type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(new_type.isEmpty());
+    static void update_journalist() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Journalist");
 
-    rs_type = new_type;
-}
-    sql_insert_stmt = "Update Editors set type = ? where id = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_type);
-    ps.setInt(2,s_id);
-    ps.executeUpdate();
-}
+        int s_id = -1;
+        String rs_type = "";
+        String new_type = "";
 
-static void update_journalist() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Journalist");
-
-    int s_id = -1;
-    String rs_type = "";
-    String new_type = "";
-
-    do{
-    System.out.println("Enter Staff ID");
-        try{
+        do {
+            System.out.println("Enter Staff ID");
+            try {
                 s_id = getinput();
-                String sql_chk = "select id from Journalists WHERE id = ?;"; 
+                String sql_chk = "select id from Journalists WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    s_id=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    s_id = -1;
                     System.out.println("ID not in Journalist Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_id < 0);
+
+        String data_retrieval = "Select type from Journalists where id = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setInt(1, s_id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_type = rs.getString("type");
         }
-    }while(s_id<0);
+        System.out.println("If you want to update the type, please enter 1 else press 0");
+        int choice = getinput();
 
-    String data_retrieval = "Select type from Journalists where id = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setInt(1,s_id);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_type = rs.getString("type");
-}
-    System.out.println("If you want to update the type, please enter 1 else press 0");
-    int choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
 
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Journalist Type");
+                try {
+                    new_type = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_type.isEmpty());
+
+            rs_type = new_type;
+        }
+        sql_insert_stmt = "Update Journalists set type = ? where id = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_type);
+        ps.setInt(2, s_id);
+        ps.executeUpdate();
     }
 
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter Journalist Type");
-        try{
-            new_type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(new_type.isEmpty());
+    static void update_books() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Books");
 
-    rs_type = new_type;
-}
-    sql_insert_stmt = "Update Journalists set type = ? where id = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_type);
-    ps.setInt(2,s_id);
-    ps.executeUpdate();
-}
+        String isbn = "";
+        String rs_edition = "";
+        String new_edition = "";
 
-static void update_books() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Books");
-
-    String isbn = "";
-    String rs_edition = "";
-    String new_edition = "";
-
-    do{
-    System.out.println("Enter isbn");
-        try{
+        do {
+            System.out.println("Enter isbn");
+            try {
                 isbn = br.readLine();
-                String sql_chk = "select isbn from Books WHERE ISBN = ?;"; 
+                String sql_chk = "select isbn from Books WHERE ISBN = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setString(1, isbn);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    isbn="";
+
+                if (rs.next() == true) {
+                } else {
+                    isbn = "";
                     System.out.println("ISBN not in the Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        String data_retrieval = "Select edition from Books where ISBN = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_edition = rs.getString("edition");
         }
-    }while(isbn.isEmpty());
+        System.out.println("If you want to update the edition, please enter 1 else press 0");
+        int choice = getinput();
 
-    String data_retrieval = "Select edition from Books where ISBN = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setString(1,isbn);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_edition = rs.getString("edition");
-    }
-    System.out.println("If you want to update the edition, please enter 1 else press 0");
-    int choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter Book Edition");
-        try{
-            new_edition = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(new_edition.isEmpty());
 
-    rs_edition = new_edition;
-}
-    sql_insert_stmt = "Update Books set edition = ? where ISBN = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_edition);
-    ps.setString(2,isbn);
-    ps.executeUpdate();
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Book Edition");
+                try {
+                    new_edition = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_edition.isEmpty());
 
-}
+            rs_edition = new_edition;
+        }
+        sql_insert_stmt = "Update Books set edition = ? where ISBN = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_edition);
+        ps.setString(2, isbn);
+        ps.executeUpdate();
 
-static void update_periodicals() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Periodicals");
+    }
 
-    String isbn = "";
-    String rs_type = "";
-    String new_type = "";
-    String rs_periodicity = "";
-    String new_periodicity = "";
+    static void update_periodicals() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Periodicals");
 
-do{
-    System.out.println("Enter isbn");
-        try{
+        String isbn = "";
+        String rs_type = "";
+        String new_type = "";
+        String rs_periodicity = "";
+        String new_periodicity = "";
+
+        do {
+            System.out.println("Enter isbn");
+            try {
                 isbn = br.readLine();
-                String sql_chk = "select isbn from Periodicals WHERE ISBN = ?;"; 
+                String sql_chk = "select isbn from Periodicals WHERE ISBN = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setString(1, isbn);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    isbn="";
+
+                if (rs.next() == true) {
+                } else {
+                    isbn = "";
                     System.out.println("ISBN not in the Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        String data_retrieval = "Select periodicity,type from Periodicals where ISBN = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_periodicity = rs.getString("periodicity");
+            rs_type = rs.getString("type");
         }
-    }while(isbn.isEmpty());
+        System.out.println("If you want to update the periodicity, please enter 1 else press 0");
+        int choice = getinput();
 
-    String data_retrieval = "Select periodicity,type from Periodicals where ISBN = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setString(1,isbn);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_periodicity = rs.getString("periodicity");
-        rs_type = rs.getString("type");
-    }
-    System.out.println("If you want to update the periodicity, please enter 1 else press 0");
-    int choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
 
-    while(choice!=0 && choice!=1)
-    {
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Periodicity");
+                try {
+                    new_periodicity = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_periodicity.isEmpty());
+
+            rs_periodicity = new_periodicity;
+        }
+
+        System.out.println("If you want to update the type, please enter 1 else press 0");
         choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+
+        if (choice == 1) {
+            do {
+                System.out.println("Enter type");
+                try {
+                    new_type = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (new_type.isEmpty());
+
+            rs_type = new_type;
+        }
+        sql_insert_stmt = "Update Periodicals set periodicity = ?,type = ? where isbn = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_periodicity);
+        ps.setString(2, rs_type);
+        ps.setString(3, isbn);
+        ps.executeUpdate();
+
     }
 
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter Periodicity");
-        try{
-            new_periodicity = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(new_periodicity.isEmpty());
+    static void update_staff() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Staff");
+        int s_id = -1;
+        String staff_name = "";
+        String phone_number = "";
+        String staff_address = "";
+        String staff_gender = "";
+        int s_age = -1;
 
-    rs_periodicity = new_periodicity;
-}
+        String rs_name = "";
+        String rs_phonenumber = "";
+        String rs_address = "";
+        int rs_age = -1;
+        String rs_gender = "";
 
-    System.out.println("If you want to update the type, please enter 1 else press 0");
-    choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter type");
-        try{
-            new_type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(new_type.isEmpty());
-
-    rs_type = new_type;
-}
-    sql_insert_stmt = "Update Periodicals set periodicity = ?,type = ? where isbn = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_periodicity);
-    ps.setString(2, rs_type);
-    ps.setString(3,isbn);
-    ps.executeUpdate();
-    
-}
-static void update_staff()  throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Staff");
-    int s_id = -1;
-    String staff_name = "";
-    String phone_number = "";
-    String staff_address = "";
-    String staff_gender = "";
-    int s_age = -1;
-
-    String rs_name = "";
-    String rs_phonenumber = "";
-    String rs_address = "";
-    int rs_age = -1;
-    String rs_gender = "";
-
-    do{
-        System.out.println("Enter Staff ID");
-        try{
+        do {
+            System.out.println("Enter Staff ID");
+            try {
                 s_id = getinput();
-                String sql_chk = "select id from Staff WHERE id = ?;"; 
+                String sql_chk = "select id from Staff WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    s_id=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    s_id = -1;
                     System.out.println("ID not in the Database, please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_id < 0);
+
+        String data_retrieval = "Select name,id,phonenumber,address,age,gender from Staff where id = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setInt(1, s_id);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_name = rs.getString("name");
+            rs_phonenumber = rs.getString("phonenumber");
+            rs_address = rs.getString("address");
+            rs_age = rs.getInt("age");
+            rs_gender = rs.getString("gender");
         }
-    }while(s_id<0);
 
-    String data_retrieval = "Select name,id,phonenumber,address,age,gender from Staff where id = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setInt(1,s_id);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_name = rs.getString("name");
-        rs_phonenumber = rs.getString("phonenumber");
-        rs_address = rs.getString("address");
-        rs_age = rs.getInt("age");
-        rs_gender = rs.getString("gender");
-    }
+        System.out.println("If you want to update the name, please enter 1 else press 0");
+        int choice = getinput();
 
-    System.out.println("If you want to update the name, please enter 1 else press 0");
-    int choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter Staff Name");
-        try{
-            staff_name = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(staff_name.isEmpty());
 
-    rs_name = staff_name;
-}
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Staff Name");
+                try {
+                    staff_name = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (staff_name.isEmpty());
 
-    System.out.println("If you want to update the phonenumber, please enter 1 else press 0");
-    choice = getinput();
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter phonenumber");
-        try{
-            phone_number = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
+            rs_name = staff_name;
         }
-    }while(phone_number.isEmpty());
 
-    rs_phonenumber = phone_number;
-}
-    System.out.println("If you want to update the address, please enter 1 else press 0");
-    choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
+        System.out.println("If you want to update the phonenumber, please enter 1 else press 0");
         choice = getinput();
-    }
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter address");
-        try{
-            staff_address = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }while(staff_address.isEmpty());
-
-    rs_address = staff_address;
-}while(staff_address.isEmpty());
-}
-
-    System.out.println("If you want to update the gender, please enter 1 else press 0");
-    choice = getinput();
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-    {
-    do
-    {
-        System.out.println("Enter gender");
-        try{
-            staff_gender = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(staff_gender.isEmpty());
-    rs_gender = staff_gender;
-}
 
-    System.out.println("If you want to update the age, please enter 1 else press 0");
-    choice = getinput();
+        if (choice == 1) {
+            do {
+                System.out.println("Enter phonenumber");
+                try {
+                    phone_number = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (phone_number.isEmpty());
 
-while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-    {
-        System.out.println("Enter age");
-        try{
-            s_age= getinput();
-        }catch(Exception e){
-            System.out.println(e);
+            rs_phonenumber = phone_number;
         }
-    rs_age = s_age;
-    }   
+        System.out.println("If you want to update the address, please enter 1 else press 0");
+        choice = getinput();
 
-    sql_insert_stmt = "Update Staff set name = ?,phonenumber = ?, address = ?,age=?,gender = ? where id=?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_name);
-    ps.setString(2, rs_phonenumber);
-    ps.setString(3, rs_address);
-    ps.setInt(4, rs_age);
-    ps.setString(5, rs_gender);
-    ps.setInt(6,s_id);
-    ps.executeUpdate();
-}
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter address");
+                try {
+                    staff_address = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                while (staff_address.isEmpty())
+                    ;
 
-    static void delete_manager() throws SQLException{
+                rs_address = staff_address;
+            } while (staff_address.isEmpty());
+        }
+
+        System.out.println("If you want to update the gender, please enter 1 else press 0");
+        choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter gender");
+                try {
+                    staff_gender = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (staff_gender.isEmpty());
+            rs_gender = staff_gender;
+        }
+
+        System.out.println("If you want to update the age, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            System.out.println("Enter age");
+            try {
+                s_age = getinput();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            rs_age = s_age;
+        }
+
+        sql_insert_stmt = "Update Staff set name = ?,phonenumber = ?, address = ?,age=?,gender = ? where id=?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_name);
+        ps.setString(2, rs_phonenumber);
+        ps.setString(3, rs_address);
+        ps.setInt(4, rs_age);
+        ps.setString(5, rs_gender);
+        ps.setInt(6, s_id);
+        ps.executeUpdate();
+    }
+
+    static void delete_manager() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         PreparedStatement ps = null;
@@ -777,771 +728,728 @@ while(choice!=0 && choice!=1)
         String sql_insert_stmt;
         System.out.println("Add Chapters Menu:");
         int manager_id = -1;
-        int flag=1;
+        int flag = 1;
 
-        do{
+        do {
             System.out.println("Enter Manager_ID to be deleted");
-        try{
+            try {
                 manager_id = getinput();
-                String sql_chk = "select id from Manager WHERE id = ?;"; 
+                String sql_chk = "select id from Manager WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, manager_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                    flag=2;
-                }
-                else{
-                    flag=1;
-                    manager_id=-1;
+
+                if (rs.next() == true) {
+                    flag = 2;
+                } else {
+                    flag = 1;
+                    manager_id = -1;
                     System.out.println("ID not in the Database, please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (manager_id < 0);
+
+        if (flag == 2) {
+            sql_insert_stmt = "DELETE FROM Manager WHERE id = ?;";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setInt(1, manager_id);
+            ps.executeUpdate();
         }
-    }while(manager_id<0);
-
-    if(flag==2){
-        sql_insert_stmt = "DELETE FROM Manager WHERE id = ?;";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, manager_id);
-        ps.executeUpdate();
     }
-}
 
-static void delete_staff() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static void delete_staff() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Delete Staff Menu:");
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Delete Staff Menu:");
 
-    int s_id = -1;
-    int flag = 1;
+        int s_id = -1;
+        int flag = 1;
 
-    System.out.println("Enter 1 if it is an Author");
-    System.out.println("Enter 2 if it is an Journalist");
-    System.out.println("Enter 3 if it is an Editor");
-    int choice = getinput();
-    do{
-        System.out.println("Enter Staff ID");
-        try{
+        System.out.println("Enter 1 if it is an Author");
+        System.out.println("Enter 2 if it is an Journalist");
+        System.out.println("Enter 3 if it is an Editor");
+        int choice = getinput();
+        do {
+            System.out.println("Enter Staff ID");
+            try {
                 flag = 2;
                 s_id = getinput();
-                String sql_chk = "select id from Staff WHERE id = ?;"; 
+                String sql_chk = "select id from Staff WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, s_id);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    s_id=-1;
-                    flag=1;
+
+                if (rs.next() == true) {
+                } else {
+                    s_id = -1;
+                    flag = 1;
                     System.out.println("ID not in the Database, please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(s_id<0);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (s_id < 0);
 
-    try{
-        conn.setAutoCommit(false);
-    if(flag==2)
-    {
-        if(choice==1)
-        {
-            sql_insert_stmt = "DELETE from WriteBooks where authorid = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setInt(1, s_id);
-            ps.executeUpdate();
-            flag=3;
-        }
-        else if(choice==2)
-        {
-            sql_insert_stmt = "DELETE from Writeperiodicals where journalistid = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setInt(1, s_id);
-            ps.executeUpdate();
-            flag=3;
-        }
-        else if(choice==3)
-        {
-            sql_insert_stmt = "DELETE from Assign where editorid = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setInt(1, s_id);
-            ps.executeUpdate();
+        try {
+            conn.setAutoCommit(false);
+            if (flag == 2) {
+                if (choice == 1) {
+                    sql_insert_stmt = "DELETE from WriteBooks where authorid = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
+                    flag = 3;
+                } else if (choice == 2) {
+                    sql_insert_stmt = "DELETE from Writeperiodicals where journalistid = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
+                    flag = 3;
+                } else if (choice == 3) {
+                    sql_insert_stmt = "DELETE from Assign where editorid = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
 
-            sql_insert_stmt = "DELETE from EditBooks where editorid = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setInt(1, s_id);
-            ps.executeUpdate();
+                    sql_insert_stmt = "DELETE from EditBooks where editorid = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
 
-            sql_insert_stmt = "DELETE from EditPeriodicals where editorid = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setInt(1, s_id);
-            ps.executeUpdate();
-            flag=3;
-        }
-        if(flag==3)
-        {
-        sql_insert_stmt = "DELETE FROM Staff WHERE id = ?;";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setInt(1, s_id);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-        }
-        else
-        {
-        conn.rollback();
-        System.out.println("Entered Choices are out of the scope and invalid");
+                    sql_insert_stmt = "DELETE from EditPeriodicals where editorid = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
+                    flag = 3;
+                }
+                if (flag == 3) {
+                    sql_insert_stmt = "DELETE FROM Staff WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setInt(1, s_id);
+                    ps.executeUpdate();
+                    conn.commit();
+                    conn.close();
+                } else {
+                    conn.rollback();
+                    System.out.println("Entered Choices are out of the scope and invalid");
+                }
+            } else {
+                System.out.println("Entered Staff ID does not exist");
+            }
+        } catch (Exception e) {
+            System.out.println("Error");
         }
     }
-    else
-    {
-        System.out.println("Entered Staff ID does not exist");
-    }
-}catch(Exception e)
-{
-    System.out.println("Error");
-}
-}
 
-static void add_publications() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static void add_publications() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Adding Publications Menu");
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Adding Publications Menu");
 
-    String dateofcreation = "";
-    String dateofpublishing = "";
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    format.setLenient(false);
-    java.util.Date myDate1 = new java.util.Date();
-    java.util.Date myDate2 = new java.util.Date();
+        String dateofcreation = "";
+        String dateofpublishing = "";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+        java.util.Date myDate1 = new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
 
-    int flag = 1;
-    int flag2 = 1;
+        int flag = 1;
+        int flag2 = 1;
 
-    String isbn = "";
-    String title = "";
-    String topic = "";
-    double price = -1;
+        String isbn = "";
+        String title = "";
+        String topic = "";
+        double price = -1;
 
-    do{
-        System.out.println("Enter ISBN Number");
-        try{
-            isbn = br.readLine();
-            String sql_chk = "select ISBN from Publication WHERE ISBN = ?;"; 
+        do {
+            System.out.println("Enter ISBN Number");
+            try {
+                isbn = br.readLine();
+                String sql_chk = "select ISBN from Publication WHERE ISBN = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setString(1, isbn);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                     isbn="";
+
+                if (rs.next() == true) {
+                    isbn = "";
                     System.out.println("ISBN already in the database");
                 }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(isbn.isEmpty());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
 
-    do{
-        System.out.println("Enter Title");
-        try{
-            title = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(title.isEmpty());
+        do {
+            System.out.println("Enter Title");
+            try {
+                title = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (title.isEmpty());
 
-    do{
-        System.out.println("Enter Topic");
-        try{
-            topic = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(topic.isEmpty());
+        do {
+            System.out.println("Enter Topic");
+            try {
+                topic = br.readLine();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (topic.isEmpty());
 
-    do{
-        System.out.println("Enter Price");
-        try{
-            price = getinput();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(price<0);
+        do {
+            System.out.println("Enter Price");
+            try {
+                price = getinput();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (price < 0);
 
-    do{
-    System.out.println("Enter Date of Creation");
-    try{
+        do {
+            System.out.println("Enter Date of Creation");
+            try {
                 dateofcreation = br.readLine();
-                try{
-                myDate1 = format.parse(dateofcreation);
-                flag=1;
-            }catch(ParseException e){
-                flag=0;
-                System.out.println("Invalid Date please reenter");
+                try {
+                    myDate1 = format.parse(dateofcreation);
+                    flag = 1;
+                } catch (ParseException e) {
+                    flag = 0;
+                    System.out.println("Invalid Date please reenter");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            }catch(Exception e){
-            System.out.println(e);
-        }
-        }while(flag==0);
+        } while (flag == 0);
 
-
-        do{
-    System.out.println("Enter Date of Publishing");
-    try{
+        do {
+            System.out.println("Enter Date of Publishing");
+            try {
                 dateofpublishing = br.readLine();
-                try{
-                myDate2 = format.parse(dateofpublishing);
-                flag2=1;
-            }catch(ParseException e){
-                flag2=0;
-                System.out.println("Invalid Date please reenter");
+                try {
+                    myDate2 = format.parse(dateofpublishing);
+                    flag2 = 1;
+                } catch (ParseException e) {
+                    flag2 = 0;
+                    System.out.println("Invalid Date please reenter");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            }catch(Exception e){
-            System.out.println(e);
-        }
-        }while(flag2==0);
+        } while (flag2 == 0);
 
-    java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
-    java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
+        java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+        java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
 
-try{            
-    conn.setAutoCommit(false);
-    sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, isbn);
-    ps.setDate(2, sqlDate1);
-    ps.setString(3, title);
-    ps.setString(4, topic);
-    ps.setDate(5, sqlDate2);
-    ps.setDouble(6, price);
-    ps.executeUpdate();
+        try {
+            conn.setAutoCommit(false);
+            sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
+            ps = conn.prepareStatement(sql_insert_stmt);
+            ps.setString(1, isbn);
+            ps.setDate(2, sqlDate1);
+            ps.setString(3, title);
+            ps.setString(4, topic);
+            ps.setDate(5, sqlDate2);
+            ps.setDouble(6, price);
+            ps.executeUpdate();
 
-    System.out.println("If the above publication is Books, enter 1");
-    System.out.println("If the above publication is Periodicals, enter 2");
-    int choice = getinput();
+            System.out.println("If the above publication is Books, enter 1");
+            System.out.println("If the above publication is Periodicals, enter 2");
+            int choice = getinput();
 
-    if(choice==1)
-    {
-        String edition = "";
-        do{
-        System.out.println("Enter Edition");
-        try{
-            edition = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(edition.isEmpty());
+            if (choice == 1) {
+                String edition = "";
+                do {
+                    System.out.println("Enter Edition");
+                    try {
+                        edition = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (edition.isEmpty());
 
-        sql_insert_stmt = "INSERT INTO Books VALUES(?,?);";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setString(1, isbn);
-        ps.setString(2, edition);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-    }
+                sql_insert_stmt = "INSERT INTO Books VALUES(?,?);";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setString(1, isbn);
+                ps.setString(2, edition);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            }
 
-    else if(choice==2)
-    {
-        String periodicity = "";
-        String type = "";
-        do{
-        System.out.println("Enter Periodicity");
-        try{
-            periodicity = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(periodicity.isEmpty());
+            else if (choice == 2) {
+                String periodicity = "";
+                String type = "";
+                do {
+                    System.out.println("Enter Periodicity");
+                    try {
+                        periodicity = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (periodicity.isEmpty());
 
-        do{
-        System.out.println("Enter Type of the Periodicals");
-        try{
-            type = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(type.isEmpty());
+                do {
+                    System.out.println("Enter Type of the Periodicals");
+                    try {
+                        type = br.readLine();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                } while (type.isEmpty());
 
-        sql_insert_stmt = "INSERT INTO Periodicals VALUES(?,?,?);";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setString(1, isbn);
-        ps.setString(2, periodicity);
-        ps.setString(3,type);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-    }
-    else{
-        conn.rollback();
-    }
-    }catch(Exception e){
-        try{
-            if(conn!=null)
-            {
+                sql_insert_stmt = "INSERT INTO Periodicals VALUES(?,?,?);";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setString(1, isbn);
+                ps.setString(2, periodicity);
+                ps.setString(3, type);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            } else {
                 conn.rollback();
             }
-        }catch(Exception f){
-            System.out.println("Error Rolling Back");
-        }
-    }
-}
-
-static void update_publication() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Updating the information of Publication");
-    
-    String isbn = "";
-    String title = "";
-    String topic = "";
-    double price = -1;
-    String rs_title = "";
-    String rs_topic = "";
-    double rs_price = 0;
-    java.util.Date rs_dateofcreation = new java.util.Date();
-    java.util.Date rs_dateofpublishing = new java.util.Date();
-
-    String dateofcreation = "";
-    String dateofpublishing = "";
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    format.setLenient(false);
-    java.util.Date myDate1 = new java.util.Date();
-    java.util.Date myDate2 = new java.util.Date();
-
-    int flag = 1;
-    int flag2 = 1;
-
-    System.out.println("Enter ISBN");
-    do{
-    try{
-        isbn = br.readLine();
-        String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
-        ps = conn.prepareStatement(sql_chk);
-        ps.setString(1, isbn);
-        ResultSet rs = ps.executeQuery();
-                
-        if(rs.next() == true){
-            }
-            else{
-                    isbn="";
-                    System.out.println("ISBN not in the Table");
-                    System.out.println("Please enter valid id");
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
                 }
-    }catch(Exception e){
-        System.out.println(e);
-    }
-}while(isbn.isEmpty());
-
-    String data_retrieval = "Select ISBN,dateofcreation,title,topic,publicationdate,price from Publication where ISBN = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setString(1,isbn);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_title = rs.getString("title");
-        rs_topic = rs.getString("topic");
-        rs_price = rs.getDouble("price");
-        rs_dateofcreation = rs.getDate("dateofcreation");
-        rs_dateofpublishing = rs.getDate("publicationdate");
-    }
-
-    System.out.println("If you want to update the title, please enter 1 else press 0");
-    int choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-        {
-    do
-    {
-        System.out.println("Enter title");
-        try{
-            title = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(title.isEmpty());
-
-    rs_title = title;
-}
-    System.out.println("If you want to update the topic, please enter 1 else press 0");
-    choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-        {
-    do
-    {
-        System.out.println("Enter topic");
-        try{
-            topic = br.readLine();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(topic.isEmpty());
-
-    rs_topic = topic;
-}
-
-    System.out.println("If you want to update the dateofcreation, please enter 1 else press 0");
-    choice = getinput();  
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-    {
-        do{
-    System.out.println("Enter Date of Creation");
-    try{
-                dateofcreation = br.readLine();
-                try{
-                myDate1 = format.parse(dateofcreation);
-                flag=1;
-            }catch(ParseException e){
-                flag=0;
-                System.out.println("Invalid Date please reenter");
+            } catch (Exception f) {
+                System.out.println("Error Rolling Back");
             }
-            }catch(Exception e){
-            System.out.println(e);
         }
-        }while(flag==0);
-        rs_dateofcreation = myDate1;
     }
 
+    static void update_publication() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Updating the information of Publication");
 
-    System.out.println("If you want to update the dateofpublishing, please enter 1 else press 0");
-    choice = getinput(); 
+        String isbn = "";
+        String title = "";
+        String topic = "";
+        double price = -1;
+        String rs_title = "";
+        String rs_topic = "";
+        double rs_price = 0;
+        java.util.Date rs_dateofcreation = new java.util.Date();
+        java.util.Date rs_dateofpublishing = new java.util.Date();
 
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
+        String dateofcreation = "";
+        String dateofpublishing = "";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+        java.util.Date myDate1 = new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
 
-    if (choice==1)
-    {
-    do{
-    System.out.println("Enter Date of Publishing");
-    try{
-                dateofpublishing = br.readLine();
-                try{
-                myDate2 = format.parse(dateofpublishing);
-                flag2=1;
-            }catch(ParseException e){
-                flag2=0;
-                System.out.println("Invalid Date please reenter");
-            }
-            }catch(Exception e){
-            System.out.println(e);
-        }
-        }while(flag2==0);
+        int flag = 1;
+        int flag2 = 1;
 
-        rs_dateofpublishing = myDate2;
-    }
-
-    java.sql.Date sqlDate1 = new java.sql.Date(rs_dateofcreation.getTime());
-    java.sql.Date sqlDate2 = new java.sql.Date(rs_dateofpublishing.getTime());
-              
-
-    System.out.println("If you want to update the price, please enter 1 else press 0");
-    choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1) 
-    {
-        do{
-        System.out.println("Enter price");
-        try{
-            price = getinput();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(price<0);
-    rs_price = price;
-}
-    sql_insert_stmt = "Update Publication set title = ?,topic = ?, price = ?, dateofcreation = ?, publicationdate = ? where ISBN = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setString(1, rs_title);
-    ps.setString(2, rs_topic);
-    ps.setDouble(3, rs_price);
-    ps.setDate(4,sqlDate1);
-    ps.setDate(5,sqlDate2);
-    ps.setString(6, isbn);
-    ps.executeUpdate();
-}
-
-static void delete_publication()  throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Delete Publication Menu:");
-    int flag=1;
-    String isbn = "";
-
-    System.out.println("Enter 1 if it is a Book");
-    System.out.println("Enter 2 if it is a Periodical");
-    int choice = getinput();
-    
-    do{
-        System.out.println("Enter ISBN Number");
-        try{
-            isbn = br.readLine();
-            String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
+        System.out.println("Enter ISBN");
+        do {
+            try {
+                isbn = br.readLine();
+                String sql_chk = "select isbn from Publication WHERE ISBN = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setString(1, isbn);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                    flag=2;
-                }
-                else{
-                    isbn="";
-                    flag=1;
+
+                if (rs.next() == true) {
+                } else {
+                    isbn = "";
                     System.out.println("ISBN not in the Table");
                     System.out.println("Please enter valid id");
                 }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(isbn.isEmpty());
-
-    try{
-        conn.setAutoCommit(false);
-    if(flag==2){
-        if(choice==1){
-            sql_insert_stmt = "DELETE from EditBooks where isbn = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-
-            sql_insert_stmt = "DELETE from WriteBooks where isbn = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-        }
-        if(choice==2)
-        {
-            sql_insert_stmt = "DELETE from EditPeriodicals where isbn = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-
-            sql_insert_stmt = "DELETE from Writeperiodicals where isbn = ?;";
-            ps = conn.prepareStatement(sql_insert_stmt);
-            ps.setString(1, isbn);
-            ps.executeUpdate();
-        }
-
-        sql_insert_stmt = "DELETE from Publication where ISBN = ?;";
-        ps = conn.prepareStatement(sql_insert_stmt);
-        ps.setString(1,isbn);
-        ps.executeUpdate();
-        conn.commit();
-        conn.close();
-        }
-    }catch(Exception e){
-        try{
-            if(conn!=null){
-                conn.rollback();
+            } catch (Exception e) {
+                System.out.println(e);
             }
-        }catch(Exception f){
-            system.out.println("Error");
+        } while (isbn.isEmpty());
+
+        String data_retrieval = "Select ISBN,dateofcreation,title,topic,publicationdate,price from Publication where ISBN = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_title = rs.getString("title");
+            rs_topic = rs.getString("topic");
+            rs_price = rs.getDouble("price");
+            rs_dateofcreation = rs.getDate("dateofcreation");
+            rs_dateofpublishing = rs.getDate("publicationdate");
+        }
+
+        System.out.println("If you want to update the title, please enter 1 else press 0");
+        int choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter title");
+                try {
+                    title = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (title.isEmpty());
+
+            rs_title = title;
+        }
+        System.out.println("If you want to update the topic, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter topic");
+                try {
+                    topic = br.readLine();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (topic.isEmpty());
+
+            rs_topic = topic;
+        }
+
+        System.out.println("If you want to update the dateofcreation, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Date of Creation");
+                try {
+                    dateofcreation = br.readLine();
+                    try {
+                        myDate1 = format.parse(dateofcreation);
+                        flag = 1;
+                    } catch (ParseException e) {
+                        flag = 0;
+                        System.out.println("Invalid Date please reenter");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (flag == 0);
+            rs_dateofcreation = myDate1;
+        }
+
+        System.out.println("If you want to update the dateofpublishing, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+
+        if (choice == 1) {
+            do {
+                System.out.println("Enter Date of Publishing");
+                try {
+                    dateofpublishing = br.readLine();
+                    try {
+                        myDate2 = format.parse(dateofpublishing);
+                        flag2 = 1;
+                    } catch (ParseException e) {
+                        flag2 = 0;
+                        System.out.println("Invalid Date please reenter");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (flag2 == 0);
+
+            rs_dateofpublishing = myDate2;
+        }
+
+        java.sql.Date sqlDate1 = new java.sql.Date(rs_dateofcreation.getTime());
+        java.sql.Date sqlDate2 = new java.sql.Date(rs_dateofpublishing.getTime());
+
+        System.out.println("If you want to update the price, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+
+        if (choice == 1) {
+            do {
+                System.out.println("Enter price");
+                try {
+                    price = getinput();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (price < 0);
+            rs_price = price;
+        }
+        sql_insert_stmt = "Update Publication set title = ?,topic = ?, price = ?, dateofcreation = ?, publicationdate = ? where ISBN = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setString(1, rs_title);
+        ps.setString(2, rs_topic);
+        ps.setDouble(3, rs_price);
+        ps.setDate(4, sqlDate1);
+        ps.setDate(5, sqlDate2);
+        ps.setString(6, isbn);
+        ps.executeUpdate();
+    }
+
+    static void delete_publication() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Delete Publication Menu:");
+        int flag = 1;
+        String isbn = "";
+
+        System.out.println("Enter 1 if it is a Book");
+        System.out.println("Enter 2 if it is a Periodical");
+        int choice = getinput();
+
+        do {
+            System.out.println("Enter ISBN Number");
+            try {
+                isbn = br.readLine();
+                String sql_chk = "select isbn from Publication WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next() == true) {
+                    flag = 2;
+                } else {
+                    isbn = "";
+                    flag = 1;
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (isbn.isEmpty());
+
+        try {
+            conn.setAutoCommit(false);
+            if (flag == 2) {
+                if (choice == 1) {
+                    sql_insert_stmt = "DELETE from EditBooks where isbn = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, isbn);
+                    ps.executeUpdate();
+
+                    sql_insert_stmt = "DELETE from WriteBooks where isbn = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, isbn);
+                    ps.executeUpdate();
+                }
+                if (choice == 2) {
+                    sql_insert_stmt = "DELETE from EditPeriodicals where isbn = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, isbn);
+                    ps.executeUpdate();
+
+                    sql_insert_stmt = "DELETE from Writeperiodicals where isbn = ?;";
+                    ps = conn.prepareStatement(sql_insert_stmt);
+                    ps.setString(1, isbn);
+                    ps.executeUpdate();
+                }
+
+                sql_insert_stmt = "DELETE from Publication where ISBN = ?;";
+                ps = conn.prepareStatement(sql_insert_stmt);
+                ps.setString(1, isbn);
+                ps.executeUpdate();
+                conn.commit();
+                conn.close();
+            }
+        } catch (Exception e) {
+            try {
+                if (conn != null) {
+                    conn.rollback();
+                }
+            } catch (Exception f) {
+                system.out.println("Error");
+            }
         }
     }
-}
 
-static void insert_orders() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Insert Orders : ");
+    static void insert_orders() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Insert Orders : ");
 
-    String dateoforder = "";
-    String dateofdelivery = "";
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    format.setLenient(false);
-    java.util.Date myDate1 = new java.util.Date();
-    java.util.Date myDate2 = new java.util.Date();
+        String dateoforder = "";
+        String dateofdelivery = "";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+        java.util.Date myDate1 = new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
 
-    int flag = 1;
-    int flag2 = 1;
+        int flag = 1;
+        int flag2 = 1;
 
-    int distributorid = -1;
-    int managerid = -1;
-    int orderid = -1;
-    String isbn = "";
-    int numofcopies = -1;
-    double cost = 0;
-    double shippingcost = 0;
-    double rs_price_val = 0;
+        int distributorid = -1;
+        int managerid = -1;
+        int orderid = -1;
+        String isbn = "";
+        int numofcopies = -1;
+        double cost = 0;
+        double shippingcost = 0;
+        double rs_price_val = 0;
 
-        do{
-        try{
-            System.out.println("Enter OrderId");
-            orderid = getinput();
-            String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
+        do {
+            try {
+                System.out.println("Enter OrderId");
+                orderid = getinput();
+                String sql_chk = "select orderid from Orders WHERE orderid = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                    orderid=-1;
+
+                if (rs.next() == true) {
+                    orderid = -1;
                     System.out.println("Entered value already present in the database");
                 }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(orderid<0);
-
-    do{
-        try{
-            System.out.println("Enter ManagerId");
-            managerid = getinput();
-
-            String queryCheck = "SELECT * from Manager WHERE id = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setInt(1,managerid);
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            else{
-                System.out.println("Entered Manager Id not present in our database");
-                managerid = -1;
+        } while (orderid < 0);
+
+        do {
+            try {
+                System.out.println("Enter ManagerId");
+                managerid = getinput();
+
+                String queryCheck = "SELECT * from Manager WHERE id = ?;";
+                ps = conn.prepareStatement(queryCheck);
+                ps.setInt(1, managerid);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                } else {
+                    System.out.println("Entered Manager Id not present in our database");
+                    managerid = -1;
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(managerid<0);
+        } while (managerid < 0);
 
-    do{
-        try{
-            System.out.println("Enter DistributorId");
-            distributorid = getinput();
+        do {
+            try {
+                System.out.println("Enter DistributorId");
+                distributorid = getinput();
 
-            String queryCheck = "SELECT * from Distributors WHERE id = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setInt(1,distributorid);
-            ResultSet rs = ps.executeQuery();
+                String queryCheck = "SELECT * from Distributors WHERE id = ?;";
+                ps = conn.prepareStatement(queryCheck);
+                ps.setInt(1, distributorid);
+                ResultSet rs = ps.executeQuery();
 
-            if(rs.next()){
+                if (rs.next()) {
 
+                } else {
+                    System.out.println("Entered DistributorId not present in our database");
+                    distributorid = -1;
+                }
+
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            else{
-                System.out.println("Entered DistributorId not present in our database");
-                distributorid = -1;
+        } while (distributorid < 0);
+
+        do {
+            try {
+                System.out.println("Enter isbn");
+                isbn = br.readLine();
+
+                String queryCheck = "SELECT * from Publication WHERE ISBN = ?;";
+                ps = conn.prepareStatement(queryCheck);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                } else {
+                    System.out.println("Entered isbn not present in our database");
+                    isbn = "";
+                }
+
+            } catch (Exception e) {
+                System.out.println(e);
             }
+        } while (isbn.isEmpty());
 
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(distributorid<0);
-
-    do{
-        try{
-            System.out.println("Enter isbn");
-            isbn = br.readLine();
-
-            String queryCheck = "SELECT * from Publication WHERE ISBN = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setString(1,isbn);
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
+        do {
+            try {
+                System.out.println("Enter Number of Copies");
+                numofcopies = getinput();
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            else{
-                System.out.println("Entered isbn not present in our database");
-                isbn = "";
-            }
-
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(isbn.isEmpty());
-
-    do{
-        try{
-            System.out.println("Enter Number of Copies");
-            numofcopies = getinput();
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(numofcopies<0);
+        } while (numofcopies < 0);
 
         String queryCheck = "SELECT price from Publication WHERE ISBN = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setString(1,isbn);
-            ResultSet rs = ps.executeQuery();
+        ps = conn.prepareStatement(queryCheck);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
 
-        while(rs.next())
-        {
+        while (rs.next()) {
             rs_price_val = rs.getDouble("price");
         }
-        cost = rs_price_val*numofcopies;
+        cost = rs_price_val * numofcopies;
 
-        shippingcost = 25*numofcopies;
+        shippingcost = 25 * numofcopies;
 
-        do{
-    System.out.println("Enter Date of Order");
-    try{
+        do {
+            System.out.println("Enter Date of Order");
+            try {
                 dateoforder = br.readLine();
-                try{
-                myDate1 = format.parse(dateoforder);
-                flag=1;
-            }catch(ParseException e){
-                flag=0;
-                System.out.println("Invalid Date please reenter");
+                try {
+                    myDate1 = format.parse(dateoforder);
+                    flag = 1;
+                } catch (ParseException e) {
+                    flag = 0;
+                    System.out.println("Invalid Date please reenter");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            }catch(Exception e){
-            System.out.println(e);
-        }
-        }while(flag==0);
+        } while (flag == 0);
 
-
-        do{
-    System.out.println("Enter Date of delivery");
-    try{
+        do {
+            System.out.println("Enter Date of delivery");
+            try {
                 dateofdelivery = br.readLine();
-                try{
-                myDate2 = format.parse(dateofdelivery);
-                flag2=1;
-            }catch(ParseException e){
-                flag2=0;
-                System.out.println("Invalid Date please reenter");
+                try {
+                    myDate2 = format.parse(dateofdelivery);
+                    flag2 = 1;
+                } catch (ParseException e) {
+                    flag2 = 0;
+                    System.out.println("Invalid Date please reenter");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            }catch(Exception e){
-            System.out.println(e);
-        }
-        }while(flag2==0);
+        } while (flag2 == 0);
 
-    java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
-    java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
-        
+        java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
+        java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
 
         sql_insert_stmt = "INSERT INTO Orders VALUES(?,?,?,?,?,?,?,?,?);";
         ps = conn.prepareStatement(sql_insert_stmt);
@@ -1556,533 +1464,505 @@ static void insert_orders() throws SQLException{
         ps.setDouble(9, shippingcost);
         ps.executeUpdate();
 
-}
+    }
 
-static void delete_order() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("delete from the Orders Menu:");
+    static void delete_order() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("delete from the Orders Menu:");
 
-    int orderid = -1;
-    do{
-        try{
-            System.out.println("Enter OrderId");
-            orderid = getinput();
-            String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
+        int orderid = -1;
+        do {
+            try {
+                System.out.println("Enter OrderId");
+                orderid = getinput();
+                String sql_chk = "select orderid from Orders WHERE orderid = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    orderid=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    orderid = -1;
                     System.out.println("Entered value not present in the database");
                 }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }while(orderid<0);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (orderid < 0);
 
-    sql_insert_stmt = "DELETE from Orders where orderid = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setInt(1,orderid);
-    ps.executeUpdate();
-}
+        sql_insert_stmt = "DELETE from Orders where orderid = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setInt(1, orderid);
+        ps.executeUpdate();
+    }
 
-static void update_order() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("Update from the Orders Menu:");
+    static void update_order() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("Update from the Orders Menu:");
 
-    String isbn = "";
-    int managerid = -1;
-    int distributorid = -1;
-    int orderid = -1;
-    int numofcopies = -1;
+        String isbn = "";
+        int managerid = -1;
+        int distributorid = -1;
+        int orderid = -1;
+        int numofcopies = -1;
 
-    int rs_distributorid = -1;
-    int rs_managerid = -1;
-    int rs_numofcopies = -1;
-    String rs_isbn = "";
+        int rs_distributorid = -1;
+        int rs_managerid = -1;
+        int rs_numofcopies = -1;
+        String rs_isbn = "";
 
-    java.util.Date rs_deliverydate = new java.util.Date();
-    java.util.Date rs_orderdate = new java.util.Date();
+        java.util.Date rs_deliverydate = new java.util.Date();
+        java.util.Date rs_orderdate = new java.util.Date();
 
-    String deliverydate = "";
-    String orderdate = "";
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    format.setLenient(false);
-    java.util.Date myDate1 = new java.util.Date();
-    java.util.Date myDate2 = new java.util.Date();
+        String deliverydate = "";
+        String orderdate = "";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        format.setLenient(false);
+        java.util.Date myDate1 = new java.util.Date();
+        java.util.Date myDate2 = new java.util.Date();
 
-    int flag = 1;
-    int flag2 = 1;
+        int flag = 1;
+        int flag2 = 1;
 
-    System.out.println("Enter OrderID");
-    do{
-    try{
-        orderid = getinput();
-        String sql_chk = "select orderid from Orders WHERE orderid = ?;"; 
+        System.out.println("Enter OrderID");
+        do {
+            try {
+                orderid = getinput();
+                String sql_chk = "select orderid from Orders WHERE orderid = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setInt(1, orderid);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                }
-                else{
-                    orderid=-1;
+
+                if (rs.next() == true) {
+                } else {
+                    orderid = -1;
                     System.out.println("Entered value not present in the database");
                 }
-    }catch(Exception e){
-        System.out.println(e);
-    }
-}while(orderid<0);
-
-    String data_retrieval = "Select distributorid,managerid,ISBN,numcopies,deliverydate,orderdate from Orders where orderid = ?;";
-    ps = conn.prepareStatement(data_retrieval);
-    ps.setInt(1,orderid);
-    ResultSet rs = ps.executeQuery();
-    while(rs.next())
-    {
-        rs_distributorid = rs.getInt("distributorid");
-        rs_managerid = rs.getInt("managerid");
-        rs_isbn = rs.getString("isbn");
-        rs_numofcopies = rs.getInt("numcopies");
-        rs_deliverydate = rs.getDate("deliverydate");
-        rs_orderdate = rs.getDate("orderdate");
-    }
-
-    System.out.println("If you want to update the distributorid, please enter 1 else press 0");
-    int choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-
-    if(choice==1)
-        {
-    do
-    {
-        System.out.println("Enter distributorid");
-        try{
-            distributorid = getinput();
-            String queryCheck = "SELECT * from Distributors WHERE id = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setInt(1,distributorid);
-            ResultSet rms = ps.executeQuery();
-
-            if(rms.next()){
-
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            else{
-                System.out.println("Entered DistributorId not present in our database");
-                distributorid = -1;
-            }
-        }catch(Exception e){
-            System.out.println(e);
+        } while (orderid < 0);
+
+        String data_retrieval = "Select distributorid,managerid,ISBN,numcopies,deliverydate,orderdate from Orders where orderid = ?;";
+        ps = conn.prepareStatement(data_retrieval);
+        ps.setInt(1, orderid);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            rs_distributorid = rs.getInt("distributorid");
+            rs_managerid = rs.getInt("managerid");
+            rs_isbn = rs.getString("isbn");
+            rs_numofcopies = rs.getInt("numcopies");
+            rs_deliverydate = rs.getDate("deliverydate");
+            rs_orderdate = rs.getDate("orderdate");
         }
-    }while(distributorid<0);
 
-    rs_distributorid = distributorid;
-}
-    System.out.println("If you want to update the managerid, please enter 1 else press 0");
-    choice = getinput();
+        System.out.println("If you want to update the distributorid, please enter 1 else press 0");
+        int choice = getinput();
 
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-        {
-    do
-    {
-        System.out.println("Enter managerid");
-        try{
-            managerid = getinput();
-            String queryCheck = "SELECT * from Manager WHERE id = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setInt(1,managerid);
-            ResultSet rms = ps.executeQuery();
-
-            if(rms.next()){
-            }
-            else{
-                System.out.println("Entered Manager Id not present in our database");
-                managerid = -1;
-            }
-        }catch(Exception e){
-            System.out.println(e);
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(managerid<0);
 
-    rs_managerid = managerid;
-}
-    System.out.println("If you want to update the isbn, please enter 1 else press 0");
-    choice = getinput();
+        if (choice == 1) {
+            do {
+                System.out.println("Enter distributorid");
+                try {
+                    distributorid = getinput();
+                    String queryCheck = "SELECT * from Distributors WHERE id = ?;";
+                    ps = conn.prepareStatement(queryCheck);
+                    ps.setInt(1, distributorid);
+                    ResultSet rms = ps.executeQuery();
 
-    while(choice!=0 && choice!=1)
-    {
-        choice = getinput();
-    }
-    if(choice==1)
-        {
-    do
-    {
-        System.out.println("Enter isbn");
-        try{
-            isbn = br.readLine();
-            String queryCheck = "SELECT * from Publication WHERE ISBN = ?;";
-            ps = conn.prepareStatement(queryCheck);
-            ps.setString(1,isbn);
-            ResultSet rms = ps.executeQuery();
+                    if (rms.next()) {
 
-            if(rms.next()){
-            }
-            else{
-                System.out.println("Entered isbn not present in our database");
-                isbn = "";
-            }
-        }catch(Exception e){
-            System.out.println(e);
+                    } else {
+                        System.out.println("Entered DistributorId not present in our database");
+                        distributorid = -1;
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (distributorid < 0);
+
+            rs_distributorid = distributorid;
         }
-    }while(isbn.isEmpty());
-
-    rs_isbn = isbn;
-}
-
-    System.out.println("If you want to update the deliverydate, please enter 1 else press 0");
-    choice = getinput();  
-
-    while(choice!=0 && choice!=1)
-    {
+        System.out.println("If you want to update the managerid, please enter 1 else press 0");
         choice = getinput();
-    }
-    if(choice==1)
-    {
-        do{
-    System.out.println("Enter new deliverydate");
-    try{
-                deliverydate = br.readLine();
-                try{
-                myDate1 = format.parse(deliverydate);
-                flag=1;
-            }catch(ParseException e){
-                flag=0;
-                System.out.println("Invalid Date please reenter");
-            }
-            }catch(Exception e){
-            System.out.println(e);
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-        }while(flag==0);
-        rs_deliverydate = myDate1;
-    }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter managerid");
+                try {
+                    managerid = getinput();
+                    String queryCheck = "SELECT * from Manager WHERE id = ?;";
+                    ps = conn.prepareStatement(queryCheck);
+                    ps.setInt(1, managerid);
+                    ResultSet rms = ps.executeQuery();
 
+                    if (rms.next()) {
+                    } else {
+                        System.out.println("Entered Manager Id not present in our database");
+                        managerid = -1;
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (managerid < 0);
 
-    System.out.println("If you want to update the orderdate, please enter 1 else press 0");
-    choice = getinput();  
-    while(choice!=0 && choice!=1)
-    {
+            rs_managerid = managerid;
+        }
+        System.out.println("If you want to update the isbn, please enter 1 else press 0");
         choice = getinput();
-    }
-    if (choice==1)
-    {
-    do{
-    System.out.println("Enter new order date");
-    try{
-                orderdate = br.readLine();
-                try{
-                myDate2 = format.parse(orderdate);
-                flag2=1;
-            }catch(ParseException e){
-                flag2=0;
-                System.out.println("Invalid Date please reenter");
-            }
-            }catch(Exception e){
-            System.out.println(e);
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-        }while(flag2==0);
+        if (choice == 1) {
+            do {
+                System.out.println("Enter isbn");
+                try {
+                    isbn = br.readLine();
+                    String queryCheck = "SELECT * from Publication WHERE ISBN = ?;";
+                    ps = conn.prepareStatement(queryCheck);
+                    ps.setString(1, isbn);
+                    ResultSet rms = ps.executeQuery();
 
-        rs_orderdate = myDate2;
-    }
+                    if (rms.next()) {
+                    } else {
+                        System.out.println("Entered isbn not present in our database");
+                        isbn = "";
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (isbn.isEmpty());
 
-    java.sql.Date sqlDate1 = new java.sql.Date(rs_deliverydate.getTime());
-    java.sql.Date sqlDate2 = new java.sql.Date(rs_orderdate.getTime());
-              
+            rs_isbn = isbn;
+        }
 
-    System.out.println("If you want to update the number of copies, please enter 1 else press 0");
-    choice = getinput();
-
-    while(choice!=0 && choice!=1)
-    {
+        System.out.println("If you want to update the deliverydate, please enter 1 else press 0");
         choice = getinput();
-    }
-    if(choice==1)
-    { 
-    do{
-        System.out.println("Enter new num of copies");
-        try{
-            numofcopies = getinput();
-        }catch(Exception e){
-            System.out.println(e);
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
         }
-    }while(numofcopies<0);
-    rs_numofcopies = numofcopies;
-}
+        if (choice == 1) {
+            do {
+                System.out.println("Enter new deliverydate");
+                try {
+                    deliverydate = br.readLine();
+                    try {
+                        myDate1 = format.parse(deliverydate);
+                        flag = 1;
+                    } catch (ParseException e) {
+                        flag = 0;
+                        System.out.println("Invalid Date please reenter");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (flag == 0);
+            rs_deliverydate = myDate1;
+        }
+
+        System.out.println("If you want to update the orderdate, please enter 1 else press 0");
+        choice = getinput();
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter new order date");
+                try {
+                    orderdate = br.readLine();
+                    try {
+                        myDate2 = format.parse(orderdate);
+                        flag2 = 1;
+                    } catch (ParseException e) {
+                        flag2 = 0;
+                        System.out.println("Invalid Date please reenter");
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (flag2 == 0);
+
+            rs_orderdate = myDate2;
+        }
+
+        java.sql.Date sqlDate1 = new java.sql.Date(rs_deliverydate.getTime());
+        java.sql.Date sqlDate2 = new java.sql.Date(rs_orderdate.getTime());
+
+        System.out.println("If you want to update the number of copies, please enter 1 else press 0");
+        choice = getinput();
+
+        while (choice != 0 && choice != 1) {
+            choice = getinput();
+        }
+        if (choice == 1) {
+            do {
+                System.out.println("Enter new num of copies");
+                try {
+                    numofcopies = getinput();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            } while (numofcopies < 0);
+            rs_numofcopies = numofcopies;
+        }
         double ms_price_val = -1;
         String queryCheck = "SELECT price from Publication WHERE isbn = ?;";
         ps = conn.prepareStatement(queryCheck);
-        ps.setString(1,rs_isbn);
+        ps.setString(1, rs_isbn);
         ResultSet ms = ps.executeQuery();
 
-        while(ms.next())
-        {
+        while (ms.next()) {
             ms_price_val = ms.getDouble("price");
         }
-        double cost = ms_price_val*rs_numofcopies;
+        double cost = ms_price_val * rs_numofcopies;
 
-        double shippingcost = 25*rs_numofcopies;
+        double shippingcost = 25 * rs_numofcopies;
 
+        sql_insert_stmt = "Update Orders set distributorid = ?,managerid = ?, isbn = ?, numcopies = ?, deliverydate = ?,orderdate = ?, cost = ?, shippingcost = ? where orderid = ?;";
+        ps = conn.prepareStatement(sql_insert_stmt);
+        ps.setInt(1, rs_distributorid);
+        ps.setInt(2, rs_managerid);
+        ps.setString(3, rs_isbn);
+        ps.setInt(4, rs_numofcopies);
+        ps.setDate(5, sqlDate1);
+        ps.setDate(6, sqlDate2);
+        ps.setDouble(7, cost);
+        ps.setDouble(8, shippingcost);
+        ps.setInt(9, orderid);
+        ps.executeUpdate();
 
+    }
 
-    sql_insert_stmt = "Update Orders set distributorid = ?,managerid = ?, isbn = ?, numcopies = ?, deliverydate = ?,orderdate = ?, cost = ?, shippingcost = ? where orderid = ?;";
-    ps = conn.prepareStatement(sql_insert_stmt);
-    ps.setInt(1, rs_distributorid);
-    ps.setInt(2, rs_managerid);
-    ps.setString(3, rs_isbn);
-    ps.setInt(4,rs_numofcopies);
-    ps.setDate(5,sqlDate1);
-    ps.setDate(6,sqlDate2);
-    ps.setDouble(7, cost);
-    ps.setDouble(8,shippingcost);
-    ps.setInt(9,orderid);
-    ps.executeUpdate();
-
-}
-static int getinput()
-    {
+    static int getinput() {
         System.out.println("Enter Input");
         Scanner scan = new Scanner(System.in);
         int num;
-        try{
-        num = scan.nextInt();
-    }catch(Exception e)
-    {
-        System.out.println("Enter Input Again. Invalid Entry");
-        num = 9;
-    }
+        try {
+            num = scan.nextInt();
+        } catch (Exception e) {
+            System.out.println("Enter Input Again. Invalid Entry");
+            num = 9;
+        }
         return num;
     }
 
-static void displayManager() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("View Manager Table:");
-    System.out.println("");
-    int rs_managerid = -1;
-    String rs_managername = "";
-    String rs_phonenumber = "";
-    String rs_address = "";
-    int rs_age = -1;
-    String rs_gender = "";
-    String data_retrieval = "Select name, id, phonenumber, address, age, gender from Manager;";
-    ps = conn.prepareStatement(data_retrieval);
-    ResultSet rs = ps.executeQuery();
+    static void displayManager() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("View Manager Table:");
+        System.out.println("");
+        int rs_managerid = -1;
+        String rs_managername = "";
+        String rs_phonenumber = "";
+        String rs_address = "";
+        int rs_age = -1;
+        String rs_gender = "";
+        String data_retrieval = "Select name, id, phonenumber, address, age, gender from Manager;";
+        ps = conn.prepareStatement(data_retrieval);
+        ResultSet rs = ps.executeQuery();
 
         List<String> l = new ArrayList<String>();
-            l.add("ID");
-            l.add("Name");
-            l.add("Phone Number");
-            l.add("Address");
-            l.add("Age");
-            l.add("Gender");
+        l.add("ID");
+        l.add("Name");
+        l.add("Phone Number");
+        l.add("Address");
+        l.add("Age");
+        l.add("Gender");
 
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-20s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            rs_managerid = rs.getInt("id");
+            rs_managername = rs.getString("name");
+            rs_phonenumber = rs.getString("phonenumber");
+            rs_address = rs.getString("address");
+            rs_age = rs.getInt("age");
+            rs_gender = rs.getString("gender");
+
+            l.add(Integer.toString(rs_managerid));
+            l.add(rs_managername);
+            l.add(rs_phonenumber);
+            l.add(rs_address);
+            l.add(Integer.toString(rs_age));
+            l.add(rs_gender);
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-20s", l.get(i)));
             System.out.println(sb);
-
-            while (rs.next()) {
-                l.clear();
-                sb.setLength(0);
-                rs_managerid = rs.getInt("id");
-                rs_managername = rs.getString("name");
-                rs_phonenumber = rs.getString("phonenumber");
-                rs_address = rs.getString("address");
-                rs_age = rs.getInt("age");
-                rs_gender = rs.getString("gender");
-
-                l.add(Integer.toString(rs_managerid));
-                l.add(rs_managername);
-                l.add(rs_phonenumber);
-                l.add(rs_address);
-                l.add(Integer.toString(rs_age));
-                l.add(rs_gender);
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-20s", l.get(i)));
-                System.out.println(sb);
+        }
     }
-}
 
-static void displayStaff() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("View Staff Table:");
-    System.out.println("");
-    int rs_staffid = -1;
-    String rs_staffname = "";
-    String rs_phonenumber = "";
-    String rs_address = "";
-    int rs_age = -1;
-    String rs_gender = "";
-    String data_retrieval = "Select name, id, phonenumber, address, age, gender from Staff;";
-    ps = conn.prepareStatement(data_retrieval);
-    ResultSet rs = ps.executeQuery();
+    static void displayStaff() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("View Staff Table:");
+        System.out.println("");
+        int rs_staffid = -1;
+        String rs_staffname = "";
+        String rs_phonenumber = "";
+        String rs_address = "";
+        int rs_age = -1;
+        String rs_gender = "";
+        String data_retrieval = "Select name, id, phonenumber, address, age, gender from Staff;";
+        ps = conn.prepareStatement(data_retrieval);
+        ResultSet rs = ps.executeQuery();
 
         List<String> l = new ArrayList<String>();
-            l.add("ID");
-            l.add("Name");
-            l.add("Phone Number");
-            l.add("Address");
-            l.add("Age");
-            l.add("Gender");
+        l.add("ID");
+        l.add("Name");
+        l.add("Phone Number");
+        l.add("Address");
+        l.add("Age");
+        l.add("Gender");
 
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-25s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            rs_staffid = rs.getInt("id");
+            rs_staffname = rs.getString("name");
+            rs_phonenumber = rs.getString("phonenumber");
+            rs_address = rs.getString("address");
+            rs_age = rs.getInt("age");
+            rs_gender = rs.getString("gender");
+
+            l.add(Integer.toString(rs_staffid));
+            l.add(rs_staffname);
+            l.add(rs_phonenumber);
+            l.add(rs_address);
+            l.add(Integer.toString(rs_age));
+            l.add(rs_gender);
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-25s", l.get(i)));
             System.out.println(sb);
-
-            while (rs.next()) {
-                l.clear();
-                sb.setLength(0);
-                rs_staffid = rs.getInt("id");
-                rs_staffname = rs.getString("name");
-                rs_phonenumber = rs.getString("phonenumber");
-                rs_address = rs.getString("address");
-                rs_age = rs.getInt("age");
-                rs_gender = rs.getString("gender");
-
-                l.add(Integer.toString(rs_staffid));
-                l.add(rs_staffname);
-                l.add(rs_phonenumber);
-                l.add(rs_address);
-                l.add(Integer.toString(rs_age));
-                l.add(rs_gender);
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-25s", l.get(i)));
-                System.out.println(sb);
+        }
     }
-}
 
-static void displayPeriodicals() throws SQLException{
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("View Periodicals Table:");
-    System.out.println("");
+    static void displayPeriodicals() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("View Periodicals Table:");
+        System.out.println("");
 
-    String rs_isbn = "";
-    String rs_periodicity = "";
-    String rs_type = "";
+        String rs_isbn = "";
+        String rs_periodicity = "";
+        String rs_type = "";
 
-
-    String data_retrieval = "Select ISBN,periodicity,type from Periodicals;";
-    ps = conn.prepareStatement(data_retrieval);
-    ResultSet rs = ps.executeQuery();
+        String data_retrieval = "Select ISBN,periodicity,type from Periodicals;";
+        ps = conn.prepareStatement(data_retrieval);
+        ResultSet rs = ps.executeQuery();
 
         List<String> l = new ArrayList<String>();
-            l.add("ISBN");
-            l.add("Periodicity");
-            l.add("Type");
+        l.add("ISBN");
+        l.add("Periodicity");
+        l.add("Type");
 
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-25s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            rs_isbn = rs.getString("ISBN");
+            rs_periodicity = rs.getString("periodicity");
+            rs_type = rs.getString("type");
+
+            l.add(rs_isbn);
+            l.add(rs_periodicity);
+            l.add(rs_type);
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-25s", l.get(i)));
             System.out.println(sb);
+        }
+    }
 
-            while (rs.next()) {
-                l.clear();
-                sb.setLength(0);
-                rs_isbn = rs.getString("ISBN");
-                rs_periodicity = rs.getString("periodicity");
-                rs_type = rs.getString("type");
+    static void displayPublication() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        System.out.println("View Publication Table:");
+        System.out.println("");
 
-                l.add(rs_isbn);
-                l.add(rs_periodicity);
-                l.add(rs_type);
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-25s", l.get(i)));
-                System.out.println(sb);
-            }
-}
+        String rs_isbn = "";
+        String rs_dateofcreation = "";
+        String rs_title = "";
+        String rs_topic = "";
+        String rs_dateofpublishing = "";
+        int rs_price = -1;
 
-static void displayPublication() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
-    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-    String sql_insert_stmt;
-    System.out.println("View Publication Table:");
-    System.out.println("");
-
-    String rs_isbn = "";
-    String rs_dateofcreation = "";
-    String rs_title = "";
-    String rs_topic = "";
-    String rs_dateofpublishing = "";
-    int rs_price = -1;
-
-    String data_retrieval = "Select ISBN, dateofcreation, title, topic, publicationdate, price from Publication;";
-    ps = conn.prepareStatement(data_retrieval);
-    ResultSet rs = ps.executeQuery();
+        String data_retrieval = "Select ISBN, dateofcreation, title, topic, publicationdate, price from Publication;";
+        ps = conn.prepareStatement(data_retrieval);
+        ResultSet rs = ps.executeQuery();
 
         List<String> l = new ArrayList<String>();
-            l.add("ISBN");
-            l.add("dateofcreation");
-            l.add("Title");
-            l.add("Topic");
-            l.add("Publication Date");
-            l.add("Price");
+        l.add("ISBN");
+        l.add("dateofcreation");
+        l.add("Title");
+        l.add("Topic");
+        l.add("Publication Date");
+        l.add("Price");
 
-            StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-30s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            rs_isbn = rs.getString("ISBN");
+            rs_dateofcreation = rs.getString("dateofcreation");
+            rs_title = rs.getString("title");
+            rs_topic = rs.getString("topic");
+            rs_dateofpublishing = rs.getString("publicationdate");
+            rs_price = rs.getInt("price");
+
+            l.add(rs_isbn);
+            l.add(rs_dateofcreation);
+            l.add(rs_title);
+            l.add(rs_topic);
+            l.add(rs_dateofpublishing);
+            l.add(Integer.toString(rs_price));
+
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-30s", l.get(i)));
             System.out.println(sb);
+        }
+    }
 
-            while (rs.next()) {
-                l.clear();
-                sb.setLength(0);
-                rs_isbn = rs.getString("ISBN");
-                rs_dateofcreation = rs.getString("dateofcreation");
-                rs_title = rs.getString("title");
-                rs_topic = rs.getString("topic");
-                rs_dateofpublishing = rs.getString("publicationdate");
-                rs_price = rs.getInt("price");
-
-                l.add(rs_isbn);
-                l.add(rs_dateofcreation);
-                l.add(rs_title);
-                l.add(rs_topic);
-                l.add(rs_dateofpublishing);
-                l.add(Integer.toString(rs_price));
-                
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-30s", l.get(i)));
-                System.out.println(sb);
-}
-}
-
- static void add_chapters() throws SQLException {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static void add_chapters() throws SQLException {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -2152,8 +2032,7 @@ static void displayPublication() throws SQLException {
         }
     }
 
-
-    //journalists
+    // journalists
     static void add_articles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2224,7 +2103,7 @@ static void displayPublication() throws SQLException {
         }
     }
 
-    //editors, authors
+    // editors, authors
     static void total_chapters() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2265,7 +2144,6 @@ static void displayPublication() throws SQLException {
             }
         }
     }
-
 
     // editors, journalists
     static void total_articles() throws SQLException {
@@ -2308,7 +2186,6 @@ static void displayPublication() throws SQLException {
             }
         }
     }
-
 
     // manager
     static void add_distributor() throws SQLException {
@@ -2434,7 +2311,6 @@ static void displayPublication() throws SQLException {
         ps.setString(8, contact_person);
         ps.executeUpdate();
     }
-
 
     // manager
     static void delete_distributor() throws SQLException {
@@ -2608,7 +2484,6 @@ static void displayPublication() throws SQLException {
         }
     }
 
-
     // editors, journalists
     static void total_number_articles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -2624,7 +2499,6 @@ static void displayPublication() throws SQLException {
             System.out.println("Total number of Articles" + " = " + rs.getInt(1));
         }
     }
-
 
     // editors, journalists
     static void update_articles_text() throws SQLException {
@@ -2721,8 +2595,6 @@ static void displayPublication() throws SQLException {
         }
     }
 
-
-
     // editors, authors
     static void update_chapters_text() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -2817,6 +2689,7 @@ static void displayPublication() throws SQLException {
             ps.executeUpdate();
         }
     }
+
     // editor, journalist
     static void delete_article() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -3113,7 +2986,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void insert_pay() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3298,7 +3171,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void generate_distributor_report() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3394,7 +3267,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void generate_distributors_report() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3447,7 +3320,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void orders_by_month() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3489,7 +3362,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void total_distributors() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3525,7 +3398,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void total_expense() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3561,7 +3434,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void Revenue_by_City() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3599,7 +3472,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void distributor_report_by_month() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3689,7 +3562,8 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void update_distributors() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3724,10 +3598,9 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                 if (!rs.isBeforeFirst()) {
                     System.out.println("Manager ID does not exist");
+                    sd_id = "";
                     // continue;
-                }
-
-                else {
+                } else {
                     flag1 = 2;
                     while (rs.next()) {
                         String r1 = rs.getString(1);
@@ -3750,7 +3623,6 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     }
                 }
             }
-
         } while (sd_id.isEmpty());
 
         if (flag1 == 2) {
@@ -3876,66 +3748,78 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 }
             }
 
-            if (!ch.isEmpty()) {
+            try {
+                con.setAutoCommit(false);
+                if (!ch.isEmpty()) {
 
-                if (f1 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET name = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_name);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
+                    if (f1 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET name = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_name);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f2 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET phonenumber = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_number);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f3 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET city = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_city);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f4 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET address = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_address);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f5 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET type = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_type);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f6 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET amountowed = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setDouble(1, a_o);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f7 == 1) {
+                        sql_insert_stmt = "UPDATE Distributors SET contactperson = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_contact);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    con.commit();
+                    con.close();
+                } else {
+                    // go to all options menu-----------
                 }
-                if (f2 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET phonenumber = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_number);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
+            } catch (Exception e) {
+                try {
+                    if (con != null) {
+                        con.rollback();
+                    }
+                } catch (Exception f) {
+                    System.out.println("Rollback Failed............");
                 }
-                if (f3 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET city = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_city);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f4 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET address = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_address);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f5 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET type = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_type);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f6 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET amountowed = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setDouble(1, a_o);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f7 == 1) {
-                    sql_insert_stmt = "UPDATE Distributors SET contactperson = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_contact);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-
-            } else {
-                // go to all options menu-----------
             }
         }
     }
 
     static String get_name() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Name:");
@@ -3951,7 +3835,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_number() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Number:");
@@ -3967,7 +3851,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_city() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New City:");
@@ -3983,7 +3867,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_address() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Address:");
@@ -3999,7 +3883,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_type() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Type:");
@@ -4015,7 +3899,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static double get_amount() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         double a_o = 0.0d;
 
@@ -4040,7 +3924,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_contact() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Contact:");
@@ -4056,7 +3940,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static int get_age() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         int a_o = 0;
 
@@ -4081,7 +3965,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static String get_gender() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Gender:");
@@ -4098,7 +3982,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void add_manager() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4202,7 +4086,8 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     // manager
     static void update_manager() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4228,7 +4113,6 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     sd_id = "";
                 }
             }
-
             if (!sd_id.isEmpty()) {
                 String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
                 ps = conn.prepareStatement(sql_chk);
@@ -4237,10 +4121,9 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                 if (!rs.isBeforeFirst()) {
                     System.out.println("Manager ID does not exist");
+                    sd_id = "";
                     // continue;
-                }
-
-                else {
+                } else {
                     flag1 = 2;
                     while (rs.next()) {
                         String r1 = rs.getString(1);
@@ -4259,7 +4142,6 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     }
                 }
             }
-
         } while (sd_id.isEmpty());
 
         if (flag1 == 2) {
@@ -4307,7 +4189,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                         }
                     } else {
-                        System.out.println("Name Already Entered");
+                        // System.out.println("Name Already Entered");
                     }
                 }
 
@@ -4320,7 +4202,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                         }
                     } else {
-                        System.out.println("Phone Number Already Entered");
+                        // System.out.println("Phone Number Already Entered");
                     }
                 }
 
@@ -4333,7 +4215,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                         }
                     } else {
-                        System.out.println("Address Already Entered");
+                        // System.out.println("Address Already Entered");
                     }
                 }
 
@@ -4346,7 +4228,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                         }
                     } else {
-                        System.out.println("Age Already Entered");
+                        // System.out.println("Age Already Entered");
                     }
                 }
 
@@ -4359,61 +4241,72 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                         }
                     } else {
-                        System.out.println("Gender Already Entered");
+                        // System.out.println("Gender Already Entered");
                     }
                 }
 
             }
+            try {
+                conn.setAutoCommit(false);
+                if (!ch.isEmpty()) {
 
-            if (!ch.isEmpty()) {
+                    if (f1 == 1) {
+                        sql_insert_stmt = "UPDATE Manager SET name = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_name);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f2 == 1) {
+                        sql_insert_stmt = "UPDATE Manager SET phonenumber = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_number);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f3 == 1) {
+                        sql_insert_stmt = "UPDATE Manager SET address = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_address);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f4 == 1) {
+                        sql_insert_stmt = "UPDATE Manager SET age = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setInt(1, new_age);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    if (f5 == 1) {
+                        sql_insert_stmt = "UPDATE Manager SET gender = ? WHERE id = ?;";
+                        ps = conn.prepareStatement(sql_insert_stmt);
+                        ps.setString(1, new_gender);
+                        ps.setInt(2, d_id);
+                        ps.executeUpdate();
+                    }
+                    con.commit();
+                    con.close();
+                    System.out.println("All queries have executed--------------");
 
-                if (f1 == 1) {
-                    sql_insert_stmt = "UPDATE Manager SET name = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_name);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
+                } else {
+                    // go to all options menu-----------
                 }
-                if (f2 == 1) {
-                    sql_insert_stmt = "UPDATE Manager SET phonenumber = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_number);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
+            } catch (Exception e) {
+                try {
+                    if (conn != null) {
+                        conn.rollback();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Unable to rollback");
                 }
-                if (f3 == 1) {
-                    sql_insert_stmt = "UPDATE Manager SET address = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_address);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f4 == 1) {
-                    sql_insert_stmt = "UPDATE Manager SET age = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setInt(1, new_age);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-                if (f5 == 1) {
-                    sql_insert_stmt = "UPDATE Manager SET gender = ? WHERE id = ?;";
-                    ps = conn.prepareStatement(sql_insert_stmt);
-                    ps.setString(1, new_gender);
-                    ps.setInt(2, d_id);
-                    ps.executeUpdate();
-                }
-
-                System.out.println("All queries have executed--------------");
-
-            } else {
-                // go to all options menu-----------
             }
         }
     }
 
     // to print all the tables in the db
     static void displayArticles() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4452,7 +4345,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayAssigns() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4491,7 +4384,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayAuthors() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4528,7 +4421,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayBooks() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4565,7 +4458,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayChapters() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4604,7 +4497,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayDistributors() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4655,7 +4548,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayEditBooks() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4694,7 +4587,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayEditPeriodicals() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4733,7 +4626,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayEditors() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4770,7 +4663,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     static void displayJournalists() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4811,16 +4704,16 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n" + 
-                    "from Distributors d left join Orders o on d.id=o.distributorid group by d.city;";
+            String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n"
+                    + "from Distributors d left join Orders o on d.id=o.distributorid group by d.city;";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            
+
             List<String> l = new ArrayList<String>();
             l.add("City");
             l.add("Revenue");
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
             while (rs.next()) {
@@ -4830,65 +4723,62 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String city = rs.getString("city");
                 l.add(city);
                 l.add(Integer.toString(revenue));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-     }
-    
+    }
+
     public static void revenue_for_city() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         System.out.println("Enter the name of the city to get revenue details: ");
-        
+
         Scanner sc = new Scanner(System.in);
         int flag = 0;
         String city = "";
         do {
-            try{
+            try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
                 city = br.readLine();
-                String sql_chk = "select city from Distributors WHERE city = ?;"; 
+                String sql_chk = "select city from Distributors WHERE city = ?;";
                 ps = conn.prepareStatement(sql_chk);
                 ps.setString(1, city);
                 ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
+
+                if (rs.next() == true) {
                     flag = 1;
-                }
-                else{
+                } else {
                     flag = 0;
                     System.out.println("City does not exist in Distributor table");
                     System.out.println("Please enter city again");
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
             }
-        }while(flag == 0 );
-        
-    
-        if(flag == 1) {
-            //System.out.println("Came in try after flag = 1");
+        } while (flag == 0);
+
+        if (flag == 1) {
+            // System.out.println("Came in try after flag = 1");
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n" + 
-                        "from Distributors d join Orders o on d.id=o.distributorid\r\n" + 
-                        " and d.city = ?;";
+                String query = "select d.city,sum(d.amountowed) + sum(o.cost) + sum(o.shippingcost) as \"Revenue Generated\"\r\n"
+                        + "from Distributors d join Orders o on d.id=o.distributorid\r\n" + " and d.city = ?;";
                 ps = null;
                 ps = conn.prepareStatement(query);
                 ps.setString(1, city);
-                //Statement stmt = conn.createStatement();
+                // Statement stmt = conn.createStatement();
                 ResultSet rs = ps.executeQuery();
                 List<String> l = new ArrayList<String>();
                 l.add("City");
                 l.add("Revenue");
                 StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
                 while (rs.next()) {
@@ -4898,19 +4788,19 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     String city_name = rs.getString("city");
                     l.add(city_name);
                     l.add(Integer.toString(revenue));
-                    for(int i=0; i<l.size(); i++)
+                    for (int i = 0; i < l.size(); i++)
                         sb.append(String.format("| %-15s", l.get(i)));
                     System.out.println(sb);
-                 }
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
         }
-        
-     }
-    
+
+    }
+
     public static void get_total_expense() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4919,11 +4809,11 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String query = "select sum(payment) from Pays;";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            
+
             List<String> l = new ArrayList<String>();
             l.add("Total Expense");
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
             while (rs.next()) {
@@ -4931,18 +4821,18 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 sb.setLength(0);
                 int expense = rs.getInt("sum(payment)");
                 l.add(Integer.toString(expense));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
-    
-    //API: get staff payment remaining
+
+    // API: get staff payment remaining
     public static void get_staff_payment_remaining() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4951,12 +4841,12 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String query = "select staffid, sum(payment) from Pays where TrackingPayment = \"No\" group by staffid";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            
+
             List<String> l = new ArrayList<String>();
             l.add("staffid");
             l.add("sum(payment remaining)");
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
             while (rs.next()) {
@@ -4966,201 +4856,126 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 int payment = rs.getInt("sum(payment)");
                 l.add(Integer.toString(id));
                 l.add(Integer.toString(payment));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
-    
-    //API: get staff payment availed
-        public static void get_staff_payment_availed() {
-            final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            PreparedStatement ps = null;
-            try {
-                conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String query = "select staffid, sum(payment) from Pays where TrackingPayment = \"Yes\" group by staffid ";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                
-                List<String> l = new ArrayList<String>();
-                l.add("staffid");
-                l.add("sum(payment availed)");
-                StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-15s", l.get(i)));
-                System.out.println(sb);
-                while (rs.next()) {
-                    l.clear();
-                    sb.setLength(0);
-                    int id = rs.getInt("staffid");
-                    int payment = rs.getInt("sum(payment)");
-                    l.add(Integer.toString(id));
-                    l.add(Integer.toString(payment));
-                    for(int i=0; i<l.size(); i++)
-                        sb.append(String.format("| %-15s", l.get(i)));
-                    System.out.println(sb);
-                 }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 
-        }
-    
-        
-        //API: Find distributors by city
-        public static void find_distributors_by_city() {
-            final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            PreparedStatement ps = null;
-            System.out.println("Enter the name of the city to get distributors details in that city: ");
-        
-            int flag = 0;
-            String city = "";
-            do {
-                try{
-                    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                    city = br.readLine();
-                    String sql_chk = "select city from Distributors WHERE city = ?;"; 
-                    ps = conn.prepareStatement(sql_chk);
-                    ps.setString(1, city);
-                    ResultSet rs = ps.executeQuery();
-                    
-                    if(rs.next() == true){
-                        flag = 1;
-                    }
-                    else{
-                        flag = 0;
-                        System.out.println("City does not exist in Distributor table");
-                        System.out.println("Please Enter valid city");
-                    }
-                }catch(Exception e){
-                    System.out.println(e);
-                }
-            }while(flag == 0);
-            
-        
-            if(flag == 1) {
-                //System.out.println("Came in try after flag = 1");
-                try {
-                    conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                    String query = "SELECT * FROM Distributors WHERE city = \"New York City\" OR city = ?;";
-                    ps = null;
-                    ps = conn.prepareStatement(query);
-                    ps.setString(1, city);
-                    //Statement stmt = conn.createStatement();
-                    ResultSet rs = ps.executeQuery();
-                    List<String> l = new ArrayList<String>();
-                    l.add("id");
-                    l.add("name");
-                    l.add("City");
-                    l.add("Phone Number");
-                    l.add("Type");
-                    l.add("Amount Owed");
-                    l.add("Contact Person");
-                    StringBuilder sb = new StringBuilder();
-                    for(int i=0; i<l.size(); i++)
-                        sb.append(String.format("| %-17s", l.get(i)));
-                    System.out.println(sb);
-                    while (rs.next()) {
-                        l.clear();
-                        sb.setLength(0);
-                    
-                        int id = rs.getInt("id");
-                        String name = rs.getString("name");
-                        String city_name = rs.getString("city");
-                        String phone = rs.getString("phonenumber");
-                        String type = rs.getString("type");
-                        int amount = rs.getInt("amountowed");
-                        String person = rs.getString("contactperson");
-                        
-                        l.add(Integer.toString(id));
-                        l.add(name);
-                        l.add(city_name);
-                        l.add(type);
-                        l.add(Integer.toString(amount));
-                        l.add(person);
-                        
-                        
-                        for(int i=0; i<l.size(); i++)
-                            sb.append(String.format("| %-17s", l.get(i)));
-                        System.out.println(sb);
-                     }
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-            }
-        }
-    
-    
-    public static void check_editor_publications() {
+    // API: get staff payment availed
+    public static void get_staff_payment_availed() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
-        System.out.println("Enter Editor ID: ");
-    
-        int flag = 0;
-        String id = "";
-        
-        do {
-            try{
-                conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                id = br.readLine();
-                String sql_chk = "select editorid from Assign WHERE editorid = ?;"; 
-                ps = conn.prepareStatement(sql_chk);
-                ps.setString(1, id);
-                ResultSet rs = ps.executeQuery();
-                
-                if(rs.next() == true){
-                    flag = 1;
-                }
-                else{
-                    flag = 0;
-                    System.out.println("Editor ID not in Assign Table");
-                    System.out.println("Please enter valid editor id");
-                }
-            }catch(Exception e){
-                System.out.println(e);
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String query = "select staffid, sum(payment) from Pays where TrackingPayment = \"Yes\" group by staffid ";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            List<String> l = new ArrayList<String>();
+            l.add("staffid");
+            l.add("sum(payment availed)");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+            while (rs.next()) {
+                l.clear();
+                sb.setLength(0);
+                int id = rs.getInt("staffid");
+                int payment = rs.getInt("sum(payment)");
+                l.add(Integer.toString(id));
+                l.add(Integer.toString(payment));
+                for (int i = 0; i < l.size(); i++)
+                    sb.append(String.format("| %-15s", l.get(i)));
+                System.out.println(sb);
             }
-        }while(flag == 0);
-        
-    
-        if(flag == 1) {
-            //System.out.println("Came in try after flag = 1");
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    // API: Find distributors by city
+    public static void find_distributors_by_city() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        System.out.println("Enter the name of the city to get distributors details in that city: ");
+
+        int flag = 0;
+        String city = "";
+        do {
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String query = "SELECT editorid, ISBN FROM Assign WHERE editorid = ?;";
+                city = br.readLine();
+                String sql_chk = "select city from Distributors WHERE city = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, city);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next() == true) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                    System.out.println("City does not exist in Distributor table");
+                    System.out.println("Please Enter valid city");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (flag == 0);
+
+        if (flag == 1) {
+            // System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String query = "SELECT * FROM Distributors WHERE city = \"New York City\" OR city = ?;";
                 ps = null;
                 ps = conn.prepareStatement(query);
-                ps.setString(1, id);
-                //Statement stmt = conn.createStatement();
+                ps.setString(1, city);
+                // Statement stmt = conn.createStatement();
                 ResultSet rs = ps.executeQuery();
                 List<String> l = new ArrayList<String>();
-                l.add("Editor id");
-                l.add("ISBN");
+                l.add("id");
+                l.add("name");
+                l.add("City");
+                l.add("Phone Number");
+                l.add("Type");
+                l.add("Amount Owed");
+                l.add("Contact Person");
                 StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-17s", l.get(i)));
                 System.out.println(sb);
                 while (rs.next()) {
                     l.clear();
                     sb.setLength(0);
-                
-                    int editorid = rs.getInt("editorid");
-                    String name = rs.getString("ISBN");
-                    
-                    l.add(Integer.toString(editorid));
+
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String city_name = rs.getString("city");
+                    String phone = rs.getString("phonenumber");
+                    String type = rs.getString("type");
+                    int amount = rs.getInt("amountowed");
+                    String person = rs.getString("contactperson");
+
+                    l.add(Integer.toString(id));
                     l.add(name);
-                    
-                    for(int i=0; i<l.size(); i++)
+                    l.add(city_name);
+                    l.add(type);
+                    l.add(Integer.toString(amount));
+                    l.add(person);
+
+                    for (int i = 0; i < l.size(); i++)
                         sb.append(String.format("| %-17s", l.get(i)));
                     System.out.println(sb);
-                 }
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -5168,8 +4983,75 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         }
     }
-    
-    
+
+    public static void check_editor_publications() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        System.out.println("Enter Editor ID: ");
+
+        int flag = 0;
+        String id = "";
+
+        do {
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                id = br.readLine();
+                String sql_chk = "select editorid from Assign WHERE editorid = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next() == true) {
+                    flag = 1;
+                } else {
+                    flag = 0;
+                    System.out.println("Editor ID not in Assign Table");
+                    System.out.println("Please enter valid editor id");
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } while (flag == 0);
+
+        if (flag == 1) {
+            // System.out.println("Came in try after flag = 1");
+            try {
+                conn = DriverManager.getConnection(jdbcURL, user, passwd);
+                String query = "SELECT editorid, ISBN FROM Assign WHERE editorid = ?;";
+                ps = null;
+                ps = conn.prepareStatement(query);
+                ps.setString(1, id);
+                // Statement stmt = conn.createStatement();
+                ResultSet rs = ps.executeQuery();
+                List<String> l = new ArrayList<String>();
+                l.add("Editor id");
+                l.add("ISBN");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < l.size(); i++)
+                    sb.append(String.format("| %-17s", l.get(i)));
+                System.out.println(sb);
+                while (rs.next()) {
+                    l.clear();
+                    sb.setLength(0);
+
+                    int editorid = rs.getInt("editorid");
+                    String name = rs.getString("ISBN");
+
+                    l.add(Integer.toString(editorid));
+                    l.add(name);
+
+                    for (int i = 0; i < l.size(); i++)
+                        sb.append(String.format("| %-17s", l.get(i)));
+                    System.out.println(sb);
+                }
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     public static void totalprice_perisbn_perdistributor_permonth() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5178,15 +5060,15 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String query = "select MONTH(o.orderdate) as Month,o.ISBN, o.distributorid, sum(p.price*o.numcopies) as \"Price Generated\" from Orders o join Publication p on o.ISBN where o.ISBN = p .ISBN group by MONTH(o.orderdate), o.ISBN, o.distributorid;";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            
+
             List<String> l = new ArrayList<String>();
             l.add("Month");
             l.add("ISBN");
             l.add("Distributor ID");
             l.add("Price Generated");
-            
+
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
             while (rs.next()) {
@@ -5196,104 +5078,101 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 String ISBN = rs.getString("o.distributorid");
                 int distributorid = rs.getInt("o.distributorid");
                 int price = rs.getInt("Price Generated");
-                
-                
+
                 l.add(Integer.toString(month));
                 l.add(ISBN);
                 l.add(Integer.toString(distributorid));
                 l.add(Integer.toString(price));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    
+
     public static void calculate_payment_within_daterange() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
+
         String mydate1 = "";
         String mydate2 = "";
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // United States style of format.
         format.setLenient(false);
-        java.util.Date myDate1 =  new java.util.Date();
+        java.util.Date myDate1 = new java.util.Date();
         java.util.Date myDate2 = new java.util.Date();
-        
-        
+
         int flag = 1;
         do {
-        try {
-            System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
-            mydate1 = br.readLine();
             try {
-                myDate1 = format.parse( mydate1 );
-                flag = 1;
-            } catch (ParseException e) {
+                System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
+                mydate1 = br.readLine();
+                try {
+                    myDate1 = format.parse(mydate1);
+                    flag = 1;
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    flag = 0;
+                    System.out.println("Invalid Date, Please Enter again");
+                    // e.printStackTrace();
+                }
+                // System.out.println(mydate);
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
-                flag = 0;
-                System.out.println("Invalid Date, Please Enter again");
-                //e.printStackTrace();
-            }       
-            //System.out.println(mydate);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        }while(flag == 0);
-        
+                e.printStackTrace();
+            }
+        } while (flag == 0);
+
         flag = 1;
         do {
-        try {
-            System.out.println("Enter End of Date Range (YYYY-MM-DD)");
-            mydate2 = br.readLine();
             try {
-                myDate2 = format.parse( mydate2 );
-                flag = 1;
-            } catch (ParseException e) {
+                System.out.println("Enter End of Date Range (YYYY-MM-DD)");
+                mydate2 = br.readLine();
+                try {
+                    myDate2 = format.parse(mydate2);
+                    flag = 1;
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    flag = 0;
+                    System.out.println("Invalid Date, Please Enter again");
+                    // e.printStackTrace();
+                }
+                // System.out.println(mydate2);
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
-                flag = 0;
-                System.out.println("Invalid Date, Please Enter again");
-                //e.printStackTrace();
-            }       
-            //System.out.println(mydate2);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        }while(flag == 0);
-        
+                e.printStackTrace();
+            }
+        } while (flag == 0);
+
         PreparedStatement ps = null;
-        
+
         flag = 0;
-        
-        try{
+
+        try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+            String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid";
             ps = conn.prepareStatement(sql_chk);
             java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
             java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
             ps.setDate(1, sqlDate1);
             ps.setDate(2, sqlDate2);
             ResultSet rs = ps.executeQuery();
-            
-            if(rs.next() == true){
+
+            if (rs.next() == true) {
                 flag = 1;
-            }
-            else{
+            } else {
                 System.out.println("No results for this date range ");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-    
-        if(flag == 1) {
-            //System.out.println("Came in try after flag = 1");
+
+        if (flag == 1) {
+            // System.out.println("Came in try after flag = 1");
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid"; 
+                String sql_chk = "select staffid, sum(payment) from Pays where paydate between ? and ? group by staffid";
                 ps = conn.prepareStatement(sql_chk);
                 java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
                 java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
@@ -5304,7 +5183,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 l.add("Staff ID");
                 l.add("Total Payments");
                 StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
                 while (rs.next()) {
@@ -5314,10 +5193,10 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     int revenue = rs.getInt("sum(payment)");
                     l.add(Integer.toString(id));
                     l.add(Integer.toString(revenue));
-                    for(int i=0; i<l.size(); i++)
+                    for (int i = 0; i < l.size(); i++)
                         sb.append(String.format("| %-15s", l.get(i)));
                     System.out.println(sb);
-                 }
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -5325,116 +5204,112 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         }
 
-        
     }
-    
+
     public static void orders_date_range() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String mydate1 = "";
         String mydate2 = "";
-        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // United States style of format.
         format.setLenient(false);
-        java.util.Date myDate1 =  new java.util.Date();
+        java.util.Date myDate1 = new java.util.Date();
         java.util.Date myDate2 = new java.util.Date();
-        
-        
+
         int flag = 1;
         do {
-        try {
-            System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
-            mydate1 = br.readLine();
             try {
-                myDate1 = format.parse( mydate1 );
-                flag = 1;
-            } catch (ParseException e) {
+                System.out.println("Enter Begin of Date Range (YYYY-MM-DD)");
+                mydate1 = br.readLine();
+                try {
+                    myDate1 = format.parse(mydate1);
+                    flag = 1;
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    flag = 0;
+                    System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+                    // e.printStackTrace();
+                }
+                // System.out.println(mydate);
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
-                flag = 0;
-                System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
-                //e.printStackTrace();
-            }       
-            //System.out.println(mydate);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        }while(flag == 0);
-        
+                e.printStackTrace();
+            }
+        } while (flag == 0);
+
         flag = 1;
         do {
-        try {
-            System.out.println("Enter End of Date Range (YYYY-MM-DD)");
-            mydate2 = br.readLine();
             try {
-                myDate2 = format.parse( mydate2 );
-                flag = 1;
-            } catch (ParseException e) {
+                System.out.println("Enter End of Date Range (YYYY-MM-DD)");
+                mydate2 = br.readLine();
+                try {
+                    myDate2 = format.parse(mydate2);
+                    flag = 1;
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    flag = 0;
+                    System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
+                    // e.printStackTrace();
+                }
+                // System.out.println(mydate2);
+            } catch (IOException e) {
                 // TODO Auto-generated catch block
-                flag = 0;
-                System.out.println("Invalid Date, Please Enter again (YYYY-MM-DD)");
-                //e.printStackTrace();
-            }       
-            //System.out.println(mydate2);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        }while(flag == 0);
-        
-        
+                e.printStackTrace();
+            }
+        } while (flag == 0);
+
         PreparedStatement ps = null;
-        
+
         flag = 0;
-        
-        try{
+
+        try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+            String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;";
             ps = conn.prepareStatement(sql_chk);
             java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
             java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
             ps.setDate(1, sqlDate1);
             ps.setDate(2, sqlDate2);
             ResultSet rs = ps.executeQuery();
-            
-            if(rs.next() == true){
+
+            if (rs.next() == true) {
                 flag = 1;
-            }
-            else{
+            } else {
                 System.out.println("No results for this date range");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-    
-        if(flag == 1) {
-            //System.out.println("Came in try after flag = 1");
+
+        if (flag == 1) {
+            // System.out.println("Came in try after flag = 1");
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;"; 
+                String sql_chk = "SELECT * FROM Orders WHERE orderdate BETWEEN ? AND ?;";
                 ps = conn.prepareStatement(sql_chk);
                 java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
                 java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
                 ps.setDate(1, sqlDate1);
                 ps.setDate(2, sqlDate2);
                 ResultSet rs = ps.executeQuery();
-                ArrayList<String> l = new ArrayList<String>( 
-                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
+                ArrayList<String> l = new ArrayList<String>(Arrays.asList("distributorid", "managerid", "orderid",
+                        "ISBN", "numcopies", "deliverydate", "orderdate", "cost", "shippingcost"));
                 StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", l.get(i)));
                 System.out.println(sb);
-                
+
                 while (rs.next()) {
                     sb.setLength(0);
-                     
+
                     int did = rs.getInt(l.get(0));
                     int mid = rs.getInt(l.get(1));
-                    int oid= rs.getInt(l.get(2));
+                    int oid = rs.getInt(l.get(2));
                     String ISBN = rs.getString(l.get(3));
                     int copies = rs.getInt(l.get(4));
                     String ddate = rs.getString(l.get(5));
                     String odate = rs.getString(l.get(6));
                     int cost = rs.getInt(l.get(7));
-                    int scost= rs.getInt(l.get(8));
+                    int scost = rs.getInt(l.get(8));
                     ArrayList<String> m = new ArrayList<String>();
                     m.add(Integer.toString(did));
                     m.add(Integer.toString(mid));
@@ -5445,10 +5320,10 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     m.add(odate);
                     m.add(Integer.toString(cost));
                     m.add(Integer.toString(scost));
-                    for(int i=0; i<l.size(); i++)
+                    for (int i = 0; i < l.size(); i++)
                         sb.append(String.format("| %-15s", m.get(i)));
                     System.out.println(sb);
-                 }
+                }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -5457,123 +5332,119 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         }
 
     }
-    
+
     public static void display_orders() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
+
         PreparedStatement ps = null;
-        
-    
-            //System.out.println("Came in try after flag = 1");
-            try {
-                conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String sql_chk = "SELECT * FROM Orders;"; 
-                ps = conn.prepareStatement(sql_chk);
-                ResultSet rs = ps.executeQuery();
-                System.out.println("Orders Table");
-                ArrayList<String> l = new ArrayList<String>( 
-                        Arrays.asList("distributorid", "managerid","orderid", "ISBN", "numcopies", "deliverydate","orderdate","cost", "shippingcost"));
-                StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-15s", l.get(i)));
-                System.out.println(sb);
-                
-                while (rs.next()) {
-                    sb.setLength(0);
-                     
-                    int did = rs.getInt(l.get(0));
-                    int mid = rs.getInt(l.get(1));
-                    int oid= rs.getInt(l.get(2));
-                    String ISBN = rs.getString(l.get(3));
-                    int copies = rs.getInt(l.get(4));
-                    String ddate = rs.getString(l.get(5));
-                    String odate = rs.getString(l.get(6));
-                    int cost = rs.getInt(l.get(7));
-                    int scost= rs.getInt(l.get(8));
-                    ArrayList<String> m = new ArrayList<String>();
-                    m.add(Integer.toString(did));
-                    m.add(Integer.toString(mid));
-                    m.add(Integer.toString(oid));
-                    m.add(ISBN);
-                    m.add(Integer.toString(copies));
-                    m.add(ddate);
-                    m.add(odate);
-                    m.add(Integer.toString(cost));
-                    m.add(Integer.toString(scost));
-                    for(int i=0; i<l.size(); i++)
-                        sb.append(String.format("| %-15s", m.get(i)));
-                    System.out.println(sb);
-                 }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
 
-        }
-    
-public static void display_pays() {
-        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        PreparedStatement ps = null;
-        
-    
-            
-            try {
-                conn = DriverManager.getConnection(jdbcURL, user, passwd);
-                String sql_chk = "SELECT * FROM Pays;"; 
-                ps = conn.prepareStatement(sql_chk);
-                ResultSet rs = ps.executeQuery();
-                System.out.println("Pays Table");
-                ArrayList<String> l = new ArrayList<String>( 
-                        Arrays.asList("managerid", "staffid","payment", "paydate", "Payment Availed"));
-                StringBuilder sb = new StringBuilder();
-                for(int i=0; i<l.size(); i++)
-                    sb.append(String.format("| %-15s", l.get(i)));
-                System.out.println(sb);
-                
-                while (rs.next()) {
-                    sb.setLength(0);
-                     
-                    int mid = rs.getInt(l.get(0));
-                    int sid = rs.getInt(l.get(1));
-                    int payment = rs.getInt(l.get(2));
-                    String pdate = rs.getString(l.get(3));
-                    String track = rs.getString("TrackingPayment");
-                    ArrayList<String> m = new ArrayList<String>();
-                    m.add(Integer.toString(mid));
-                    m.add(Integer.toString(sid));
-                    m.add(Integer.toString(payment));
-                    m.add(pdate);
-                    m.add(track);
-                    for(int i=0; i<l.size(); i++)
-                        sb.append(String.format("| %-15s", m.get(i)));
-                    System.out.println(sb);
-                 }
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-
-public static void display_WriteBooks() {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
+        // System.out.println("Came in try after flag = 1");
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            String sql_chk = "SELECT * FROM WriteBooks;"; 
+            String sql_chk = "SELECT * FROM Orders;";
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Orders Table");
+            ArrayList<String> l = new ArrayList<String>(Arrays.asList("distributorid", "managerid", "orderid", "ISBN",
+                    "numcopies", "deliverydate", "orderdate", "cost", "shippingcost"));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+
+            while (rs.next()) {
+                sb.setLength(0);
+
+                int did = rs.getInt(l.get(0));
+                int mid = rs.getInt(l.get(1));
+                int oid = rs.getInt(l.get(2));
+                String ISBN = rs.getString(l.get(3));
+                int copies = rs.getInt(l.get(4));
+                String ddate = rs.getString(l.get(5));
+                String odate = rs.getString(l.get(6));
+                int cost = rs.getInt(l.get(7));
+                int scost = rs.getInt(l.get(8));
+                ArrayList<String> m = new ArrayList<String>();
+                m.add(Integer.toString(did));
+                m.add(Integer.toString(mid));
+                m.add(Integer.toString(oid));
+                m.add(ISBN);
+                m.add(Integer.toString(copies));
+                m.add(ddate);
+                m.add(odate);
+                m.add(Integer.toString(cost));
+                m.add(Integer.toString(scost));
+                for (int i = 0; i < l.size(); i++)
+                    sb.append(String.format("| %-15s", m.get(i)));
+                System.out.println(sb);
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void display_pays() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM Pays;";
+            ps = conn.prepareStatement(sql_chk);
+            ResultSet rs = ps.executeQuery();
+            System.out.println("Pays Table");
+            ArrayList<String> l = new ArrayList<String>(
+                    Arrays.asList("managerid", "staffid", "payment", "paydate", "Payment Availed"));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < l.size(); i++)
+                sb.append(String.format("| %-15s", l.get(i)));
+            System.out.println(sb);
+
+            while (rs.next()) {
+                sb.setLength(0);
+
+                int mid = rs.getInt(l.get(0));
+                int sid = rs.getInt(l.get(1));
+                int payment = rs.getInt(l.get(2));
+                String pdate = rs.getString(l.get(3));
+                String track = rs.getString("TrackingPayment");
+                ArrayList<String> m = new ArrayList<String>();
+                m.add(Integer.toString(mid));
+                m.add(Integer.toString(sid));
+                m.add(Integer.toString(payment));
+                m.add(pdate);
+                m.add(track);
+                for (int i = 0; i < l.size(); i++)
+                    sb.append(String.format("| %-15s", m.get(i)));
+                System.out.println(sb);
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void display_WriteBooks() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        try {
+            conn = DriverManager.getConnection(jdbcURL, user, passwd);
+            String sql_chk = "SELECT * FROM WriteBooks;";
             ps = conn.prepareStatement(sql_chk);
             ResultSet rs = ps.executeQuery();
             System.out.println("Write Books Table");
-            ArrayList<String> l = new ArrayList<String>( 
-                    Arrays.asList("authorid","ISBN","chapterid"));
+            ArrayList<String> l = new ArrayList<String>(Arrays.asList("authorid", "ISBN", "chapterid"));
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
-            
+
             while (rs.next()) {
                 sb.setLength(0);
-                 
+
                 int aid = rs.getInt(l.get(0));
                 String ISBN = rs.getString(l.get(1));
                 int cid = rs.getInt(l.get(2));
@@ -5581,10 +5452,10 @@ public static void display_WriteBooks() {
                 m.add(Integer.toString(aid));
                 m.add(ISBN);
                 m.add(Integer.toString(cid));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", m.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -5593,24 +5464,23 @@ public static void display_WriteBooks() {
     }
 
     public static void display_WritePeriodicals() {
-    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    PreparedStatement ps = null;
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
-            String sql_chk = "SELECT * FROM Writeperiodicals;"; 
+            String sql_chk = "SELECT * FROM Writeperiodicals;";
             ps = conn.prepareStatement(sql_chk);
             ResultSet rs = ps.executeQuery();
             System.out.println("Write Periodicals Table");
-            ArrayList<String> l = new ArrayList<String>( 
-                    Arrays.asList("journalistid","ISBN","articleid"));
+            ArrayList<String> l = new ArrayList<String>(Arrays.asList("journalistid", "ISBN", "articleid"));
             StringBuilder sb = new StringBuilder();
-            for(int i=0; i<l.size(); i++)
+            for (int i = 0; i < l.size(); i++)
                 sb.append(String.format("| %-15s", l.get(i)));
             System.out.println(sb);
-            
+
             while (rs.next()) {
                 sb.setLength(0);
-                 
+
                 int jid = rs.getInt(l.get(0));
                 String ISBN = rs.getString(l.get(1));
                 int aid = rs.getInt(l.get(2));
@@ -5618,10 +5488,10 @@ public static void display_WriteBooks() {
                 m.add(Integer.toString(jid));
                 m.add(ISBN);
                 m.add(Integer.toString(aid));
-                for(int i=0; i<l.size(); i++)
+                for (int i = 0; i < l.size(); i++)
                     sb.append(String.format("| %-15s", m.get(i)));
                 System.out.println(sb);
-             }
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
