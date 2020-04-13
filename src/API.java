@@ -75,7 +75,7 @@ public class API {
             //assign();
             //insert_orders();
             //update_publication();
-            delete_manager();
+            //delete_manager();
 
 
         }catch(Exception e){

@@ -1,12 +1,17 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.Scanner;
 
 
 public class DBMSFinal {
 	
-	static Connection conn = null;
-	private static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/jjjagtap";
-	private static final String user = "jjjagtap";
-	private static final String password = "200311438";
+	static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/jjjagtap";
+    static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    static Connection conn = null;
+    static String user = "jjjagtap";
+    static String passwd = "200311438";
 
 	public static void main(String[] args) {
 		try {
@@ -14,44 +19,62 @@ public class DBMSFinal {
 		} catch (Exception e) {
 			System.out.println("Driver missing!");
 		}
-
-		try {
-			conn = DriverManager.getConnection(jdbcURL, user, password);
-			
-			//Our methods go here
-			addStaff(conn);
-			
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println("=========== Closed connection ===========");
-		}
-
+		
+		runManager();
 	}
 	
-	public static void addStaff(Connection conn) {
-	Statement statement = null;
-    ResultSet result = null;
-    try {
-		statement = conn.createStatement();
-	} catch (SQLException e1) {
-		// TODO Auto-generated catch block
-		e1.printStackTrace();
-	} 
-	try {
-		statement.executeUpdate("INSERT INTO Staff values('Bond',777,'9043296128','Champion Court', 22, 'Male');");
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public static void runManager() {
+		int choice;
+		API a = new API();
+		
+		do {
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("1. Add Staff");
+			System.out.println("2. Update Author");
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("Welcome to Manager Section: Here are the APIS");
+			
+			
+			System.out.println("Please enter operation number to be performed");
+			choice = getMenuChoice();
+			 switch (choice) {
+			 case 1: try {
+					a.add_staff();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+			 break;
+			 case 2: try {
+					API.update_author();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+				}
+			 break;
+			 default: System.out.println("Invalid Entry, try Again :)"); 
+				 
+			 	
+			 }
+	            
+		}while(false);
 	}
-	}
-
+	
+	public static int getMenuChoice() {
+        Scanner keyboard = new Scanner(System.in);
+        int choice = -1;
+        do {
+            System.out.print("Enter your choice: ");
+            try {
+                choice = Integer.parseInt(keyboard.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid selection. Numbers only please.");
+            }
+        } while (choice < 0 || choice > 4);
+        return choice;
+    }
+	
 }
