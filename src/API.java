@@ -728,6 +728,7 @@ static void update_staff()  throws SQLException {
 static void delete_staff() throws SQLException {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    displayStaff();
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -814,6 +815,8 @@ static void delete_staff() throws SQLException {
     else{
         System.out.println("Entered Staff ID does not exist");
     }
+
+    displayStaff();
 }
 
 static void add_publications() throws SQLException {
@@ -1016,6 +1019,18 @@ static void update_publication() throws SQLException{
     do{
     try{
         isbn = br.readLine();
+        String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
+        ps = conn.prepareStatement(sql_chk);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+                
+        if(rs.next() == true){
+            }
+            else{
+                    isbn="";
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
     }catch(Exception e){
         System.out.println(e);
     }
@@ -1164,7 +1179,20 @@ static void delete_publication()  throws SQLException{
         System.out.println("Enter ISBN Number");
         try{
             isbn = br.readLine();
-            flag = 2;
+            String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    flag=2;
+                }
+                else{
+                    isbn="";
+                    flag=1
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1231,6 +1259,15 @@ static void insert_orders() throws SQLException{
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
+            String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    orderid=-1;
+                    System.out.println("Entered value already present in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1387,6 +1424,17 @@ static void delete_order() throws SQLException {
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
+            String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    orderid=-1;
+                    System.out.println("Entered value not present in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1433,6 +1481,17 @@ static void update_order() throws SQLException {
     do{
     try{
         orderid = getinput();
+        String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    orderid=-1;
+                    System.out.println("Entered value not present in the database");
+                }
     }catch(Exception e){
         System.out.println(e);
     }
