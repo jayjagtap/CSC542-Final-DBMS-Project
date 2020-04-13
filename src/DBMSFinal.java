@@ -19,10 +19,9 @@ public class DBMSFinal {
 		} catch (Exception e) {
 			System.out.println("Driver missing!");
 		}
-		
 		runManager();
 	}
-	
+
 	public static void runJournalist() {
 		int choice;
 		API a = new API();
@@ -52,6 +51,7 @@ public class DBMSFinal {
 			 case 2:
 				try {
 					a.displayArticles();
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -67,7 +67,7 @@ public class DBMSFinal {
 				 break;
 			 case 4:
 				 try {
-					a.add_articles();
+					 a.add_articles();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -83,6 +83,7 @@ public class DBMSFinal {
 				 break;
 			 case 6:
 				 try {
+
 					a.total_articles();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
@@ -99,12 +100,15 @@ public class DBMSFinal {
 				 break;
 			 case 8:
 				 try {
+
 					a.update_articles_text();;
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				 break;
+
 			 default: System.out.println("Exiting Journalist View :)"); 	
 			 }
 	            
