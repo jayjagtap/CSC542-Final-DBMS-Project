@@ -1189,7 +1189,7 @@ static void delete_publication()  throws SQLException{
                 }
                 else{
                     isbn="";
-                    flag=1
+                    flag=1;
                     System.out.println("ISBN not in the Table");
                     System.out.println("Please enter valid id");
                 }
