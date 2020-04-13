@@ -20,16 +20,18 @@ public class DBMSFinal {
 			System.out.println("Driver missing!");
 		}
 		
-		System.out.println("Welcome to WolfPub DB, best in NC");
-		System.out.println("1. Manager");
-		System.out.println("2. Editor");
-		System.out.println("3. Author");
-		System.out.println("4. Journalist");
-		System.out.println("5. Admin");
 		int choice;
-		choice = getMenuChoice();
 		do {
+			System.out.println("Welcome to WolfPub DB, best in NC");
+			System.out.println("1. Manager");
+			System.out.println("2. Editor");
+			System.out.println("3. Author");
+			System.out.println("4. Journalist");
+			System.out.println("5. Admin");
+			choice = getMenuChoice();
 			switch (choice) {
+			case 0:
+				break;
 			 case 1: 
 					runManager();
 			 break;
@@ -46,7 +48,7 @@ public class DBMSFinal {
 				 runAdmin();
 			 break;
 			default:
-				System.out.println("Invalid Entry, Enter Again");
+				System.out.println("Invalid Entry, Enter again");
 			}
 			}while(choice != 0);
 		System.out.println("Thank You have a blast!!");
@@ -719,7 +721,6 @@ public class DBMSFinal {
 				 break;
 			 default: System.out.println("Exiting Manager View :)"); 	
 			 }
-	            
 		}while(choice != 0);
 	}
 	
@@ -740,13 +741,15 @@ public class DBMSFinal {
 		API obj = new API();
 
 		do{
+			System.out.println("*************************************************_______________________________");
 			System.out.println("1. Add Manager");
 			System.out.println("2. Update Manager");
-			System.out.println("3. Delete Maanager");
+			System.out.println("3. Delete Manager");
 			System.out.println("0. To Exit the Manager View");
 
 			System.out.println("Please Enter the operation number to be performed");
 			choice = getMenuChoice();
+			System.out.println("Choice: " + choice);
 			switch (choice){
 				case 1 : try{
 					obj.add_manager();
@@ -771,10 +774,12 @@ public class DBMSFinal {
 					e.printStackTrace();
 				}
 				 break;
-				 default: System.out.println("Invalid Entry, try Again :)"); 
-			break;
+			 default: 
+			 System.out.println("Invalid Entry, try Again :)"); 
+			 												
 		}
-	}while(choice!=0);
+			System.out.println("Choice just before while " + choice);
+	}while(choice != 0);
 }
 	public static int getMenuChoice() {
         Scanner keyboard = new Scanner(System.in);
@@ -783,7 +788,9 @@ public class DBMSFinal {
             System.out.print("Enter your choice: ");
             try {
                 choice = Integer.parseInt(keyboard.nextLine());
+                
             } catch (NumberFormatException e) {
+            	choice = -1;
                 System.out.println("Invalid selection. Numbers only please.");
             }
         } while (choice == -1);

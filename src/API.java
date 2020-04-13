@@ -27,7 +27,7 @@ public class API {
     static Connection conn = null;
     static String user = "nkashya";
     static String passwd = "200314563";
-/*
+
     public static void main(String[] args) 
     {
 
@@ -42,7 +42,7 @@ public class API {
             //update_author();
             //update_editor();
             //update_journalist();
-            //update_books();
+            update_books();
             //update_periodicals();
             //update_staff();
             //delete_manager();
@@ -52,7 +52,7 @@ public class API {
             //delete_publication();
             //insert_orders();
             //delete_order();
-            update_order();
+            //update_order();
             //displayManager();
             //displayStaff();
             //displayPeriodicals();
@@ -63,7 +63,7 @@ public class API {
             System.out.println(e);
         }   
     }
-*/
+
 static void add_staff() throws SQLException
 {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -255,6 +255,10 @@ static void update_author() throws SQLException {
     }
     System.out.println("If you want to update the type, please enter 1 else press 0");
     int choice = getinput();
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
 
     if(choice==1)
     {
@@ -320,6 +324,11 @@ static void update_editor() throws SQLException {
     System.out.println("If you want to update the type, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if(choice==1)
     {
     do
@@ -384,6 +393,11 @@ static void update_journalist() throws SQLException {
     System.out.println("If you want to update the type, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if(choice==1)
     {
     do
@@ -447,6 +461,11 @@ static void update_books() throws SQLException{
     }
     System.out.println("If you want to update the edition, please enter 1 else press 0");
     int choice = getinput();
+
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
 
     if(choice==1)
     {
@@ -516,6 +535,11 @@ do{
     System.out.println("If you want to update the periodicity, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if(choice==1)
     {
     do
@@ -533,6 +557,11 @@ do{
 
     System.out.println("If you want to update the type, please enter 1 else press 0");
     choice = getinput();
+
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
 
     if(choice==1)
     {
@@ -611,6 +640,11 @@ static void update_staff()  throws SQLException {
     System.out.println("If you want to update the name, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if(choice==1)
     {
     do
@@ -628,6 +662,10 @@ static void update_staff()  throws SQLException {
 
     System.out.println("If you want to update the phonenumber, please enter 1 else press 0");
     choice = getinput();
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
 
     if(choice==1)
     {
@@ -646,6 +684,10 @@ static void update_staff()  throws SQLException {
     System.out.println("If you want to update the address, please enter 1 else press 0");
     choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     {
     do
@@ -663,7 +705,10 @@ static void update_staff()  throws SQLException {
 
     System.out.println("If you want to update the gender, please enter 1 else press 0");
     choice = getinput();
-
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     {
     do
@@ -681,6 +726,10 @@ static void update_staff()  throws SQLException {
     System.out.println("If you want to update the age, please enter 1 else press 0");
     choice = getinput();
 
+while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     {
         System.out.println("Enter age");
@@ -1070,6 +1119,10 @@ static void update_publication() throws SQLException{
     System.out.println("If you want to update the title, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
         {
     do
@@ -1087,6 +1140,10 @@ static void update_publication() throws SQLException{
     System.out.println("If you want to update the topic, please enter 1 else press 0");
     choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
         {
     do
@@ -1105,6 +1162,10 @@ static void update_publication() throws SQLException{
     System.out.println("If you want to update the dateofcreation, please enter 1 else press 0");
     choice = getinput();  
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     {
         do{
@@ -1127,7 +1188,13 @@ static void update_publication() throws SQLException{
 
 
     System.out.println("If you want to update the dateofpublishing, please enter 1 else press 0");
-    choice = getinput();  
+    choice = getinput(); 
+
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if (choice==1)
     {
     do{
@@ -1155,6 +1222,11 @@ static void update_publication() throws SQLException{
 
     System.out.println("If you want to update the price, please enter 1 else press 0");
     choice = getinput();
+
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
 
     if(choice==1) 
     {
@@ -1533,6 +1605,11 @@ static void update_order() throws SQLException {
     System.out.println("If you want to update the distributorid, please enter 1 else press 0");
     int choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
+
     if(choice==1)
         {
     do
@@ -1562,6 +1639,10 @@ static void update_order() throws SQLException {
     System.out.println("If you want to update the managerid, please enter 1 else press 0");
     choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
         {
     do
@@ -1590,6 +1671,10 @@ static void update_order() throws SQLException {
     System.out.println("If you want to update the isbn, please enter 1 else press 0");
     choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
         {
     do
@@ -1619,6 +1704,10 @@ static void update_order() throws SQLException {
     System.out.println("If you want to update the deliverydate, please enter 1 else press 0");
     choice = getinput();  
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     {
         do{
@@ -1642,6 +1731,10 @@ static void update_order() throws SQLException {
 
     System.out.println("If you want to update the orderdate, please enter 1 else press 0");
     choice = getinput();  
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if (choice==1)
     {
     do{
@@ -1670,6 +1763,10 @@ static void update_order() throws SQLException {
     System.out.println("If you want to update the number of copies, please enter 1 else press 0");
     choice = getinput();
 
+    while(choice!=0 && choice!=1)
+    {
+        choice = getinput();
+    }
     if(choice==1)
     { 
     do{
@@ -1714,8 +1811,16 @@ static void update_order() throws SQLException {
 }
 static int getinput()
     {
+        System.out.println("Enter Input");
         Scanner scan = new Scanner(System.in);
-        int num = scan.nextInt();
+        int num;
+        try{
+        num = scan.nextInt();
+    }catch(Exception e)
+    {
+        System.out.println("Enter Input Again. Invalid Entry");
+        num = 9;
+    }
         return num;
     }
 
@@ -2384,7 +2489,7 @@ static void displayPublication() throws SQLException {
 
         int d_id = 0;
         int flag = 1;
-
+        boolean change = false;
         double amount_owed = 0.0d;
 
         do {
@@ -2397,24 +2502,27 @@ static void displayPublication() throws SQLException {
             if (!sd_id.isEmpty()) {
                 try {
                     d_id = Integer.parseInt(sd_id);
+                    change = true;
                 } catch (Exception e) {
                     System.out.println("Enter a valid Distributor ID");
                     sd_id = "";
                 }
             }
+            if (change) {
+                String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, d_id);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    flag = 2;
+                    // break;
+                } else {
+                    System.out.println("Entered Distributor ID does not Exist. Enter again");
+                    sd_id = "";
+                }
+            }
         } while (sd_id.isEmpty());
-
-        String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
-        ps = conn.prepareStatement(sql_chk);
-        ps.setInt(1, d_id);
-        ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            flag = 2;
-            // break;
-        } else {
-            System.out.println("Entered Distributor ID does not Exist");
-        }
 
         if (flag == 2) {
             do {
@@ -2477,6 +2585,7 @@ static void displayPublication() throws SQLException {
         int c_id = 0;
         int flag_o = 1;
         int flag_t = 1;
+        boolean change = false;
 
         do {
             System.out.println("Enter ISBN:");
@@ -2492,6 +2601,7 @@ static void displayPublication() throws SQLException {
                     break;
                 } else {
                     System.out.println("ISBN does not exist");
+                    isbn = "";
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -2522,22 +2632,27 @@ static void displayPublication() throws SQLException {
                 if (!tc_id.isEmpty()) {
                     try {
                         c_id = Integer.parseInt(tc_id);
+                        change = true;
                     } catch (Exception e) {
                         System.out.println("Enter a valid ID");
                         tc_id = "";
                     }
                 }
+
+                if (change) {
+                    String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_chk);
+                    ps.setInt(1, c_id);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        flag_t = 2;
+                        // break;
+                    } else {
+                        System.out.println("Article ID does not exist");
+                        tc_id = "";
+                    }
+                }
             } while (tc_id.isEmpty());
-            String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
-            ps = conn.prepareStatement(sql_chk);
-            ps.setInt(1, c_id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                flag_t = 2;
-                // break;
-            } else {
-                System.out.println("Article ID does not exist");
-            }
         }
 
         if (flag_o == 2 && flag_t == 2) {
@@ -2550,6 +2665,7 @@ static void displayPublication() throws SQLException {
             ps.executeUpdate();
         }
     }
+
 
 
     // editors, authors
@@ -2567,6 +2683,8 @@ static void displayPublication() throws SQLException {
         int flag_o = 1;
         int flag_t = 1;
 
+        boolean change = false;
+
         do {
             System.out.println("Enter ISBN:");
             try {
@@ -2583,8 +2701,8 @@ static void displayPublication() throws SQLException {
                 break;
             } else {
                 System.out.println("ISBN does not exist");
+                isbn = "";
             }
-
         } while (isbn.isEmpty());
 
         if (flag_o == 2) {
@@ -2611,23 +2729,27 @@ static void displayPublication() throws SQLException {
                 if (!tc_id.isEmpty()) {
                     try {
                         c_id = Integer.parseInt(tc_id);
+                        change = true;
                     } catch (Exception e) {
                         System.out.println("Enter a valid ID");
                         tc_id = "";
                     }
                 }
+                if (change) {
+                    String sql_chk = "SELECT * FROM Chapters WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_chk);
+                    ps.setInt(1, c_id);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        flag_t = 2;
+                        // break;
+                    } else {
+                        System.out.println("Chapter ID does not exist");
+                    }
+                }
+
             } while (tc_id.isEmpty());
 
-            String sql_chk = "SELECT * FROM Chapters WHERE id = ?;";
-            ps = conn.prepareStatement(sql_chk);
-            ps.setInt(1, c_id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                flag_t = 2;
-                // break;
-            } else {
-                System.out.println("Chapter ID does not exist");
-            }
         }
 
         if (flag_o == 2 && flag_t == 2) {
@@ -2640,7 +2762,6 @@ static void displayPublication() throws SQLException {
             ps.executeUpdate();
         }
     }
-
     // editor, journalist
     static void delete_article() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -2654,6 +2775,8 @@ static void displayPublication() throws SQLException {
         int c_id = 0;
         int flag_o = 1;
         int flag_t = 1;
+
+        boolean change = false;
 
         do {
             System.out.println("Enter ISBN:");
@@ -2671,6 +2794,7 @@ static void displayPublication() throws SQLException {
                 break;
             } else {
                 System.out.println("ISBN does not exist");
+                isbn = "";
             }
         } while (isbn.isEmpty());
 
@@ -2686,23 +2810,28 @@ static void displayPublication() throws SQLException {
                 if (!tc_id.isEmpty()) {
                     try {
                         c_id = Integer.parseInt(tc_id);
+                        change = true;
                     } catch (Exception e) {
                         System.out.println("Enter a valid ID");
                         tc_id = "";
                     }
                 }
+
+                if (change) {
+                    String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_chk);
+                    ps.setInt(1, c_id);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        flag_t = 2;
+                        // break;
+                    } else {
+                        System.out.println("Article_ID does not exist");
+                        tc_id = "";
+                    }
+                }
             } while (tc_id.isEmpty());
 
-            String sql_chk = "SELECT * FROM Articles WHERE id = ?;";
-            ps = conn.prepareStatement(sql_chk);
-            ps.setInt(1, c_id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                flag_t = 2;
-                // break;
-            } else {
-                System.out.println("Article_ID does not exist");
-            }
         }
 
         if (flag_o == 2 && flag_t == 2) {
@@ -2716,7 +2845,6 @@ static void displayPublication() throws SQLException {
         }
     }
 
-    // manager
     static void assign() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2735,6 +2863,8 @@ static void displayPublication() throws SQLException {
         int t2 = 1;
         int t3 = 1;
 
+        boolean change = false;
+
         do {
             System.out.println("Enter Manager ID:");
             try {
@@ -2745,23 +2875,29 @@ static void displayPublication() throws SQLException {
             if (!sm_id.isEmpty()) {
                 try {
                     m_id = Integer.parseInt(sm_id);
+                    change = true;
                 } catch (Exception e) {
                     System.out.println("Enter a valid ID");
                     sm_id = "";
                 }
             }
+
+            if (change) {
+                String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, m_id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    t1 = 2;
+                    // break;
+                } else {
+                    System.out.println("Manager ID does not exist");
+                    sm_id = "";
+                }
+            }
         } while (sm_id.isEmpty());
 
-        String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
-        ps = conn.prepareStatement(sql_chk);
-        ps.setInt(1, m_id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            t1 = 2;
-            // break;
-        } else {
-            System.out.println("Manager ID does not exist");
-        }
+        change = false;
 
         if (t1 == 2) {
             do {
@@ -2775,23 +2911,26 @@ static void displayPublication() throws SQLException {
                 if (!se_id.isEmpty()) {
                     try {
                         e_id = Integer.parseInt(se_id);
+                        change = true;
                     } catch (Exception e) {
                         System.out.println("Enter a valid ID");
                         se_id = "";
                     }
                 }
+                if (change) {
+                    String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_chk1);
+                    ps.setInt(1, e_id);
+                    ResultSet rs1 = ps.executeQuery();
+                    if (rs1.next()) {
+                        t2 = 2;
+                        // break;
+                    } else {
+                        System.out.println("Editor ID does not exist");
+                        se_id = "";
+                    }
+                }
             } while (se_id.isEmpty());
-
-            String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
-            ps = conn.prepareStatement(sql_chk1);
-            ps.setInt(1, e_id);
-            ResultSet rs1 = ps.executeQuery();
-            if (rs1.next()) {
-                t2 = 2;
-                // break;
-            } else {
-                System.out.println("Editor ID does not exist");
-            }
         }
 
         if (t1 == 2 && t2 == 2) {
@@ -2799,19 +2938,19 @@ static void displayPublication() throws SQLException {
                 System.out.println("Enter ISBN:");
                 try {
                     isbn = br.readLine();
-
-                    String sql_chk1 = "SELECT * FROM Publication WHERE ISBN = ?;";
-                    ps = conn.prepareStatement(sql_chk1);
-                    ps.setString(1, isbn);
-                    ResultSet rs1 = ps.executeQuery();
-                    if (rs1.next()) {
-                        t3 = 2;
-                        break;
-                    } else {
-                        System.out.println("ISBN does not exist");
-                    }
                 } catch (Exception e) {
                     System.out.println(e);
+                }
+                String sql_chk1 = "SELECT * FROM Publication WHERE ISBN = ?;";
+                ps = conn.prepareStatement(sql_chk1);
+                ps.setString(1, isbn);
+                ResultSet rs1 = ps.executeQuery();
+                if (rs1.next()) {
+                    t3 = 2;
+                    break;
+                } else {
+                    System.out.println("ISBN does not exist");
+                    isbn = "";
                 }
             } while (isbn.isEmpty());
         }
@@ -2828,10 +2967,9 @@ static void displayPublication() throws SQLException {
 
     }
 
-
-    //  manager
+    // manager
     static void publication_by_editor() throws SQLException {
-final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2841,6 +2979,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         String se_id = "";
         int t1 = 1;
+        boolean change = false;
 
         do {
             System.out.println("Enter Editor ID:");
@@ -2853,23 +2992,27 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             if (!se_id.isEmpty()) {
                 try {
                     e_id = Integer.parseInt(se_id);
+                    change = true;
                 } catch (Exception e) {
                     System.out.println("Enter a valid ID");
                     se_id = "";
                 }
             }
-        } while (se_id.isEmpty());
+            if (change) {
+                String sql_chk = "SELECT * FROM Editors WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, e_id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    t1 = 2;
+                    // break;
+                } else {
+                    System.out.println("Editor does not exist");
+                    se_id = "";
+                }
+            }
 
-        String sql_chk = "SELECT * FROM Editors WHERE id = ?;";
-        ps = conn.prepareStatement(sql_chk);
-        ps.setInt(1, e_id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            t1 = 2;
-            // break;
-        } else {
-            System.out.println("Editor does not exist");
-        }
+        } while (se_id.isEmpty());
 
         if (t1 == 2) {
             sql_insert_stmt = "Select * From Publication WHERE ISBN IN (Select ISBN from Assign where editorid=?);";
@@ -2936,6 +3079,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int flag1 = 1;
         int flag2 = 1;
+        boolean change = false;
 
         do {
             System.out.println("Enter Manager ID:");
@@ -2949,23 +3093,30 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
                 try {
                     m_id = Integer.parseInt(sm_id);
+                    change = true;
                 } catch (Exception e) {
                     System.out.println("Enter a valid ID");
                     sm_id = "";
                 }
             }
+
+            if (change) {
+                String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, m_id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    flag1 = 2;
+                    // break;
+                } else {
+                    System.out.println("Manager does not exist");
+                    sm_id = "";
+                }
+            }
+
         } while (sm_id.isEmpty());
 
-        String sql_chk = "SELECT * FROM Manager WHERE id = ?;";
-        ps = conn.prepareStatement(sql_chk);
-        ps.setInt(1, m_id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            flag1 = 2;
-            // break;
-        } else {
-            System.out.println("Manager does not exist");
-        }
+        change = false;
 
         if (flag1 == 2) {
             do {
@@ -2979,24 +3130,27 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 if (!se_id.isEmpty()) {
                     try {
                         e_id = Integer.parseInt(se_id);
+                        change = true;
                     } catch (Exception e) {
-                        System.out.println("ENter a valid ID");
+                        System.out.println("Enter a valid ID");
                         se_id = "";
                     }
                 }
+                if (change) {
+                    String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
+                    ps = conn.prepareStatement(sql_chk1);
+                    ps.setInt(1, e_id);
+                    ResultSet rs1 = ps.executeQuery();
+                    if (rs1.next()) {
+                        flag2 = 2;
+                        // break;
+                    } else {
+                        System.out.println("Editor does not exist");
+                        se_id = "";
+                    }
+                }
+
             } while (se_id.isEmpty());
-
-            String sql_chk1 = "SELECT * FROM Editors WHERE id = ?;";
-            ps = conn.prepareStatement(sql_chk1);
-            ps.setInt(1, e_id);
-            ResultSet rs1 = ps.executeQuery();
-            if (rs1.next()) {
-                flag2 = 2;
-                // break;
-            } else {
-                System.out.println("Editor does not exist");
-            }
-
         }
 
         if (flag1 == 2 && flag2 == 2) {
@@ -3038,7 +3192,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     try {
                         m = Integer.parseInt(month);
                     } catch (Exception e) {
-                        System.out.println("Enter a valid value");
+                        System.out.println("Enter a valid integer value");
                         month = "";
                     }
                 }
@@ -3055,11 +3209,10 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                     try {
                         d = Integer.parseInt(day);
                     } catch (Exception e) {
-                        System.out.println("ENter a valid value");
+                        System.out.println("Enter a valid  integer value");
                         day = "";
                     }
                 }
-
             } while (day.isEmpty() || d > 31 || d <= 0);
 
             date = year + "-" + month + "-" + day;
@@ -3101,6 +3254,7 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         // String e_id = "";
         int t1 = 1;
+        boolean change = false;
 
         do {
             System.out.println("Enter Distributor ID:");
@@ -3112,23 +3266,27 @@ final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             if (!sd_id.isEmpty()) {
                 try {
                     d_id = Integer.parseInt(sd_id);
+                    change = true;
                 } catch (Exception e) {
                     System.out.println("Enter a valid value");
                     sd_id = "";
                 }
             }
-        } while (sd_id.isEmpty());
+            if (change) {
+                String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, d_id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    t1 = 2;
+                    // break;
+                } else {
+                    System.out.println("Distributor does not exist");
+                    sd_id = "";
+                }
+            }
 
-        String sql_chk = "SELECT * FROM Distributors WHERE id = ?;";
-        ps = conn.prepareStatement(sql_chk);
-        ps.setInt(1, d_id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            t1 = 2;
-            // break;
-        } else {
-            System.out.println("Distributor does not exist");
-        }
+        } while (sd_id.isEmpty());
 
         if (t1 == 2) {
             sql_insert_stmt = "Select A.id as Distributorid, A.phonenumber, A.city, A.type, A.amountowed,B.orderid, B.ISBN,B.numcopies, B.cost from Distributors as A join Orders as B where A.id = B.distributorid and A.id = ?;";
