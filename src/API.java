@@ -42,12 +42,12 @@ public class API {
             //update_author();
             //update_editor();
             //update_journalist();
-            update_books();
+            //update_books();
             //update_periodicals();
             //update_staff();
             //delete_manager();
-            //delete_staff();
-            //add_publications();
+            delete_staff();
+            add_publications();
             //update_publication();
             //delete_publication();
             //insert_orders();
@@ -143,7 +143,8 @@ static void add_staff() throws SQLException
             System.out.println(e);
         }
     }while(staff_gender.isEmpty());
-
+try{
+    conn.setAutoCommit(false);
     sql_insert_stmt = "INSERT INTO Staff VALUES(?,?,?,?,?,?);";
     ps = conn.prepareStatement(sql_insert_stmt);
     ps.setString(1, staff_name);
@@ -176,6 +177,8 @@ static void add_staff() throws SQLException
         ps.setInt(1, s_id);
         ps.setString(2, type);
         ps.executeUpdate();
+        conn.commit();
+        conn.close();
     }
     else if(choice==2)
     {
@@ -193,6 +196,8 @@ static void add_staff() throws SQLException
         ps.setInt(1, s_id);
         ps.setString(2, type);
         ps.executeUpdate();
+        conn.commit();
+        conn.close();
     }
     else if(choice==3)
     {
@@ -210,7 +215,19 @@ static void add_staff() throws SQLException
         ps.setInt(1, s_id);
         ps.setString(2, type);
         ps.executeUpdate();
+        conn.commit();
+        conn.close();
     }
+}catch(Exception e){
+    try{
+        if(conn!=null)
+        {
+            conn.rollback();
+        }
+    }catch(Exception f){
+        System.out.println("Unable to Rollback");
+    }
+}
 }
 
 static void update_author() throws SQLException {
@@ -795,7 +812,6 @@ while(choice!=0 && choice!=1)
 static void delete_staff() throws SQLException {
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    displayStaff();
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -830,7 +846,10 @@ static void delete_staff() throws SQLException {
         }
     }while(s_id<0);
 
-    if(flag==2){
+    try{
+        conn.setAutoCommit(false);
+    if(flag==2)
+    {
         if(choice==1)
         {
             sql_insert_stmt = "DELETE from WriteBooks where authorid = ?;";
@@ -839,7 +858,6 @@ static void delete_staff() throws SQLException {
             ps.executeUpdate();
             flag=3;
         }
-
         else if(choice==2)
         {
             sql_insert_stmt = "DELETE from Writeperiodicals where journalistid = ?;";
@@ -848,7 +866,6 @@ static void delete_staff() throws SQLException {
             ps.executeUpdate();
             flag=3;
         }
-
         else if(choice==3)
         {
             sql_insert_stmt = "DELETE from Assign where editorid = ?;";
@@ -867,23 +884,29 @@ static void delete_staff() throws SQLException {
             ps.executeUpdate();
             flag=3;
         }
-
         if(flag==3)
         {
         sql_insert_stmt = "DELETE FROM Staff WHERE id = ?;";
         ps = conn.prepareStatement(sql_insert_stmt);
         ps.setInt(1, s_id);
         ps.executeUpdate();
-    }
-    else{
+        conn.commit();
+        conn.close();
+        }
+        else
+        {
+        conn.rollback();
         System.out.println("Entered Choices are out of the scope and invalid");
+        }
     }
-    }
-    else{
+    else
+    {
         System.out.println("Entered Staff ID does not exist");
     }
-
-    displayStaff();
+}catch(Exception e)
+{
+    System.out.println("Error");
+}
 }
 
 static void add_publications() throws SQLException {
@@ -989,8 +1012,9 @@ static void add_publications() throws SQLException {
 
     java.sql.Date sqlDate1 = new java.sql.Date(myDate1.getTime());
     java.sql.Date sqlDate2 = new java.sql.Date(myDate2.getTime());
-            
 
+try{            
+    conn.setAutoCommit(false);
     sql_insert_stmt = "INSERT into Publication values(?,?,?,?,?,?);";
     ps = conn.prepareStatement(sql_insert_stmt);
     ps.setString(1, isbn);
@@ -1022,9 +1046,11 @@ static void add_publications() throws SQLException {
         ps.setString(1, isbn);
         ps.setString(2, edition);
         ps.executeUpdate();
+        conn.commit();
+        conn.close();
     }
 
-    if(choice==2)
+    else if(choice==2)
     {
         String periodicity = "";
         String type = "";
@@ -1052,7 +1078,22 @@ static void add_publications() throws SQLException {
         ps.setString(2, periodicity);
         ps.setString(3,type);
         ps.executeUpdate();
-    }      
+        conn.commit();
+        conn.close();
+    }
+    else{
+        conn.rollback();
+    }
+    }catch(Exception e){
+        try{
+            if(conn!=null)
+            {
+                conn.rollback();
+            }
+        }catch(Exception f){
+            System.out.println("Error Rolling Back");
+        }
+    }
 }
 
 static void update_publication() throws SQLException{
@@ -1288,6 +1329,8 @@ static void delete_publication()  throws SQLException{
         }
     }while(isbn.isEmpty());
 
+    try{
+        conn.setAutoCommit(false);
     if(flag==2){
         if(choice==1){
             sql_insert_stmt = "DELETE from EditBooks where isbn = ?;";
@@ -1312,12 +1355,24 @@ static void delete_publication()  throws SQLException{
             ps.setString(1, isbn);
             ps.executeUpdate();
         }
+
         sql_insert_stmt = "DELETE from Publication where ISBN = ?;";
         ps = conn.prepareStatement(sql_insert_stmt);
         ps.setString(1,isbn);
         ps.executeUpdate();
+        conn.commit();
+        conn.close();
+        }
+    }catch(Exception e){
+        try{
+            if(conn!=null){
+                conn.rollback();
+            }
+        }catch(Exception f){
+            system.out.println("Error");
         }
     }
+}
 
 static void insert_orders() throws SQLException{
     final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
