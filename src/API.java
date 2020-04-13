@@ -27,7 +27,6 @@ import java.util.List;
 public class API {
 
     static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/nkashya";
-    static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     static Connection conn = null;
     static String user = "nkashya";
@@ -52,6 +51,7 @@ public class API {
 */
 static void add_staff() throws SQLException
 {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -197,6 +197,7 @@ static void add_staff() throws SQLException
 }
 
 static void update_author() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -260,6 +261,7 @@ static void update_author() throws SQLException {
 }
 
 static void update_editor() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -323,6 +325,7 @@ static void update_editor() throws SQLException {
 }
 
 static void update_journalist() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -386,6 +389,7 @@ static void update_journalist() throws SQLException {
 }
 
 static void update_books() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -450,6 +454,7 @@ static void update_books() throws SQLException{
 }
 
 static void update_periodicals() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -535,6 +540,7 @@ do{
     
 }
 static void update_staff()  throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -681,6 +687,7 @@ static void update_staff()  throws SQLException {
 }
 
     static void delete_manager() throws SQLException{
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -692,8 +699,20 @@ static void update_staff()  throws SQLException {
         do{
             System.out.println("Enter Manager_ID to be deleted");
         try{
-                flag = 2;
                 manager_id = getinput();
+                String sql_chk = "select id from Manager WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, manager_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    flag=2;
+                }
+                else{
+                    flag=1;
+                    manager_id=-1;
+                    System.out.println("ID not in the Database, please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -708,7 +727,9 @@ static void update_staff()  throws SQLException {
 }
 
 static void delete_staff() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
+    displayStaff();
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -726,6 +747,18 @@ static void delete_staff() throws SQLException {
         try{
                 flag = 2;
                 s_id = getinput();
+                String sql_chk = "select id from Staff WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, s_id);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    s_id=-1;
+                    flag=1;
+                    System.out.println("ID not in the Database, please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -783,9 +816,12 @@ static void delete_staff() throws SQLException {
     else{
         System.out.println("Entered Staff ID does not exist");
     }
+
+    displayStaff();
 }
 
 static void add_publications() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -811,6 +847,15 @@ static void add_publications() throws SQLException {
         System.out.println("Enter ISBN Number");
         try{
             isbn = br.readLine();
+            String sql_chk = "select ISBN from Publication WHERE ISBN = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                     isbn="";
+                    System.out.println("ISBN already in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -945,6 +990,7 @@ static void add_publications() throws SQLException {
 }
 
 static void update_publication() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -974,6 +1020,18 @@ static void update_publication() throws SQLException{
     do{
     try{
         isbn = br.readLine();
+        String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
+        ps = conn.prepareStatement(sql_chk);
+        ps.setString(1, isbn);
+        ResultSet rs = ps.executeQuery();
+                
+        if(rs.next() == true){
+            }
+            else{
+                    isbn="";
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
     }catch(Exception e){
         System.out.println(e);
     }
@@ -1105,6 +1163,7 @@ static void update_publication() throws SQLException{
 }
 
 static void delete_publication()  throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -1121,7 +1180,20 @@ static void delete_publication()  throws SQLException{
         System.out.println("Enter ISBN Number");
         try{
             isbn = br.readLine();
-            flag = 2;
+            String sql_chk = "select isbn from Publication WHERE ISBN = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setString(1, isbn);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    flag=2;
+                }
+                else{
+                    isbn="";
+                    flag=1
+                    System.out.println("ISBN not in the Table");
+                    System.out.println("Please enter valid id");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1159,6 +1231,7 @@ static void delete_publication()  throws SQLException{
     }
 
 static void insert_orders() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1187,6 +1260,15 @@ static void insert_orders() throws SQLException{
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
+            String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                    orderid=-1;
+                    System.out.println("Entered value already present in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1332,6 +1414,7 @@ static void insert_orders() throws SQLException{
 }
 
 static void delete_order() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1342,6 +1425,17 @@ static void delete_order() throws SQLException {
         try{
             System.out.println("Enter OrderId");
             orderid = getinput();
+            String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    orderid=-1;
+                    System.out.println("Entered value not present in the database");
+                }
         }catch(Exception e){
             System.out.println(e);
         }
@@ -1354,6 +1448,7 @@ static void delete_order() throws SQLException {
 }
 
 static void update_order() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1387,6 +1482,17 @@ static void update_order() throws SQLException {
     do{
     try{
         orderid = getinput();
+        String sql_chk = "select id from Orders WHERE id = ?;"; 
+                ps = conn.prepareStatement(sql_chk);
+                ps.setInt(1, orderid);
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next() == true){
+                }
+                else{
+                    orderid=-1;
+                    System.out.println("Entered value not present in the database");
+                }
     }catch(Exception e){
         System.out.println(e);
     }
@@ -1562,6 +1668,7 @@ static int getinput()
     }
 
 static void displayManager() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1613,6 +1720,7 @@ static void displayManager() throws SQLException {
 }
 
 static void displayStaff() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1664,6 +1772,7 @@ static void displayStaff() throws SQLException{
 }
 
 static void displayPeriodicals() throws SQLException{
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1706,6 +1815,7 @@ static void displayPeriodicals() throws SQLException{
 }
 
 static void displayPublication() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
     conn = DriverManager.getConnection(jdbcURL, user, passwd);
     String sql_insert_stmt;
@@ -1760,6 +1870,7 @@ static void displayPublication() throws SQLException {
 }
 
  static void add_chapters() throws SQLException {
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -1832,7 +1943,7 @@ static void displayPublication() throws SQLException {
 
     //journalists
     static void add_articles() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -1903,7 +2014,7 @@ static void displayPublication() throws SQLException {
 
     //editors, authors
     static void total_chapters() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -1946,7 +2057,7 @@ static void displayPublication() throws SQLException {
 
     // editors, journalists
     static void total_articles() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -1989,7 +2100,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void add_distributor() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2115,7 +2226,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void delete_distributor() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2161,7 +2272,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void bill_distributor() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2210,7 +2321,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void update_distributor_balance() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2285,7 +2396,7 @@ static void displayPublication() throws SQLException {
 
     // editors, journalists
     static void total_number_articles() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2302,7 +2413,7 @@ static void displayPublication() throws SQLException {
 
     // editors, journalists
     static void update_articles_text() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2391,7 +2502,7 @@ static void displayPublication() throws SQLException {
 
     // editors, authors
     static void update_chapters_text() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2480,7 +2591,7 @@ static void displayPublication() throws SQLException {
 
     // editor, journalist
     static void delete_article() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2555,7 +2666,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void assign() throws SQLException {
-
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2668,7 +2779,7 @@ static void displayPublication() throws SQLException {
 
     //  manager
     static void publication_by_editor() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2752,7 +2863,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void insert_pay() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -2927,7 +3038,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void generate_distributor_report() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3018,7 +3129,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void generate_distributors_report() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3071,7 +3182,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void orders_by_month() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3113,7 +3224,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void total_distributors() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3149,7 +3260,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void total_expense() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3185,7 +3296,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void Revenue_by_City() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3223,7 +3334,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void distributor_report_by_month() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3313,7 +3424,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void update_distributors() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3559,7 +3670,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_name() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Name:");
@@ -3575,7 +3686,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_number() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Number:");
@@ -3591,7 +3702,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_city() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New City:");
@@ -3607,7 +3718,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_address() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Address:");
@@ -3623,7 +3734,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_type() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Type:");
@@ -3639,7 +3750,7 @@ static void displayPublication() throws SQLException {
     }
 
     static double get_amount() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         double a_o = 0.0d;
 
@@ -3664,7 +3775,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_contact() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Contact:");
@@ -3680,7 +3791,7 @@ static void displayPublication() throws SQLException {
     }
 
     static int get_age() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         int a_o = 0;
 
@@ -3705,7 +3816,7 @@ static void displayPublication() throws SQLException {
     }
 
     static String get_gender() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
         do {
             System.out.println("Enter New Gender:");
@@ -3722,7 +3833,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void add_manager() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -3826,7 +3937,7 @@ static void displayPublication() throws SQLException {
 
     // manager
     static void update_manager() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4037,7 +4148,7 @@ static void displayPublication() throws SQLException {
 
     // to print all the tables in the db
     static void articles() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4076,7 +4187,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void assigns() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4115,7 +4226,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void authors() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4152,7 +4263,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void books() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4189,7 +4300,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void chapters() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4228,7 +4339,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void distributors() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4279,7 +4390,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void editBooks() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4318,7 +4429,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void editPeriodicals() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4357,7 +4468,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void editors() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4394,7 +4505,7 @@ static void displayPublication() throws SQLException {
     }
 
     static void journalists() throws SQLException {
-
+final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         conn = DriverManager.getConnection(jdbcURL, user, passwd);
         String sql_insert_stmt;
@@ -4431,6 +4542,7 @@ static void displayPublication() throws SQLException {
     }
 
     public static void total_revenue_for_each_city() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4465,6 +4577,7 @@ static void displayPublication() throws SQLException {
      }
     
     public static void revenue_for_city() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         System.out.println("Enter the name of the city to get revenue details: ");
         
@@ -4534,6 +4647,7 @@ static void displayPublication() throws SQLException {
      }
     
     public static void get_total_expense() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4565,6 +4679,7 @@ static void displayPublication() throws SQLException {
     
     //API: get staff payment remaining
     public static void get_staff_payment_remaining() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4599,6 +4714,7 @@ static void displayPublication() throws SQLException {
     
     //API: get staff payment availed
         public static void get_staff_payment_availed() {
+            final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             PreparedStatement ps = null;
             try {
                 conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4634,6 +4750,7 @@ static void displayPublication() throws SQLException {
         
         //API: Find distributors by city
         public static void find_distributors_by_city() {
+            final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             PreparedStatement ps = null;
             System.out.println("Enter the name of the city to get distributors details in that city: ");
         
@@ -4718,6 +4835,7 @@ static void displayPublication() throws SQLException {
     
     
     public static void check_editor_publications() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         System.out.println("Enter Editor ID: ");
     
@@ -4788,6 +4906,7 @@ static void displayPublication() throws SQLException {
     
     
     public static void totalprice_perisbn_perdistributor_permonth() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -4829,6 +4948,7 @@ static void displayPublication() throws SQLException {
     }
     
     public static void calculate_payment_within_daterange() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         String mydate1 = "";
         String mydate2 = "";
@@ -4944,6 +5064,7 @@ static void displayPublication() throws SQLException {
     }
     
     public static void orders_date_range() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String mydate1 = "";
         String mydate2 = "";
         SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );  // United States style of format.
@@ -5073,6 +5194,7 @@ static void displayPublication() throws SQLException {
     }
     
     public static void display_orders() {
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         
         PreparedStatement ps = null;
         
@@ -5125,7 +5247,7 @@ static void displayPublication() throws SQLException {
         }
     
 public static void display_pays() {
-        
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
         
     
@@ -5169,7 +5291,7 @@ public static void display_pays() {
         }
 
 public static void display_WriteBooks() {
-    
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -5206,7 +5328,7 @@ public static void display_WriteBooks() {
     }
 
     public static void display_WritePeriodicals() {
-    
+    final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     PreparedStatement ps = null;
         try {
             conn = DriverManager.getConnection(jdbcURL, user, passwd);
