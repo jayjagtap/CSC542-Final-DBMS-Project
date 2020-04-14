@@ -27,7 +27,11 @@ public class API {
     static Connection conn = null;
     static String user = "nkashya";
     static String passwd = "200314563";
+    
 
+    /*
+    This api is to add details of Staff members in the relation "Staff".
+    */
     static void add_staff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -187,6 +191,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to update the details of existing Authors.
+    */
     static void update_author() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -250,6 +257,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to update the details of existing Authors.
+    */
     static void update_editor() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -315,6 +325,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to update the details of existing Journalists.
+    */
     static void update_journalist() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -379,6 +392,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to update the details of existing Books.
+    */
     static void update_books() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -444,6 +460,9 @@ public class API {
 
     }
 
+    /*
+    This api is to update the details of existing Periodicals.
+    */
     static void update_periodicals() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -533,6 +552,9 @@ public class API {
 
     }
 
+    /*
+    This api is to update the details of existing Staff Members.
+    */
     static void update_staff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -686,6 +708,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to delete an existing manager in the relation "Manager".
+    */
     static void delete_manager() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -725,6 +750,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to delete an existing staff member.
+    */
     static void delete_staff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -812,6 +840,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to add a new publication.
+    */
     static void add_publications() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -994,6 +1025,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to update an existing publication.
+    */
     static void update_publication() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1174,6 +1208,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to delete an existing publication.
+    */
     static void delete_publication() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -1254,6 +1291,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to insert new orders in the relation "Orders".
+    */
     static void insert_orders() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1432,6 +1472,9 @@ public class API {
 
     }
 
+    /*
+    This api is to delete existing orders.
+    */
     static void delete_order() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1465,6 +1508,9 @@ public class API {
         ps.executeUpdate();
     }
 
+    /*
+    This api is to update existing orders.
+    */
     static void update_order() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1712,7 +1758,9 @@ public class API {
         ps.executeUpdate();
 
     }
-
+    /*
+    This is a helper function to receive input from the user through command line. 
+    */
     static int getinput() {
         Scanner scan = new Scanner(System.in);
         int num;
@@ -1725,6 +1773,9 @@ public class API {
         return num;
     }
 
+    /*
+    This api is to print publications by either entering title or topic
+    */
     static void display_events() throws SQLException {
 
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -1870,6 +1921,10 @@ public class API {
         }
         }
     }
+
+    /*
+    This api is to print all Managers at the publishing house.
+    */
     static void displayManager() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1922,7 +1977,9 @@ public class API {
         }
     }
 
-
+    /*
+    This api is to print all Staff Members at the publishing house.
+    */
     static void displayStaff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1975,6 +2032,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all Periodicals at the publishing house.
+    */
     static void displayPeriodicals() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2017,6 +2077,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all Publications at the publishing house.
+    */
     static void displayPublication() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2072,6 +2135,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to add a new chapter in a book.
+    */
     static void add_chapters() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -2143,7 +2209,9 @@ public class API {
         }
     }
 
-    // journalists
+    /*
+    This api is to add a new article in a Periodical.
+    */
     static void add_articles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2214,7 +2282,9 @@ public class API {
         }
     }
 
-    // editors, authors
+    /*
+    This api is to print all chapters in an ISBN.
+    */
     static void total_chapters() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2256,7 +2326,9 @@ public class API {
         }
     }
 
-    // editors, journalists
+    /*
+    This api is to print all articles in an ISBN.
+    */
     static void total_articles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2298,7 +2370,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to add a new distributor for the publishing house.
+    */
     static void add_distributor() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2423,7 +2497,9 @@ public class API {
         ps.executeUpdate();
     }
 
-    // manager
+    /*
+    This api is to delete an existing distributor.
+    */
     static void delete_distributor() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2469,7 +2545,9 @@ public class API {
 
     }
 
-    // manager
+    /*
+    This api is to print the bill of an existing distributor.
+    */
     static void bill_distributor() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2518,7 +2596,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to update an existing distributor.
+    */
     static void update_distributor_balance() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2595,7 +2675,9 @@ public class API {
         }
     }
 
-    // editors, journalists
+    /*
+    This api is to print the count of articles at the publishing house.
+    */
     static void total_number_articles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2611,7 +2693,9 @@ public class API {
         }
     }
 
-    // editors, journalists
+    /*
+    This api is to update a text in a specific article.
+    */
     static void update_articles_text() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2706,7 +2790,9 @@ public class API {
         }
     }
 
-    // editors, authors
+    /*
+    This api is to update a text in a specific chapter.
+    */
     static void update_chapters_text() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2801,7 +2887,9 @@ public class API {
         }
     }
 
-    // editor, journalist
+    /*
+    This api is to delete an existing article.
+    */
     static void delete_article() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -2884,6 +2972,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to assign an existing editor to a specific ISBN.
+    */
     static void assign() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3006,7 +3097,9 @@ public class API {
 
     }
 
-    // manager
+    /*
+    This api is to print all ISBNs for a specific editor.
+    */
     static void publication_by_editor() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3095,7 +3188,10 @@ public class API {
         }
     }
 
-    // manager
+    
+    /*
+    This api is to insert a record of a new payment.
+    */
     static void insert_pay() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3280,7 +3376,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print a report for a specific distributor.
+    */
     static void generate_distributor_report() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3376,7 +3474,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print a report for all the distributors.
+    */
     static void generate_distributors_report() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3429,7 +3529,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print a report for all orders by month.
+    */
     static void orders_by_month() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3471,7 +3573,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print the total number of associated distributors.
+    */
     static void total_distributors() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3507,7 +3611,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print the payment transaction that is being tracked.
+    */
     static void total_expense() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3543,7 +3649,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print a revenue report by city.
+    */
     static void Revenue_by_City() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3581,7 +3689,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to print a report for a specific distributor grouped by month.
+    */
     static void distributor_report_by_month() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -3671,7 +3781,9 @@ public class API {
         }
     }
 
-    // manager
+    /*
+    This api is to update the details of an existing distributor.
+    */
     static void update_distributors() throws SQLException {
 
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -3928,7 +4040,9 @@ public class API {
             }
         }
     }
-
+    /*
+    This is a helper function.
+    */
     static String get_name() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -3945,6 +4059,9 @@ public class API {
         return sd_id;
     }
 
+    /*
+    This is a helper function.
+    */
     static String get_number() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -3960,7 +4077,9 @@ public class API {
         return sd_id;
 
     }
-
+    /*
+    This is a helper function.
+    */
     static String get_city() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -3976,7 +4095,10 @@ public class API {
         return sd_id;
 
     }
-
+    
+    /*
+    This is a helper function.
+    */
     static String get_address() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -3993,6 +4115,9 @@ public class API {
 
     }
 
+    /*
+    This is a helper function.
+    */
     static String get_type() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -4009,6 +4134,9 @@ public class API {
 
     }
 
+    /*
+    This is a helper function.
+    */
     static double get_amount() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -4034,6 +4162,9 @@ public class API {
         return a_o;
     }
 
+    /*
+    This is a helper function.
+    */
     static String get_contact() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -4050,6 +4181,9 @@ public class API {
 
     }
 
+    /*
+    This is a helper function.
+    */
     static int get_age() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -4075,6 +4209,9 @@ public class API {
         return a_o;
     }
 
+    /*
+    This is a helper function.
+    */
     static String get_gender() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String sd_id = "";
@@ -4091,7 +4228,9 @@ public class API {
 
     }
 
-    // manager
+    /*
+    This api is to add a new manager.
+    */
     static void add_manager() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4195,7 +4334,9 @@ public class API {
         ps.executeUpdate();
     }
 
-    // manager
+    /*
+    This api is to update an existing manager.
+    */
     static void update_manager() throws SQLException {
 
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -4415,7 +4556,9 @@ public class API {
         }
     }
 
-    // to print all the tables in the db
+    /*
+    This api is to print all articles.
+    */
     static void displayArticles() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4455,6 +4598,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all editors who have been assigned.
+    */
     static void displayAssigns() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4494,6 +4640,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all authors.
+    */
     static void displayAuthors() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4531,6 +4680,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all Books.
+    */
     static void displayBooks() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4568,6 +4720,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all Chapters.
+    */
     static void displayChapters() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4607,6 +4762,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all Distributors.
+    */
     static void displayDistributors() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4658,6 +4816,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all books that have an editor assigned to it.
+    */
     static void displayEditBooks() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4697,6 +4858,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all periodicals that have an editor assigned to it.
+    */
     static void displayEditPeriodicals() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4736,6 +4900,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print all the editors.
+    */
     static void displayEditors() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4773,6 +4940,9 @@ public class API {
         }
     }
 
+/*
+    This api is to print all the journalists.
+    */
     static void displayJournalists() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4810,6 +4980,9 @@ public class API {
         }
     }
 
+    /*
+    This api is to print the revenue for each city.
+    */
     public static void total_revenue_for_each_city() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4845,6 +5018,9 @@ public class API {
 
     }
 
+    /*
+    This api is to print the revenue for a specific city.
+    */
     public static void revenue_for_city() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4912,6 +5088,9 @@ public class API {
 
     }
 
+    /*
+    This api is to print the total expense of the publishing house.
+    */
     public static void get_total_expense() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4943,7 +5122,9 @@ public class API {
 
     }
 
-    // API: get staff payment remaining
+    /*
+    This api is to print the payment done i.e. tracking is "NO".
+    */
     public static void get_staff_payment_remaining() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -4978,7 +5159,9 @@ public class API {
 
     }
 
-    // API: get staff payment availed
+    /*
+    This api is to print the payment done i.e. tracking is "YES".
+    */
     public static void get_staff_payment_availed() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5013,7 +5196,7 @@ public class API {
 
     }
 
-    // API: Find distributors by city
+    // Find distributors by city
     public static void find_distributors_by_city() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5095,6 +5278,7 @@ public class API {
         }
     }
 
+    //To Check the Publication for a specific Editor
     public static void check_editor_publications() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5163,6 +5347,7 @@ public class API {
         }
     }
 
+    //To Print the total price for each distributor for each month
     public static void totalprice_perisbn_perdistributor_permonth() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5203,7 +5388,7 @@ public class API {
             e.printStackTrace();
         }
     }
-
+    //To print payment between two date ranges
     public static void calculate_payment_within_daterange() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -5316,7 +5501,7 @@ public class API {
         }
 
     }
-
+    //To print the orders between date range
     public static void orders_date_range() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String mydate1 = "";
@@ -5443,7 +5628,9 @@ public class API {
         }
 
     }
-
+    /*
+    This api is to print all the orders.
+    */
     public static void display_orders() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -5495,7 +5682,9 @@ public class API {
         }
 
     }
-
+    /*
+    This api is to print all the payment in the publishing house.
+    */
     public static void display_pays() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5538,6 +5727,9 @@ public class API {
 
     }
 
+    /*
+    This api is to print which author is assigned to which book.
+    */
     public static void display_WriteBooks() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -5574,6 +5766,9 @@ public class API {
 
     }
 
+    /*
+    This api is to print which journalist is assigned to which periodical.
+    */
     public static void display_WritePeriodicals() {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
