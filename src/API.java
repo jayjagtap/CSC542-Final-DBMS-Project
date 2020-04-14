@@ -28,40 +28,6 @@ public class API {
     static String user = "nkashya";
     static String passwd = "200314563";
 
-    public static void main(String[] args) {
-
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-        } catch (Exception e) {
-            System.out.println("Driver missing!");
-        }
-        try {
-
-            // add_staff();
-            // update_author();
-            // update_editor();
-            // update_journalist();
-            // update_books();
-            // update_periodicals();
-            // update_staff();
-            // delete_manager();
-            delete_staff();
-            add_publications();
-            // update_publication();
-            // delete_publication();
-            // insert_orders();
-            // delete_order();
-            // update_order();
-            // displayManager();
-            // displayStaff();
-            // displayPeriodicals();
-            // displayPublication();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     static void add_staff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1283,7 +1249,7 @@ public class API {
                     conn.rollback();
                 }
             } catch (Exception f) {
-                system.out.println("Error");
+                System.out.println("Error");
             }
         }
     }
@@ -1748,7 +1714,6 @@ public class API {
     }
 
     static int getinput() {
-        System.out.println("Enter Input");
         Scanner scan = new Scanner(System.in);
         int num;
         try {
@@ -1760,6 +1725,151 @@ public class API {
         return num;
     }
 
+    static void display_events() throws SQLException {
+
+        final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        PreparedStatement ps = null;
+        conn = DriverManager.getConnection(jdbcURL, user, passwd);
+        String sql_insert_stmt;
+        int choice;
+        String title = "";
+        String isbn = "";
+        String topic = "";
+        String dateofcreation = "";
+        String publicationdate = "";
+        String price = "";
+
+        System.out.println("Enter 1 to display Publication with respect to Title");
+        System.out.println("Enter 2 to display Publication with respect to topic");
+
+        choice = getinput();
+
+        if(choice==1)
+        {
+            do {
+                System.out.println("Enter title");
+                try {
+                    title = br.readLine();
+                    String queryCheck = "SELECT * from Publication WHERE title = ?;";
+                    ps = conn.prepareStatement(queryCheck);
+                    ps.setString(1, title);
+                    ResultSet rms = ps.executeQuery();
+
+                    if (rms.next()) {
+                    } else {
+                        System.out.println("Entered Title not present in our database");
+                        title = "";
+                    }
+                }catch(Exception e){
+                        title = "";
+                        System.out.println("Invalid Title please reenter");
+                    }
+            }while (title.isEmpty());
+
+
+            String data_retrieval = "Select ISBN,dateofcreation,title,topic,publicationdate,price from Publication where title = ?;";
+            ps = conn.prepareStatement(data_retrieval);
+            ps.setString(1, title);
+            ResultSet rs = ps.executeQuery();
+
+        List<String> l = new ArrayList<String>();
+        l.add("ISBN");
+        l.add("dateofcreation");
+        l.add("Title");
+        l.add("Topic");
+        l.add("Publication Date");
+        l.add("Price");
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-30s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            isbn = rs.getString("ISBN");
+            dateofcreation = rs.getString("dateofcreation");
+            title = rs.getString("title");
+            topic = rs.getString("topic");
+            publicationdate = rs.getString("publicationdate");
+            price = rs.getString("price");
+
+            l.add(isbn);
+            l.add(dateofcreation);
+            l.add(title);
+            l.add(topic);
+            l.add(publicationdate);
+            l.add(price);
+
+            for (int i = 0; i < l.size(); i++)
+                sb.append(String.format("| %-30s", l.get(i)));
+            System.out.println(sb);
+        }
+        }
+        else if(choice==2)
+        {
+            do {
+                System.out.println("Enter topic");
+                try {
+                    topic = br.readLine();
+                    String queryCheck = "SELECT * from Publication WHERE topic = ?;";
+                    ps = conn.prepareStatement(queryCheck);
+                    ps.setString(1, topic);
+                    ResultSet rms = ps.executeQuery();
+                    if (rms.next()) {
+                    } else {
+                        System.out.println("Entered Topic not present in our database");
+                        topic = "";
+                    }
+                }catch(Exception e){
+                        topic = "";
+                        System.out.println("Invalid Topic please reenter");
+                    }
+            }while (topic.isEmpty());
+
+
+            String data_retrieval = "Select ISBN,dateofcreation,title,topic,publicationdate,price from Publication where topic = ?;";
+            ps = conn.prepareStatement(data_retrieval);
+            ps.setString(1, topic);
+            ResultSet rs = ps.executeQuery();
+
+        List<String> l = new ArrayList<String>();
+        l.add("ISBN");
+        l.add("dateofcreation");
+        l.add("Title");
+        l.add("Topic");
+        l.add("Publication Date");
+        l.add("Price");
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < l.size(); i++)
+            sb.append(String.format("| %-30s", l.get(i)));
+        System.out.println(sb);
+
+        while (rs.next()) {
+            l.clear();
+            sb.setLength(0);
+            isbn = rs.getString("ISBN");
+            dateofcreation = rs.getString("dateofcreation");
+            title = rs.getString("title");
+            topic = rs.getString("topic");
+            publicationdate = rs.getString("publicationdate");
+            price = rs.getString("price");
+
+            l.add(isbn);
+            l.add(dateofcreation);
+            l.add(title);
+            l.add(topic);
+            l.add(publicationdate);
+            l.add(price);
+
+            for (int i = 0; i < l.size(); i++)
+                sb.append(String.format("| %-30s", l.get(i)));
+            System.out.println(sb);
+        }
+        }
+    }
     static void displayManager() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         PreparedStatement ps = null;
@@ -1811,6 +1921,7 @@ public class API {
             System.out.println(sb);
         }
     }
+
 
     static void displayStaff() throws SQLException {
         final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -3749,7 +3860,7 @@ public class API {
             }
 
             try {
-                con.setAutoCommit(false);
+                conn.setAutoCommit(false);
                 if (!ch.isEmpty()) {
 
                     if (f1 == 1) {
@@ -3801,15 +3912,15 @@ public class API {
                         ps.setInt(2, d_id);
                         ps.executeUpdate();
                     }
-                    con.commit();
-                    con.close();
+                    conn.commit();
+                    conn.close();
                 } else {
                     // go to all options menu-----------
                 }
             } catch (Exception e) {
                 try {
-                    if (con != null) {
-                        con.rollback();
+                    if (conn != null) {
+                        conn.rollback();
                     }
                 } catch (Exception f) {
                     System.out.println("Rollback Failed............");
@@ -4285,8 +4396,8 @@ public class API {
                         ps.setInt(2, d_id);
                         ps.executeUpdate();
                     }
-                    con.commit();
-                    con.close();
+                    conn.commit();
+                    conn.close();
                     System.out.println("All queries have executed--------------");
 
                 } else {
@@ -4297,7 +4408,7 @@ public class API {
                     if (conn != null) {
                         conn.rollback();
                     }
-                } catch (Exception e) {
+                } catch (Exception f) {
                     System.out.println("Unable to rollback");
                 }
             }
@@ -5075,7 +5186,7 @@ public class API {
                 l.clear();
                 sb.setLength(0);
                 int month = rs.getInt("MONTH");
-                String ISBN = rs.getString("o.distributorid");
+                String ISBN = rs.getString("o.ISBN");
                 int distributorid = rs.getInt("o.distributorid");
                 int price = rs.getInt("Price Generated");
 

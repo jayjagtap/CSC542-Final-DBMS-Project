@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 public class DBMSFinal {
 	
-	static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/jjjagtap";
+	static final String jdbcURL = "jdbc:mariadb://classdb2.csc.ncsu.edu:3306/nkashya";
     static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     static Connection conn = null;
-    static String user = "jjjagtap";
-    static String passwd = "200311438";
+    static String user = "nkashya";
+    static String passwd = "200314563";
 
 	public static void main(String[] args) {
 		try {
@@ -22,7 +22,11 @@ public class DBMSFinal {
 		
 		int choice;
 		do {
+			System.out.println("");
+			System.out.println("");
+			System.out.println("*********************************");
 			System.out.println("Welcome to WolfPub DB, best in NC");
+			System.out.println("*********************************");
 			System.out.println("1. Manager");
 			System.out.println("2. Editor");
 			System.out.println("3. Author");
@@ -51,7 +55,7 @@ public class DBMSFinal {
 				System.out.println("Invalid Entry, Enter again");
 			}
 			}while(choice != 0);
-		System.out.println("Thank You have a blast!!");
+		System.out.println("Thank You!! Have a Good Day!!");
 		
 	}
 
@@ -59,15 +63,14 @@ public class DBMSFinal {
 		System.out.println("");
 		System.out.println("");
 		System.out.println("***********************");
-		System.out.println("You are in Authors View");
+		System.out.println("Welcome to Authors View");
 		System.out.println("***********************");
-		System.out.println("");
 		System.out.println("");
 		System.out.println("The following are the operations that can be performed by the Author");
 		System.out.println("Please select the number correspondingly");
 		System.out.println("");
 		System.out.println("");
-		int choice;;
+		int choice;
 		API obj = new API();
 
 		do{
@@ -80,8 +83,11 @@ public class DBMSFinal {
 			System.out.println("7. Display Chapters");
 			System.out.println("8. Display EditBooks");
 			System.out.println("0. To Exit the Author View");
-
+			System.out.println("");
+			System.out.println("");
 			System.out.println("Please Enter the operation number to be performed");
+			System.out.println("");
+			System.out.println("");
 			choice = getMenuChoice();
 			switch (choice){
 				case 1 : try{
@@ -151,14 +157,23 @@ public class DBMSFinal {
 			default: System.out.println("Invalid Entry, try Again :)"); 
 			break;
 		}
+		if(choice!=0){
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Please Enter 0 to logout of Author's View");
+		System.out.println("Please Enter 1 to Continue in Author's View");
+		choice = getMenuChoice();
+	}
+
 	}while(choice!=0);
 }
 
 	public static void runEditor(){
+		System.out.println("");
+		System.out.println("");
 		System.out.println("***********************");
-		System.out.println("You are in Editors View");
+		System.out.println("Welcome to Editors View");
 		System.out.println("***********************");
-
 		System.out.println("");
 		System.out.println("");
 		System.out.println("The following are the operations that can be performed by the Editor");
@@ -186,8 +201,11 @@ public class DBMSFinal {
 			System.out.println("15. Display EditBooks");
 			System.out.println("16. Display EditPeriodicals");
 			System.out.println("0. To Exit the Editor View");
-
+			System.out.println("");
+			System.out.println("");
 			System.out.println("Please Enter the operation number to be performed");
+			System.out.println("");
+			System.out.println("");
 			choice = getMenuChoice();
 			switch (choice){
 				case 1 : try{
@@ -322,6 +340,13 @@ public class DBMSFinal {
 			break;
 			 
 			}
+			if(choice!=0){
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Please Enter 0 to logout of Editor's View");
+		System.out.println("Please Enter 1 to Continue in Editor's View");
+		choice = getMenuChoice();
+	}
 		}while(choice!=0);
 	}
 
@@ -329,7 +354,17 @@ public class DBMSFinal {
 		int choice;
 		API a = new API();
 		do {
-			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("***********************");
+			System.out.println("Welcome to Journalist View");
+			System.out.println("***********************");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("The following are the operations that can be performed by the Journalist");
+			System.out.println("Please select the number correspondingly");
+			System.out.println("");
+			System.out.println("");
 			System.out.println("1. Display Periodicals");
 			System.out.println("2. Display Articles");
 			System.out.println("3. Display Publication");
@@ -339,9 +374,11 @@ public class DBMSFinal {
 			System.out.println("7. Update Periodicals");
 			System.out.println("8. Update Article Text ");
 			System.out.println("0. Exit");
-			
-			
+			System.out.println("");
+			System.out.println("");
 			System.out.println("Please enter operation number to be performed");
+			System.out.println("");
+			System.out.println("");
 			choice = getMenuChoice();
 			 switch (choice) {
 			 case 1: try {
@@ -414,7 +451,13 @@ public class DBMSFinal {
 
 			 default: System.out.println("Exiting Journalist View :)"); 	
 			 }
-	            
+			 if(choice!=0){
+	            System.out.println("");
+		System.out.println("");
+		System.out.println("Please Enter 0 to logout of Journalist's View");
+		System.out.println("Please Enter 1 to Continue in Journalist's View");
+		choice = getMenuChoice();
+}
 		}while(choice != 0);
 	}
 	
@@ -423,7 +466,17 @@ public class DBMSFinal {
 		API a = new API();
 		
 		do {
-			System.out.println("Welcome to Manager Section: Here are the APIS");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("***********************");
+			System.out.println("Welcome to Managers View");
+			System.out.println("***********************");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("The following are the operations that can be performed by the Manager");
+			System.out.println("Please select the number correspondingly");
+			System.out.println("");
+			System.out.println("");
 			System.out.println("1. Add Staff");
 			System.out.println("2. Update Author");
 			System.out.println("3. Update Editor");
@@ -457,10 +510,14 @@ public class DBMSFinal {
 			System.out.println("30. Get Orders between Date Range");
 			System.out.println("31. Display Payment History");
 			System.out.println("32. Display Orders");
+			System.out.println("33. Display Publication using Title or Topic");
 			System.out.println("0. Exit");
-			
+			System.out.println("");
+			System.out.println("");
 			
 			System.out.println("Please enter operation number to be performed");
+			System.out.println("");
+			System.out.println("");
 			choice = getMenuChoice();
 			 switch (choice) {
 			 case 1: try {
@@ -719,8 +776,23 @@ public class DBMSFinal {
 					e.printStackTrace();
 				}
 				 break;
+				case 33:
+				 try {
+					a.display_events();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				 break;
 			 default: System.out.println("Exiting Manager View :)"); 	
 			 }
+			 if(choice!=0){
+			 System.out.println("");
+		System.out.println("");
+		System.out.println("Please Enter 0 to logout of Manager's View");
+		System.out.println("Please Enter 1 to Continue in Manager's View");
+		choice = getMenuChoice();
+	}
 		}while(choice != 0);
 	}
 	
@@ -732,7 +804,7 @@ public class DBMSFinal {
 		System.out.println("***********************");
 		System.out.println("");
 		System.out.println("");
-		System.out.println("The following are the operations that can be performed by the Editor");
+		System.out.println("The following are the operations that can be performed by the Admin");
 		System.out.println("Please select the number correspondingly");
 		System.out.println("");
 		System.out.println("");
@@ -741,13 +813,16 @@ public class DBMSFinal {
 		API obj = new API();
 
 		do{
-			System.out.println("*************************************************_______________________________");
 			System.out.println("1. Add Manager");
 			System.out.println("2. Update Manager");
 			System.out.println("3. Delete Manager");
 			System.out.println("0. To Exit the Manager View");
+			System.out.println("");
+			System.out.println("");
 
 			System.out.println("Please Enter the operation number to be performed");
+			System.out.println("");
+			System.out.println("");
 			choice = getMenuChoice();
 			System.out.println("Choice: " + choice);
 			switch (choice){
@@ -778,7 +853,13 @@ public class DBMSFinal {
 			 System.out.println("Invalid Entry, try Again :)"); 
 			 												
 		}
-			System.out.println("Choice just before while " + choice);
+		if(choice!=0){
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Please Enter 0 to logout of Admin's View");
+		System.out.println("Please Enter 1 to Continue in Admin's View");
+		choice = getMenuChoice();
+	}
 	}while(choice != 0);
 }
 	public static int getMenuChoice() {
